@@ -3,6 +3,17 @@
 All notable changes to this project are documented here. Format follows Keep a Changelog; versioning
 follows SemVer.
 
+## [1.2.0]
+
+### Added
+- Hooks bundle (`hooks/`): conservative, fail-open `PreToolUse` guards that block clearly destructive
+  Bash (`rm -rf /`, `git push --force`, fork bomb, `dd` to a device) and edits to secrets/credentials
+  files. Active when the plugin is enabled; complements the settings deny-list and CI.
+- Eval suite (`evals/`) for `claude plugin eval` with a with/without control arm: skill activation,
+  greenfield scaffold artifacts, and AGENTS.md repo-specificity. Runs in CI as a regression gate.
+- `scripts/verify.sh` now checks the hooks (JSON, shell/Python syntax, block/allow behavior) and the
+  eval-suite structure.
+
 ## [1.1.0]
 
 ### Added

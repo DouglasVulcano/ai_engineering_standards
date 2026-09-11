@@ -63,11 +63,12 @@ Three focused research passes (web sources, September 2026), then a sandbox benc
 | Governance scaffolding + safety | `scaffold.sh` + `assets/` (idempotent, no overwrite, `--dry-run`) |
 | MCP governance | Checklist in `references/arsenal-mcp-skills.md` |
 | Self-test | `scripts/verify.sh` (files, JSON, dashes, smoke tests) + this benchmark |
+| Hooks (enforcement in session) | `hooks/` PreToolUse guards: destructive Bash + secret edits, fail-open |
+| Eval suite | `evals/` for `claude plugin eval` (with/without control arm) |
 
-**Roadmap (not yet shipped):** a `hooks/` bundle (format-on-write, protected-path, local
-commitlint); a shipped `evals/` suite for `claude plugin eval` with a with/without control arm;
-semantic-release wiring; optional policy-as-code (conftest/OPA) and OpenSSF Scorecard in CI; deeper
-stack detection that fills CI commands automatically.
+**Roadmap (not yet shipped):** format-on-write and local commitlint hooks; semantic-release wiring;
+optional policy-as-code (conftest/OPA) and OpenSSF Scorecard in CI; deeper stack detection that fills
+CI commands automatically.
 
 ---
 

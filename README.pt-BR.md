@@ -49,6 +49,8 @@ que o reforça.
 ├── .claude-plugin/                    # plugin.json + marketplace.json (distribuição em time)
 ├── commands/standards.md              # o slash command /standards
 ├── scripts/verify.sh                  # self-check do repo (dogfood do pilar 3)
+├── hooks/                             # guards PreToolUse do plugin (bloqueia Bash destrutivo / edição de segredos)
+├── evals/                             # suíte claude plugin eval (braço de controle with/without)
 ├── skills/engineering-standards/       # a skill (payload instalado)
 │   ├── SKILL.md                       # router enxuto (dispara sozinho)
 │   ├── references/                    # deep dives por domínio (sob demanda)
@@ -165,6 +167,9 @@ scaffolder e um projeto de amostra corrigido e verificado de ponta a ponta).
   confirmação. O scaffolder nunca sobrescreve sem `--force`.
 - Enforcement mecânico (lint no pre-commit, bloquear merge sem Issue) pertence a **CI, hooks e branch
   protection**, não a uma skill. A skill é conselho; a CI é o portão autoritativo.
+- Como plugin, ele traz **hooks conservadores** (fail-open) que bloqueiam Bash claramente destrutivo e
+  edição de segredos, um guard determinístico em sessão junto do deny-list. Uma suíte `evals/`
+  versionada auto-testa o pacote (`claude plugin eval`, braço with/without).
 
 ## Créditos e Licença
 

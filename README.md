@@ -48,6 +48,8 @@ UI, observability, quality, and testing, and can scaffold the governance to enfo
 ├── .claude-plugin/                    # plugin.json + marketplace.json (team distribution)
 ├── commands/standards.md              # the /standards slash command
 ├── scripts/verify.sh                  # repo self-check (dogfoods pillar 3)
+├── hooks/                             # plugin PreToolUse guards (block destructive Bash / secret edits)
+├── evals/                             # claude plugin eval suite (with/without control arm)
 ├── skills/engineering-standards/       # the skill (payload that gets installed)
 │   ├── SKILL.md                       # lean router (triggers on its own)
 │   ├── references/                    # per-domain deep dives (loaded on demand)
@@ -161,6 +163,9 @@ scored by artifacts, with the scaffolder and a fixed sample project verified end
   without confirmation. The scaffolder never overwrites without `--force`.
 - Mechanical enforcement (lint on pre-commit, blocking a merge without an Issue) belongs in **CI,
   hooks, and branch protection**, not in a skill. The skill is advice; CI is the authoritative gate.
+- As a plugin it ships **conservative hooks** (fail-open) that block clearly destructive Bash and
+  edits to secrets, a deterministic in-session guard alongside the settings deny-list. A versioned
+  `evals/` suite self-tests the package (`claude plugin eval`, with/without control arm).
 
 ## Credits and License
 
