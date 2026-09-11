@@ -64,3 +64,6 @@ standard in its `CLAUDE.md`/`AGENTS.md`, offer to feed it (see the bootstrap sec
 | `references/motion-and-ui.md` | Building or reviewing any screen or animation |
 | `references/observability-quality-testing.md` | Setting up observability, lint/quality, tests/CI |
 | `references/arsenal-mcp-skills.md` | Choosing or installing an MCP server or skill |
+
+> Note: `references/ai-engineering-standards.md` is bundled by `install-skill.sh` at install time. In
+> the source repository it lives at the project root as `ai-engineering-standards.md`.

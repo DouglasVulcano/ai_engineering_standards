@@ -14,7 +14,8 @@
 
 ## O que é
 
-Este repositório transforma uma configuração pessoal de IA (`prompts.txt` mais `skills.txt`) em um
+Este repositório transforma uma configuração pessoal de IA (`docs/origin/prompts.txt` mais
+`docs/origin/skills.txt`) em um
 **padrão de engenharia formal, versionável e instalável**. Ele entrega:
 
 1. **`ai-engineering-standards.md`**: a especificação completa e legível (fonte única da verdade).
@@ -44,8 +45,10 @@ automaticamente os mesmos padrões de workflow, UI, observabilidade, qualidade e
 ├── README.pt-BR.md                    # este arquivo (português)
 ├── LICENSE                            # MIT
 ├── .gitignore                         # ignora artefatos de build (.tar.gz/.zip)
+├── .github/workflows/verify.yml       # CI self-check (dogfood do pilar 3)
 ├── ai-engineering-standards.md        # a especificação completa (fonte única da verdade)
 ├── install-skill.sh                   # importador: instala a skill em ~/.claude/skills/ + /standards
+├── scripts/verify.sh                  # self-check local (travessões, frontmatter, sintaxe, smoke test)
 ├── engineering-standards/             # a skill (payload que é importado)
 │   ├── SKILL.md                       # hub enxuto (dispara sozinho)
 │   └── references/                    # deep dives por domínio (carregados sob demanda)
@@ -117,8 +120,9 @@ Claude Code e não se aplica lá.
 ## Editar e evoluir o padrão
 
 1. Edite os arquivos-fonte no clone (o `ai-engineering-standards.md` e/ou a skill).
-2. Reinstale: `bash install-skill.sh`.
-3. Commit mais push. Nas outras máquinas: `git pull && bash install-skill.sh`.
+2. Verifique: `bash scripts/verify.sh`.
+3. Reinstale: `bash install-skill.sh`.
+4. Commit mais push. Nas outras máquinas: `git pull && bash install-skill.sh`.
 
 Mantenha o `ai-engineering-standards.md` como a narrativa completa e as `references/*` como as
 unidades operacionais enxutas (é o que preserva a performance de contexto).

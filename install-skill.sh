@@ -38,6 +38,12 @@ if [[ ! -f "$MASTER_MD" ]]; then
 fi
 
 # --- 1+2. Copy the skill and bundle the master markdown -----------------------
+# Prune stale references first so a renamed/removed source file does not linger
+# in the installed skill (keeps re-installs fully idempotent). Guarded so the
+# rm can only ever touch this skill's own references directory.
+if [[ "$SKILL_DEST" == */skills/"$SKILL_NAME" && -d "$SKILL_DEST/references" ]]; then
+  rm -rf "$SKILL_DEST/references"
+fi
 mkdir -p "$SKILL_DEST/references"
 cp -f "$SRC_DIR/$SKILL_NAME/SKILL.md" "$SKILL_DEST/SKILL.md"
 cp -f "$SRC_DIR/$SKILL_NAME/references/"*.md "$SKILL_DEST/references/"
