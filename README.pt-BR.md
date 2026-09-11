@@ -65,14 +65,14 @@ que o reforça.
 
 **Plugin (recomendado para times; versionado, sem drift):**
 ```text
-/plugin marketplace add DouglasVulcano/ai-engineering-standards
+/plugin marketplace add DouglasVulcano/ai_engineering_standards
 /plugin install engineering-standards
 ```
 Atualize depois com `claude plugin update`.
 
 **Skill global (pessoal):**
 ```bash
-git clone https://github.com/DouglasVulcano/ai-engineering-standards.git
+git clone https://github.com/DouglasVulcano/ai_engineering_standards.git
 cd ai-engineering-standards
 bash install-skill.sh
 ```

@@ -64,14 +64,14 @@ UI, observability, quality, and testing, and can scaffold the governance to enfo
 
 **Plugin (recommended for teams; versioned, no drift):**
 ```text
-/plugin marketplace add DouglasVulcano/ai-engineering-standards
+/plugin marketplace add DouglasVulcano/ai_engineering_standards
 /plugin install engineering-standards
 ```
 Update later with `claude plugin update`.
 
 **Global skill (personal):**
 ```bash
-git clone https://github.com/DouglasVulcano/ai-engineering-standards.git
+git clone https://github.com/DouglasVulcano/ai_engineering_standards.git
 cd ai-engineering-standards
 bash install-skill.sh
 ```

@@ -454,7 +454,7 @@ data.
 ## 6. Bootstrap and distribution
 
 **Distribution.** Two ways to install (see the README):
-- **Plugin (recommended for teams):** `/plugin marketplace add DouglasVulcano/ai-engineering-standards`
+- **Plugin (recommended for teams):** `/plugin marketplace add DouglasVulcano/ai_engineering_standards`
   then `/plugin install engineering-standards`. Versioned, updated with `claude plugin update`, no drift.
 - **Global skill:** `bash install-skill.sh` copies the skill into `~/.claude/skills/`.
 
