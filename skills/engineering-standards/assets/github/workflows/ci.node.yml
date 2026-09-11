@@ -5,6 +5,8 @@ on:
   pull_request:
 
 # Node / JS-TS quality gate (starter). Adjust scripts to your package manager.
+# Supply-chain hardening: installs with --ignore-scripts and expects a committed lockfile. For
+# stricter builds, pin tool versions instead of `npx --yes`, and pin each action to a commit SHA.
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -14,7 +16,7 @@ jobs:
         with:
           node-version: "lts/*"
       - name: Install
-        run: npm ci || npm install
+        run: npm ci --ignore-scripts || npm install --ignore-scripts
       - name: fmt + lint
         run: npx --yes @biomejs/biome check .
       - name: typecheck

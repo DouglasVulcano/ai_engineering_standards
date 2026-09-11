@@ -5,6 +5,8 @@ on:
   pull_request:
 
 # Python quality gate (starter). Tighten as the codebase matures.
+# Supply-chain hardening: pin tool versions (and hashes via a requirements file) and pin each action
+# to a commit SHA for stricter builds.
 jobs:
   verify:
     runs-on: ubuntu-latest

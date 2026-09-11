@@ -3,6 +3,18 @@
 All notable changes to this project are documented here. Format follows Keep a Changelog; versioning
 follows SemVer.
 
+## [1.2.1]
+
+### Security
+- Hardened the Bash guard: it now also catches shell-wrapper evasion (`bash -c`, `sh -c`, `eval`),
+  piping a download into a shell (`curl ... | sh`), and writing to secret files via redirection
+  (`> .env`, `id_rsa`, `*.pem`, `.git-credentials`, `.npmrc`). Still fail-open, still a guardrail and
+  not a sandbox.
+- Scaffolded Node CI installs with `--ignore-scripts`; both CI templates document version and action
+  SHA pinning.
+- Added `.github/CODEOWNERS` and a "Threat model and trust boundary" plus "Repository hardening"
+  section to SECURITY.md (branch protection, required Code Owner review, tagged releases).
+
 ## [1.2.0]
 
 ### Added

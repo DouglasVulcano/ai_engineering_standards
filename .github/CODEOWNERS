@@ -1,0 +1,4 @@
+# Require review from the owner on all changes. Enforced once branch protection
+# "Require review from Code Owners" is enabled (see SECURITY.md > Repository hardening).
+# The repo is the trust root for the plugin, so guarding merges to main is the primary control.
+* @DouglasVulcano

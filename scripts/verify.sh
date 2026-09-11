@@ -17,6 +17,7 @@ required=(
   ai-engineering-standards.md install-skill.sh README.md README.pt-BR.md LICENSE
   AGENTS.md CLAUDE.md CONTRIBUTING.md CHANGELOG.md SECURITY.md
   .claude-plugin/plugin.json .claude-plugin/marketplace.json
+  .github/CODEOWNERS
   commands/standards.md commands/scaffold.md
   "$SKILL/SKILL.md" "$SKILL/scaffold.sh"
   "$SKILL/references/workflow-github.md"
