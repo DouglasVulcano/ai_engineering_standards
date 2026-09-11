@@ -3,6 +3,14 @@
 All notable changes to this project are documented here. Format follows Keep a Changelog; versioning
 follows SemVer.
 
+## [1.3.1]
+
+### Added
+- README (EN and PT-BR): a single "golden path" quickstart (scaffold, fill AGENTS.md, set
+  CODEOWNERS, arm branch protection) plus a "this repo runs on its own standard" note pointing to
+  the end-to-end fixtures. The branch-protection step flags the Ruleset gotcha (`enforce_admins` is
+  not a status-check context).
+
 ## [1.3.0]
 
 ### Added

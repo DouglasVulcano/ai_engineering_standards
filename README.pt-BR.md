@@ -28,6 +28,46 @@ Objetivo: quando qualquer agente de IA começa, planeja ou revisa um trabalho, e
 padrão de workflow, UI, observabilidade, qualidade e testes, e pode fazer o scaffold da governança
 que o reforça.
 
+## Quickstart: o caminho de ouro
+
+O padrão compensa quando o caminho inteiro está no lugar, não só a skill. De zero à governança
+aplicada:
+
+**1. Faça o scaffold da governança** (templates de issue/PR, CODEOWNERS, um CI gate, `AGENTS.md` +
+um `CLAUDE.md` fino, um deny-list de segurança em `.claude`). Previa, depois aplique:
+
+```bash
+bash skills/engineering-standards/scaffold.sh /caminho/do/repo --dry-run
+bash skills/engineering-standards/scaffold.sh /caminho/do/repo
+```
+
+**2. Preencha o `AGENTS.md`** com seu stack e os comandos do gate (veja o apêndice de stack), e
+**3. defina owners reais** em `.github/CODEOWNERS` (as duas coisas que o scaffolder não adivinha).
+
+**4. Arme a branch protection** no seu branch default, o gate autoritativo. Re-rode o scaffolder com
+`--protect`, ou aplique você mesmo (API clássica de branch protection):
+
+```bash
+gh api -X PUT repos/OWNER/REPO/branches/main/protection --input - <<'JSON'
+{ "required_pull_request_reviews": { "required_approving_review_count": 1, "require_code_owner_reviews": true },
+  "required_status_checks": { "strict": true, "contexts": ["verify"] },
+  "enforce_admins": true, "restrictions": null }
+JSON
+```
+
+> Usando um **Ruleset** (o modelo mais novo do GitHub)? O formato muda: `enforce_admins` não é um
+> status check (ele vira a bypass list), e o `contexts` do check exigido é o nome do job (aqui
+> `verify`). Não jogue os campos da API clássica na lista de status-checks de um ruleset, senão a
+> caixa de merge trava em "Expected - Waiting for status to be reported".
+
+A skill é conselho; **CI mais branch protection são o que realmente aplica**. Só a skill dá o menor
+retorno; o scaffolder mais um `AGENTS.md` preenchido mais o gate armado é onde está o valor.
+
+> **Este repo roda no próprio padrão:** o `AGENTS.md`, o `.github/workflows/verify.yml` e o ruleset
+> no `main` (exigindo o check `verify` mais review) são o mesmo setup que o scaffolder produz. É uma
+> referência viva; veja [`docs/research-and-benchmarks.md`](docs/research-and-benchmarks.md) para as
+> fixtures greenfield/brownfield verificadas ponta a ponta.
+
 ## Os 4 pilares
 
 | # | Pilar | Resumo |
