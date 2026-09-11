@@ -9,13 +9,13 @@
 #   4. Verifies the install and prints the next steps
 #
 # Usage:
-#   bash ~/ai_config/install-skill.sh            # install/update (global, ~/.claude)
+#   bash install-skill.sh                        # install/update (global, ~/.claude), from the repo root
 #   CLAUDE_DIR=./.claude bash install-skill.sh   # install into the current project (local scope)
 #
 set -euo pipefail
 
 # --- Resolve paths ------------------------------------------------------------
-SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"   # where this script lives (~/ai_config)
+SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"   # where this script lives (the repo root, wherever it was cloned)
 CLAUDE_DIR="${CLAUDE_DIR:-$HOME/.claude}"                 # override for project scope
 SKILL_NAME="engineering-standards"
 SKILL_DEST="$CLAUDE_DIR/skills/$SKILL_NAME"
@@ -29,7 +29,7 @@ echo "    target: $SKILL_DEST"
 # --- Pre-checks ---------------------------------------------------------------
 if [[ ! -f "$SRC_DIR/$SKILL_NAME/SKILL.md" ]]; then
   echo "ERROR: could not find '$SRC_DIR/$SKILL_NAME/SKILL.md'." >&2
-  echo "       Run this script from the ~/ai_config directory." >&2
+  echo "       Run it from the repository root, or pass the full path: bash /path/to/repo/install-skill.sh." >&2
   exit 1
 fi
 if [[ ! -f "$MASTER_MD" ]]; then

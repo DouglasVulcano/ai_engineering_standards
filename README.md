@@ -59,17 +59,20 @@ standards for workflow, UI, observability, quality, and testing.
 ## Quick install
 
 ```bash
-git clone https://github.com/DouglasVulcano/ai-engineering-standards.git ~/ai_config
-bash ~/ai_config/install-skill.sh
+# clone anywhere; the folder name is up to you
+git clone https://github.com/DouglasVulcano/ai-engineering-standards.git
+cd ai-engineering-standards
+bash install-skill.sh
 ```
 
-The installer is **idempotent**: it copies the skill into `~/.claude/skills/engineering-standards/`,
-bundles the full spec into `references/`, and creates the `/standards` command. Reopen Claude Code
-(or run `/skills`) and you are set.
+The installer is **idempotent** and location independent (it resolves its own path), so run it from
+the repo root wherever you cloned it. It copies the skill into
+`~/.claude/skills/engineering-standards/`, bundles the full spec into `references/`, and creates the
+`/standards` command. Reopen Claude Code (or run `/skills`) and you are set.
 
-**Per project scope** (instead of global), installing inside a specific repo:
+**Per project scope** (instead of global), installing into a specific repo (run from the repo root):
 ```bash
-CLAUDE_DIR=./.claude bash ~/ai_config/install-skill.sh
+CLAUDE_DIR=./.claude bash install-skill.sh
 ```
 
 ## How to use
@@ -92,13 +95,14 @@ When you work in a repository, the skill also ensures the **bootstrap block** in
 
 ## Install on another machine / another Claude
 
-**Claude Code (CLI/IDE)**: clone the repo and run `install-skill.sh` (as above). To update:
+**Claude Code (CLI/IDE)**: clone the repo and run `install-skill.sh` (as above). To update, from the
+clone directory:
 ```bash
-cd ~/ai_config && git pull && bash install-skill.sh
+git pull && bash install-skill.sh
 ```
 
-**Without git**: build a package (`tar -czf ai-standards.tar.gz -C ~/ai_config .`), carry it to the
-other machine, extract into `~/ai_config`, and run the installer.
+**Without git**: build a package from the repo folder (`tar -czf ai-standards.tar.gz -C <repo-folder> .`),
+carry it to the other machine, extract it into any folder, and run `bash install-skill.sh` inside.
 
 **Claude Desktop / claude.ai (web)**: they do not use `~/.claude`. Install through the Skills UI by
 uploading the `engineering-standards/` folder (compress it first). The `/standards` slash command is
@@ -110,7 +114,7 @@ exclusive to Claude Code and does not apply there.
 
 ## Edit and evolve the standard
 
-1. Edit the source files in `ai_config/` (the `ai-engineering-standards.md` and/or the skill).
+1. Edit the source files in the clone (the `ai-engineering-standards.md` and/or the skill).
 2. Reinstall: `bash install-skill.sh`.
 3. Commit plus push. On other machines: `git pull && bash install-skill.sh`.
 

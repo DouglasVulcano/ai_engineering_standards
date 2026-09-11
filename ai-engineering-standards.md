@@ -445,7 +445,8 @@ the standard self enforcing for any agent of any model (§1.7).
 ## AI Engineering Standards (mandatory)
 
 This project follows the user's **AI Engineering Standards**. Before any task, apply them (skill
-`engineering-standards`; full source in `~/ai_config/ai-engineering-standards.md`):
+`engineering-standards`; full spec bundled in the installed skill at
+`~/.claude/skills/engineering-standards/references/ai-engineering-standards.md`):
 
 1. **Workflow:** Issue first, PR driven. Every task (Fix/Improvement/New feature) starts as an Issue;
    every deploy goes through a PR that references the Issue (`Closes #`). Conventional Commits.
