@@ -122,10 +122,19 @@ verbs passing locally as an executable proxy for the CI gate.
   deliberate safety choice; deep merge is on the roadmap.
 
 ### 4.6 Reproduce
-- `bash scripts/verify.sh` runs the files/JSON/dash/description checks plus an installer smoke test
-  and a scaffolder smoke test (create + idempotent re-run) in throwaway temp dirs.
-- With `claude plugin eval` enabled (early access), add an `evals/` suite and run
-  `--ablation with-without` for a control arm (roadmap).
+- `bash scripts/verify.sh` runs the files/JSON/dash/description checks plus installer and scaffolder
+  smoke tests (create + idempotent re-run) and the hook block/allow behavior, in throwaway temp dirs.
+- `bash scripts/stress.sh` runs the full stress battery (hook guards, 7-stack scaffolder matrix,
+  latency, throughput, context ratio) and writes `docs/benchmark-results.json` (the data behind the
+  benchmark page).
+- The shipped `evals/` suite runs under `claude plugin eval . --ablation with-without` (early access).
+
+### 4.7 Measured results (latest run)
+From `scripts/stress.sh` (WSL2, Python 3.12.3): hook guards **0 false positives / 0 false negatives
+across 50 cases**, ~25 ms/call, fail-open verified; scaffolder **7/7 stacks**, 10 artifacts/scaffold,
+idempotent and non-overwriting, ~57 ms/repo (30 repos in 1.7 s); context **~22%** loaded on trigger
+(5.3 KB of 23 KB); 67 self-check assertions. Full JSON in `docs/benchmark-results.json`. These prove
+the plugin does what it claims in a sandbox; real productivity ROI must be measured per repo (§5).
 
 ---
 

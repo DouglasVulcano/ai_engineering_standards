@@ -1,0 +1,48 @@
+{
+  "generated_at": "2026-09-11T16:28:09",
+  "env": {
+    "python": "3.12.3",
+    "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39"
+  },
+  "hooks": {
+    "bash": {
+      "dangerous": 15,
+      "blocked": 15,
+      "missed": 0,
+      "safe": 15,
+      "allowed": 15,
+      "false_blocked": 0
+    },
+    "paths": {
+      "dangerous": 10,
+      "blocked": 10,
+      "missed": 0,
+      "safe": 10,
+      "allowed": 10,
+      "false_blocked": 0
+    },
+    "fail_open": true,
+    "avg_latency_ms": 25
+  },
+  "scaffolder": {
+    "stacks_total": 7,
+    "stacks_detected": 7,
+    "ci_variant_ok": 7,
+    "artifacts_per_scaffold": 10,
+    "idempotent": true,
+    "no_overwrite": true,
+    "force_overwrites": true,
+    "dry_run_clean": true,
+    "with_plugin_ok": true,
+    "repos": 30,
+    "total_ms": 1710,
+    "avg_ms": 57
+  },
+  "context": {
+    "skill_md_bytes": 5285,
+    "references_bytes": 18230,
+    "master_bytes": 24157,
+    "on_trigger_pct": 22
+  },
+  "selfcheck_assertions": 67
+}
