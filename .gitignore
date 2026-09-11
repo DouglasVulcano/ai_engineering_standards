@@ -6,6 +6,10 @@
 __pycache__/
 *.pyc
 
+# Local benchmark outputs (personal, not versioned)
+benchmark-results.json
+benchmark*.html
+
 # OS / editor
 .DS_Store
 Thumbs.db
