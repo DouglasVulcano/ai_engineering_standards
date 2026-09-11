@@ -24,6 +24,11 @@ follows SemVer.
 - `install-skill.sh` bundles the whole skill payload (skill + scaffolder + assets); `scripts/verify.sh`
   adds JSON and plugin-manifest checks plus a scaffolder smoke test.
 
+### Fixed
+- CI actions bumped to Node 24 runtimes (`actions/checkout@v5`, `actions/setup-python@v6`,
+  `actions/setup-node@v5`, `codecov/codecov-action@v5`) to clear the Node 20 deprecation warning, in
+  the repo workflow and in the scaffolded CI templates.
+
 ## [1.0.0]
 
 ### Added

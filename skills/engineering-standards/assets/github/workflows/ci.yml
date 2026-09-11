@@ -10,7 +10,7 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       # - name: fmt        # biome check | ruff format --check | gofmt -l | cargo fmt --check
       #   run: "<cmd>"
       # - name: lint       # biome/eslint | ruff check | golangci-lint run | cargo clippy -D warnings
