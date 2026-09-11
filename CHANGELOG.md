@@ -3,6 +3,14 @@
 All notable changes to this project are documented here. Format follows Keep a Changelog; versioning
 follows SemVer.
 
+## [1.2.2]
+
+### Fixed
+- Quickstart: the global-skill install snippet referenced the wrong directory after `git clone`
+  (`cd ai-engineering-standards` should be `cd ai_engineering_standards`), in README (EN and PT-BR).
+- CHANGELOG accuracy: the v1.2.0 note overstated eval automation. CI validates the eval-suite
+  structure via `verify.sh`; the evals themselves run manually (`claude plugin eval`).
+
 ## [1.2.1]
 
 ### Security
@@ -22,7 +30,8 @@ follows SemVer.
   Bash (`rm -rf /`, `git push --force`, fork bomb, `dd` to a device) and edits to secrets/credentials
   files. Active when the plugin is enabled; complements the settings deny-list and CI.
 - Eval suite (`evals/`) for `claude plugin eval` with a with/without control arm: skill activation,
-  greenfield scaffold artifacts, and AGENTS.md repo-specificity. Runs in CI as a regression gate.
+  greenfield scaffold artifacts, and AGENTS.md repo-specificity. Its structure is validated in CI by
+  `verify.sh`; the evals themselves run manually (`claude plugin eval`).
 - `scripts/verify.sh` now checks the hooks (JSON, shell/Python syntax, block/allow behavior) and the
   eval-suite structure.
 
