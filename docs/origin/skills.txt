@@ -1,0 +1,9 @@
+https://github.com/blader/humanizer
+
+https://github.com/21st-dev/magic-mcp
+
+https://github.com/Jpisnice/shadcn-ui-mcp-server
+
+https://github.com/vercel-labs/agent-skills/tree/main/skills/web-design-guidelines
+
+https://github.com/ChromeDevTools/chrome-devtools-mcp

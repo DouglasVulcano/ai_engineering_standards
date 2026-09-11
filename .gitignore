@@ -1,0 +1,11 @@
+# Artefatos de build / pacotes distribuíveis (regeráveis a partir do repo)
+*.tar.gz
+*.zip
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/

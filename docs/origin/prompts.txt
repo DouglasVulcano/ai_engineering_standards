@@ -1,0 +1,11 @@
+1. Prompt: Crie Issues no GitHub para todas as Tarefa (Correção, Melhoria ou Nova função) que faremos e trabalhe com PRs para gerenciar os Deploys.
+Lembre de Mencionar a Issue na descrição do PR. Alimente o arquivo.md do projeto com essas instruções para que qualquer agente de qualquer modelo
+considere esse padrão.
+
+2. Prompt:
+Utilize a Skill Motion Principles GitHub.com/kylezantos/design- principles e garanta que toda interface do sistema tem skeleton, lazyloading,
+smooth animation de entrada, saida, carregamento, progresso em todos os elementos.
+
+3. Prompt
+Garanta que o sistema tenha : Observabilidade (Sentry, Datadog, NewRelic, Open Telemetry)
+Qualidade e Lint de Código (Arch- contract, Biome, Comilint, Knip, Stryke) Testes unitários e integração e end-to-end (Codecov, Playwright)
