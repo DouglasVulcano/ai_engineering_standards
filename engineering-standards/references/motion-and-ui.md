@@ -1,61 +1,67 @@
-# Referência — Motion & UI/UX
+# Reference: Motion and UI/UX
 
-> Pilar 2. Origem: `prompts.txt` #2 + `design-motion-principles` + Web Interface Guidelines (Vercel).
+> Pillar 2. Source: `prompts.txt` #2 plus `design-motion-principles` plus the Web Interface
+> Guidelines (Vercel).
 
-## Cinco estados obrigatórios (toda UI async/dinâmica)
-1. **Skeleton/placeholder** enquanto carrega (sem tela branca / layout shift).
-2. **Lazy loading**: `loading="lazy"` abaixo da dobra; `React.lazy`+`Suspense` p/ rotas/componentes
-   pesados; listas grandes virtualizadas.
-3. **Enter** — aparecimento suave.
-4. **Exit** — desmontagem suave (`AnimatePresence` ou equiv.), nunca sumir abrupto.
-5. **Carregamento & progresso** — spinners em ações; barras/indicadores em operações longas; botão
-   de submit mostra estado de envio.
+## Five mandatory states (every async/dynamic UI)
+1. **Skeleton/placeholder** while loading (no blank screen, no layout shift).
+2. **Lazy loading**: `loading="lazy"` below the fold; `React.lazy` plus `Suspense` for heavy routes
+   and components; virtualize large lists.
+3. **Enter**: smooth appearance.
+4. **Exit**: smooth unmount (`AnimatePresence` or equivalent), never a hard disappear.
+5. **Loading and progress**: spinners on actions; bars/indicators on long operations; the submit
+   button shows its sending state.
 
-## Princípios de Motion (design-motion-principles)
-**Frequency Gate** — decida *se* animar antes de *como*:
-| Frequência | Recomendação |
+## Motion principles (design-motion-principles)
+**Frequency Gate**, decide *whether* to animate before *how*:
+| Frequency | Recommendation |
 |---|---|
-| Raro (mensal) | Motion expressivo OK |
-| Ocasional (diário) | Sutil e rápido |
-| Frequente (100s/dia) | Sem animação / instantâneo |
-| Iniciado por teclado | **Nunca animar** |
+| Rare (monthly) | Expressive motion is welcome |
+| Occasional (daily) | Subtle and fast |
+| Frequent (hundreds/day) | No animation or instant |
+| Keyboard initiated | **Never animate** |
 
-**Durações** (por contexto): produtividade **< 300ms (180ms ideal)**; polish de produção
-**200–500ms**; criativo/lúdico: a duração serve ao efeito.
+**Durations** (by context): productivity **under 300ms (180ms ideal)**; production polish
+**200ms to 500ms**; creative/playful: the duration serves the effect.
 
-**Regras:**
-- "A melhor animação é a que passa despercebida" (exceção: apps lúdicos/infantis).
-- **`prefers-reduced-motion` sempre** — sem exceções.
-- Animar **só `transform`/`opacity`**; **nunca `transition: all`**; `transform-origin` correto.
-- Animações **interrompíveis**. **Motion Gap Analysis:** cace renders condicionais sem
-  `AnimatePresence` e estilos dinâmicos sem `transition`.
+**Rules:**
+- "The best animation is the one that goes unnoticed" (exception: playful/kids apps).
+- **Always honor `prefers-reduced-motion`**, no exceptions.
+- Animate **only `transform` and `opacity`**; **never `transition: all`**; correct
+  `transform-origin`.
+- Animations must be **interruptible**. **Motion Gap Analysis:** hunt for conditional renders
+  without `AnimatePresence` and dynamic styles without `transition`.
 
-**Lente por projeto:** produtividade/SaaS → Emil(velocidade)+Jakub(polish); infantil/criativo →
-Jakub+Jhey; landing → Jakub+Jhey; mobile/e-commerce → Jakub+Emil.
+**Lens per project:** productivity/SaaS uses Emil (speed) plus Jakub (polish); kids/creative uses
+Jakub plus Jhey; landing uses Jakub plus Jhey; mobile/e-commerce uses Jakub plus Emil.
 
-## Web Interface Guidelines (checklist de review)
-**A11y:** `aria-label` em botões só-ícone; `<label>` em inputs; `<button>` p/ ação, `<a>`/`<Link>` p/
-nav (nunca `<div onClick>`); `alt` em imagens (`alt=""` decorativa); `aria-hidden` em ícones deco;
-`aria-live="polite"` em updates async; headings hierárquicos + skip link.
-**Foco:** foco visível (`focus-visible:ring-*`), nunca `outline-none` sem substituto; `:focus-visible`
-e `:focus-within`; sticky não obscurece o focado.
-**Forms:** `autocomplete`+`name`; `type`/`inputmode` corretos; não bloquear paste; labels clicáveis;
-`spellCheck={false}` em email/código/user; erros inline + focar 1º erro; submit habilitado até o
-request; placeholders com `…` e exemplo; avisar sobre mudanças não salvas.
-**Tipografia:** `…` (não `...`); aspas curvas; `&nbsp;` em unidades/atalhos/marcas; loading termina em
-`…`; `tabular-nums` em colunas numéricas; `text-wrap: balance` em headings.
-**Conteúdo/layout:** `truncate`/`line-clamp`/`break-words`; filhos flex com `min-w-0`; tratar estados
-vazios; antecipar inputs curtos/longos.
-**Imagens/perf:** `width`/`height` explícitos (evita CLS); `loading="lazy"` abaixo da dobra;
-`priority`/`fetchpriority="high"` acima; virtualizar listas > 50; `preconnect`/`preload` de fontes
-(`font-display: swap`); preferir `<video muted loop playsinline>` a GIF.
-**Nav/estado:** URL reflete filtros/tabs/paginação (deep-link, ex.: nuqs); ações destrutivas com
-confirmação ou undo.
-**Touch/dark/i18n/hidratação:** `touch-action: manipulation`; `overscroll-behavior: contain` em
-modais; `color-scheme`+`theme-color`; `Intl.DateTimeFormat`/`Intl.NumberFormat`; guardar datas contra
-mismatch de hidratação.
-**Copy:** voz ativa; Title Case; numerais p/ contagens; labels específicos; erro inclui próximo passo.
+## Web Interface Guidelines (review checklist)
+**A11y:** `aria-label` on icon only buttons; `<label>` on inputs; `<button>` for actions,
+`<a>`/`<Link>` for navigation (never `<div onClick>`); `alt` on images (`alt=""` if decorative);
+`aria-hidden` on decorative icons; `aria-live="polite"` on async updates; hierarchical headings plus
+a skip link.
+**Focus:** visible focus (`focus-visible:ring-*`), never `outline-none` without a replacement; use
+`:focus-visible` and `:focus-within`; sticky elements must not obscure the focused element.
+**Forms:** `autocomplete` plus `name`; correct `type`/`inputmode`; do not block paste; clickable
+labels; `spellCheck={false}` on email/code/username; inline errors plus focus the first one; submit
+stays enabled until the request starts; placeholders end with an ellipsis and show an example; warn
+about unsaved changes.
+**Typography:** use the ellipsis character (not three dots); curly quotes; non breaking spaces in
+units/shortcuts/brands; loading states end with an ellipsis; `tabular-nums` in numeric columns;
+`text-wrap: balance` on headings.
+**Content/layout:** `truncate`/`line-clamp`/`break-words`; flex children with `min-w-0`; handle empty
+states; anticipate short and long inputs.
+**Images/perf:** explicit `width`/`height` (avoids CLS); `loading="lazy"` below the fold;
+`priority`/`fetchpriority="high"` above; virtualize lists over 50 items; `preconnect`/`preload` for
+fonts (`font-display: swap`); prefer `<video muted loop playsinline>` over GIF.
+**Nav/state:** the URL reflects filters/tabs/pagination (deep link, for example nuqs); destructive
+actions require confirmation or an undo window.
+**Touch/dark/i18n/hydration:** `touch-action: manipulation`; `overscroll-behavior: contain` in
+modals; `color-scheme` plus `theme-color`; `Intl.DateTimeFormat`/`Intl.NumberFormat`; guard date
+rendering against hydration mismatch.
+**Copy:** active voice; Title Case; numerals for counts; specific labels; error messages include the
+next step.
 
-## Ferramentas de apoio (ver arsenal)
-`design-motion-principles` (build/audit de motion), `web-design-guidelines` (auditar UI),
-`shadcn-ui-mcp`/`21st.dev Magic` (componentes), `chrome-devtools-mcp` (perf/erros no browser real).
+## Supporting tools (see arsenal)
+`design-motion-principles` (build/audit motion), `web-design-guidelines` (audit UI),
+`shadcn-ui-mcp`/`21st.dev Magic` (components), `chrome-devtools-mcp` (perf/errors in a real browser).

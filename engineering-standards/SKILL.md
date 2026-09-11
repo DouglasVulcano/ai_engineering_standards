@@ -1,62 +1,66 @@
 ---
 name: engineering-standards
 description: >-
-  Padrão único de engenharia do usuário (workflow, UI/motion, observabilidade, qualidade, testes e
-  arsenal de MCPs/skills). Use SEMPRE que for iniciar, planejar ou revisar trabalho em qualquer
-  projeto — ao "criar issue/PR", "gerenciar deploy", "montar/revisar tela ou UI", "adicionar
-  skeleton/lazy loading/animação", "configurar observabilidade/Sentry/OpenTelemetry", "setar
-  lint/qualidade/testes/CI", "definir os padrões do projeto", ou quando o usuário disser "seguir os
-  padrões", "aplicar os standards", "config de IA". Também ao alimentar CLAUDE.md/AGENTS.md.
-  English: the user's central engineering standards — apply on any new/planned/reviewed work.
+  The user's central engineering standard (workflow, UI/motion, observability, quality, testing, and
+  an arsenal of MCPs and skills). Use it whenever you start, plan, or review work on any project: when
+  "creating an issue/PR", "managing a deploy", "building or reviewing a screen or UI", "adding
+  skeleton/lazy loading/animation", "setting up observability (Sentry, OpenTelemetry)", "configuring
+  lint/quality/tests/CI", "defining the project standards", or when the user says "follow the
+  standards" / "apply the standards" / "config de IA". Also when feeding CLAUDE.md/AGENTS.md. PT-BR:
+  use ao "criar issue/PR", "gerenciar deploy", "revisar a UI", "configurar observabilidade", "setar
+  lint/testes", "seguir os padrões", "aplicar os standards".
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch
 metadata:
   version: "1.0.0"
-  author: vulca
+  author: DouglasVulcano
 ---
 
-# Engineering Standards — Padrão Único
+# Engineering Standards
 
-Skill **central** que consolida a configuração de IA do usuário (`~/ai_config/`) num padrão
-obrigatório para **qualquer agente de qualquer modelo**. A especificação completa e legível está em
-`references/ai-engineering-standards.md`; os detalhes operacionais por domínio estão nos demais
-arquivos de `references/`. **Leia sob demanda** — só o domínio relevante à tarefa, não tudo de uma vez.
+Central skill that consolidates the user's AI configuration into a single standard that is mandatory
+for any agent of any model. The full, readable specification lives in
+`references/ai-engineering-standards.md`; the operational deep dives per domain live in the other
+files under `references/`. **Read on demand:** load only the domain relevant to the task, not
+everything at once.
 
-## Quando aplicar
+## When to apply
 
-Aplique proativamente em **todo** início/planejamento/review de trabalho. Se o repositório ainda não
-tem os padrões no `CLAUDE.md`/`AGENTS.md`, ofereça alimentá-lo (ver `references/workflow-github.md` §
-bootstrap).
+Apply proactively on every start, plan, or review of work. If the repository does not yet carry the
+standard in its `CLAUDE.md`/`AGENTS.md`, offer to feed it (see the bootstrap section in
+`references/workflow-github.md`).
 
-## Os 4 pilares (sempre valem)
+## The 4 pillars (always in force)
 
-1. **Workflow — Issue-first, PR-driven.** Toda tarefa (Correção / Melhoria / Nova função) começa
-   numa **Issue**; todo deploy passa por um **PR que menciona a Issue** (`Closes #N`). Conventional
-   Commits. Alimente o `CLAUDE.md`/`AGENTS.md` do projeto. → `references/workflow-github.md`
-2. **Motion & UI.** Toda interface tem **skeleton, lazy loading e animações suaves de entrada,
-   saída, carregamento e progresso**. Honrar `prefers-reduced-motion`; animar só `transform`/
-   `opacity`; nunca `transition: all`. Aplicar o Frequency Gate + Web Interface Guidelines.
-   → `references/motion-and-ui.md`
-3. **Observabilidade + Qualidade + Testes.** OpenTelemetry como base + Sentry/Datadog/New Relic;
-   Biome, contratos de arquitetura, Commitlint, Knip, Stryker; unit + integração + E2E (Playwright)
-   com cobertura no Codecov. → `references/observability-quality-testing.md`
-4. **Arsenal.** Use as ferramentas certas: shadcn-ui-mcp, 21st.dev Magic, chrome-devtools-mcp,
-   design-motion-principles, web-design-guidelines, humanizer. → `references/arsenal-mcp-skills.md`
+1. **Workflow, Issue first and PR driven.** Every task (Fix, Improvement, or New feature) starts as
+   an **Issue**; every deploy goes through a **PR that references the Issue** (`Closes #N`).
+   Conventional Commits. Feed the project's `CLAUDE.md`/`AGENTS.md`.
+   See `references/workflow-github.md`.
+2. **Motion and UI.** Every interface has **skeleton, lazy loading, and smooth animations for enter,
+   exit, loading, and progress**. Honor `prefers-reduced-motion`; animate only `transform` and
+   `opacity`; never `transition: all`. Apply the Frequency Gate and the Web Interface Guidelines.
+   See `references/motion-and-ui.md`.
+3. **Observability, Quality, and Testing.** OpenTelemetry as the base plus Sentry, Datadog, or New
+   Relic; Biome, architecture contracts, Commitlint, Knip, Stryker; unit, integration, and E2E
+   (Playwright) with coverage on Codecov. See `references/observability-quality-testing.md`.
+4. **Arsenal.** Use the right tools: shadcn-ui-mcp, 21st.dev Magic, chrome-devtools-mcp,
+   design-motion-principles, web-design-guidelines, humanizer.
+   See `references/arsenal-mcp-skills.md`.
 
-## Fluxo recomendado
+## Recommended flow
 
-1. **Orientar:** identifique o tipo de trabalho e leia apenas a(s) referência(s) do(s) domínio(s)
-   envolvido(s).
-2. **Aplicar:** siga o pilar; para UI, garanta os cinco estados (skeleton/lazy/enter/exit/progress);
-   para features, garanta o gate de CI (lint→types→arch→knip→testes→cobertura→build).
-3. **Propagar:** garanta o bloco de bootstrap no `CLAUDE.md`/`AGENTS.md` do repo (self-enforcing).
-4. **Fechar:** valide contra a Definition of Done em `references/ai-engineering-standards.md` §5.
+1. **Orient:** identify the kind of work and read only the reference for the domain(s) involved.
+2. **Apply:** follow the pillar; for UI, guarantee the five states (skeleton, lazy, enter, exit,
+   progress); for features, guarantee the CI gate (lint, types, arch, knip, tests, coverage, build).
+3. **Propagate:** ensure the bootstrap block is in the repo's `CLAUDE.md`/`AGENTS.md` (self
+   enforcing).
+4. **Close:** validate against the Definition of Done in `references/ai-engineering-standards.md` §5.
 
-## Índice de referências
+## Reference index
 
-| Arquivo | Carregue quando |
+| File | Load when |
 |---|---|
-| `references/ai-engineering-standards.md` | Precisar da spec completa, DoD ou bloco de bootstrap |
-| `references/workflow-github.md` | Criar Issue/PR, gerenciar deploy, alimentar CLAUDE.md |
-| `references/motion-and-ui.md` | Construir/revisar qualquer tela ou animação |
-| `references/observability-quality-testing.md` | Configurar o11y, lint/qualidade, testes/CI |
-| `references/arsenal-mcp-skills.md` | Escolher/instalar um MCP server ou skill |
+| `references/ai-engineering-standards.md` | You need the full spec, the DoD, or the bootstrap block |
+| `references/workflow-github.md` | Creating an Issue/PR, managing a deploy, feeding CLAUDE.md |
+| `references/motion-and-ui.md` | Building or reviewing any screen or animation |
+| `references/observability-quality-testing.md` | Setting up observability, lint/quality, tests/CI |
+| `references/arsenal-mcp-skills.md` | Choosing or installing an MCP server or skill |
