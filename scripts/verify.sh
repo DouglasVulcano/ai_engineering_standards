@@ -134,6 +134,20 @@ else
 fi
 rm -rf "$t2"
 
+echo "==> Scaffolder branch-protection guidance"
+t3="$(mktemp -d)"
+( cd "$t3" && git init -q && git remote add origin https://github.com/acme/demo.git ) >/dev/null 2>&1 || true
+bp_out="$(bash "$SKILL/scaffold.sh" "$t3" 2>&1 || true)"
+echo "$bp_out" | grep -q "Arm branch protection" && ok "prints branch-protection next step" || err "missing branch-protection next step"
+echo "$bp_out" | grep -q "repos/acme/demo/branches" && ok "personalizes protection command from origin" || err "did not personalize protection command"
+bp_dry="$(bash "$SKILL/scaffold.sh" "$t3" --protect --dry-run 2>&1 || true)"
+if echo "$bp_dry" | grep -qi "dry run: would PUT" && ! echo "$bp_dry" | grep -q "done: branch protection applied"; then
+  ok "--protect honors --dry-run (prints, never executes)"
+else
+  err "--protect did not honor --dry-run"
+fi
+rm -rf "$t3"
+
 echo ""
 if [[ "$fail" -eq 0 ]]; then
   echo "ALL CHECKS PASSED"

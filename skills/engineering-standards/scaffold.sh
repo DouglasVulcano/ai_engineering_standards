@@ -5,7 +5,7 @@
 # re-running is idempotent (a second run makes no changes).
 #
 # Usage:
-#   scaffold.sh [TARGET_DIR] [--dry-run] [--force]
+#   scaffold.sh [TARGET_DIR] [--dry-run] [--force] [--protect]
 #               [--with-plugin OWNER/REPO] [--marketplace NAME] [--plugin NAME]
 #
 # Defaults: TARGET_DIR = current directory; plugin NAME = engineering-standards;
@@ -14,18 +14,21 @@
 # Delivers: .github issue/PR templates, CODEOWNERS, a stack-aware CI gate (verify.yml),
 # AGENTS.md (canonical) + a thin CLAUDE.md that imports it, and a .claude/settings.json safety
 # deny-list. With --with-plugin it also wires .claude/settings.json to auto-enable the plugin for
-# everyone who trusts the repo (extraKnownMarketplaces + enabledPlugins).
+# everyone who trusts the repo (extraKnownMarketplaces + enabledPlugins). With --protect it arms
+# branch protection on the target's default branch via the GitHub API (needs gh + a repo-admin
+# token); otherwise it always prints the exact command for you to run.
 #
 set -euo pipefail
 
 SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ASSETS="$SELF_DIR/assets"
 
-usage() { sed -n '2,17p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
+usage() { sed -n '2,19p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
 
 TARGET="."
 DRY=0
 FORCE=0
+PROTECT=0
 WITH_PLUGIN=""
 MARKETPLACE=""
 PLUGIN_NAME="engineering-standards"
@@ -33,6 +36,7 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --dry-run) DRY=1 ;;
     --force)   FORCE=1 ;;
+    --protect) PROTECT=1 ;;
     --with-plugin)   WITH_PLUGIN="${2:-}"; shift ;;
     --with-plugin=*) WITH_PLUGIN="${1#*=}" ;;
     --marketplace)   MARKETPLACE="${2:-}"; shift ;;
@@ -91,7 +95,10 @@ place "$ASSETS/github/CODEOWNERS"                      ".github/CODEOWNERS"
 
 # --- CI gate (stack-specific when available, else generic) ---
 ci_src="$ASSETS/github/workflows/ci.yml"
-[[ -f "$ASSETS/github/workflows/ci.$stack.yml" ]] && ci_src="$ASSETS/github/workflows/ci.$stack.yml"
+ci_is_placeholder=1
+if [[ -f "$ASSETS/github/workflows/ci.$stack.yml" ]]; then
+  ci_src="$ASSETS/github/workflows/ci.$stack.yml"; ci_is_placeholder=0
+fi
 place "$ci_src" ".github/workflows/verify.yml"
 
 # --- agent guides ---
@@ -131,12 +138,71 @@ PY
   fi
 fi
 
+# --- branch protection (the authoritative gate the standard depends on) ---
+origin_url="$(git -C "$TARGET" remote get-url origin 2>/dev/null || true)"
+repo_slug=""
+[[ -n "$origin_url" ]] && repo_slug="$(printf '%s' "$origin_url" | sed -E 's#^git@[^:]+:##; s#^https?://[^/]+/##; s#\.git$##')"
+# prefer the remote's default branch (protection targets main, not whatever is checked out)
+branch="$(git -C "$TARGET" symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null | sed 's#^origin/##' || true)"
+[[ -z "$branch" ]] && branch="$(git -C "$TARGET" symbolic-ref --quiet --short HEAD 2>/dev/null || true)"
+[[ -z "$branch" ]] && branch="main"
+slug_disp="${repo_slug:-<owner>/<repo>}"
+if [[ "$ci_is_placeholder" -eq 1 ]]; then
+  checks_json='"required_status_checks": null'
+else
+  checks_json='"required_status_checks": { "strict": true, "contexts": ["verify"] }'
+fi
+prot_json="{ \"required_pull_request_reviews\": { \"required_approving_review_count\": 1, \"require_code_owner_reviews\": true }, $checks_json, \"enforce_admins\": true, \"restrictions\": null }"
+
 echo ""
 echo "Summary: created/would-create=$created, kept=$kept, stack=$stack"
+if [[ "$ci_is_placeholder" -eq 1 ]]; then
+  echo ""
+  echo "WARNING: the generated .github/workflows/verify.yml is a placeholder that always passes."
+  echo "         Fill the gate for '$stack' BEFORE requiring the 'verify' check below, or you would"
+  echo "         enforce a check that verifies nothing (the command leaves status checks unset)."
+fi
+echo ""
 echo "Next steps:"
 echo "  1. Fill AGENTS.md: stack + the gate commands for '$stack' (see the stack-appendix)."
 echo "  2. Set real owners in .github/CODEOWNERS."
 echo "  3. Complete .github/workflows/verify.yml for your stack."
-[[ -z "$WITH_PLUGIN" ]] && echo "  4. To auto-enable the plugin for the whole team: re-run with --with-plugin OWNER/REPO."
+echo "  4. Arm branch protection on '$branch' (the authoritative gate). Review, then run:"
+echo "       gh api -X PUT repos/$slug_disp/branches/$branch/protection --input - <<'JSON'"
+echo "       $prot_json"
+echo "       JSON"
+echo "     or re-run this scaffolder with --protect to apply it for you."
+[[ -z "$WITH_PLUGIN" ]] && echo "  5. To auto-enable the plugin for the whole team: re-run with --with-plugin OWNER/REPO."
+
+if [[ "$PROTECT" -eq 1 ]]; then
+  echo ""
+  echo "==> --protect: branch protection on '$branch'"
+  if [[ "$DRY" -eq 1 ]]; then
+    echo "    dry run: would PUT repos/$slug_disp/branches/$branch/protection (nothing sent)"
+  elif [[ -z "$repo_slug" ]]; then
+    echo "    SKIP: no 'origin' remote in $TARGET; set one and re-run, or apply the command above." >&2
+  elif ! command -v gh >/dev/null 2>&1; then
+    echo "    SKIP: gh CLI not found; apply the command above with a repo-admin token." >&2
+  elif ! gh auth status >/dev/null 2>&1; then
+    echo "    SKIP: gh is not authenticated ('gh auth login'); apply the command above." >&2
+  else
+    apply=1
+    if [[ -t 0 ]]; then
+      printf '    Apply branch protection to %s on %s? [y/N] ' "$repo_slug" "$branch"
+      read -r ans || ans=""
+      [[ "$ans" =~ ^[Yy]$ ]] || apply=0
+    fi
+    if [[ "$apply" -eq 1 ]]; then
+      if printf '%s' "$prot_json" | gh api -X PUT "repos/$repo_slug/branches/$branch/protection" --input - >/dev/null 2>&1; then
+        echo "    done: branch protection applied to $repo_slug@$branch"
+      else
+        echo "    ERROR: gh api PUT failed (needs a repo-admin token: classic 'repo' scope or fine-grained Administration:write)." >&2
+      fi
+    else
+      echo "    cancelled (no changes)."
+    fi
+  fi
+fi
+
 [[ "$DRY" -eq 1 ]] && echo "(dry run: nothing was written)"
 exit 0

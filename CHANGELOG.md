@@ -3,6 +3,17 @@
 All notable changes to this project are documented here. Format follows Keep a Changelog; versioning
 follows SemVer.
 
+## [1.3.0]
+
+### Added
+- Scaffolder now arms the authoritative gate. `scaffold.sh` prints a branch-protection command
+  (`gh api ... /branches/<branch>/protection`) personalized from the target's `origin` remote and
+  default branch, and an opt-in `--protect` flag applies it (needs gh + a repo-admin token; honors
+  `--dry-run`, confirms on a TTY). It also warns when the generated `verify.yml` is the generic
+  placeholder, so you do not require a status check that verifies nothing.
+- `scripts/verify.sh` covers the new scaffolder output (branch-protection guidance; `--protect`
+  respects `--dry-run`).
+
 ## [1.2.1]
 
 ### Security
