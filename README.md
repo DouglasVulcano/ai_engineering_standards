@@ -74,7 +74,7 @@ Update later with `claude plugin update`.
 **Global skill (personal):**
 ```bash
 git clone https://github.com/DouglasVulcano/ai_engineering_standards.git
-cd ai-engineering-standards
+cd ai_engineering_standards
 bash install-skill.sh
 ```
 The installer is idempotent and location-independent; it copies the skill (with the scaffolder and

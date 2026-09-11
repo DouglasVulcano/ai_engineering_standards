@@ -11,7 +11,7 @@ description: >-
   lint/testes", "seguir os padrões", "aplicar os standards".
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch
 metadata:
-  version: "1.2.1"
+  version: "1.2.2"
   author: DouglasVulcano
 ---
 
