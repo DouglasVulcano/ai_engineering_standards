@@ -59,7 +59,7 @@ PY
 
 echo "==> Python syntax (hooks)"
 for p in hooks/guard_bash.py hooks/guard_paths.py; do
-  python3 -m py_compile "$p" && ok "py_compile $p" || err "$p has a syntax error"
+  python3 -c "import ast,sys; ast.parse(open(sys.argv[1]).read())" "$p" && ok "syntax $p" || err "$p has a syntax error"
 done
 
 echo "==> Hook behavior (guards block/allow, fail-open)"
