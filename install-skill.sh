@@ -54,13 +54,13 @@ cp -f "$MASTER_MD" "$SKILL_DEST/references/ai-engineering-standards.md"
 
 # --- 3. /standards slash command ----------------------------------------------
 mkdir -p "$CMD_DEST"
-cp -f "$SRC_DIR/commands/standards.md" "$CMD_DEST/standards.md"
+cp -f "$SRC_DIR/commands/"*.md "$CMD_DEST/"
 
 # --- 4. Verification ----------------------------------------------------------
 echo ""
 echo "==> Installed:"
 find "$SKILL_DEST" -type f | sort | sed "s|^|    |"
-echo "    $CMD_DEST/standards.md"
+for c in "$SRC_DIR/commands/"*.md; do echo "    $CMD_DEST/$(basename "$c")"; done
 
 echo ""
 echo "OK. Skill '$SKILL_NAME' imported centrally into $CLAUDE_DIR/skills/"

@@ -6,29 +6,46 @@
 #
 # Usage:
 #   scaffold.sh [TARGET_DIR] [--dry-run] [--force]
-# Defaults: TARGET_DIR = current directory.
+#               [--with-plugin OWNER/REPO] [--marketplace NAME] [--plugin NAME]
+#
+# Defaults: TARGET_DIR = current directory; plugin NAME = engineering-standards;
+#           marketplace NAME = the repo part of OWNER/REPO.
 #
 # Delivers: .github issue/PR templates, CODEOWNERS, a stack-aware CI gate (verify.yml),
 # AGENTS.md (canonical) + a thin CLAUDE.md that imports it, and a .claude/settings.json safety
-# deny-list. Then tells you what to finish (stack commands, real owners).
+# deny-list. With --with-plugin it also wires .claude/settings.json to auto-enable the plugin for
+# everyone who trusts the repo (extraKnownMarketplaces + enabledPlugins).
 #
 set -euo pipefail
 
 SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ASSETS="$SELF_DIR/assets"
 
+usage() { sed -n '2,17p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
+
 TARGET="."
 DRY=0
 FORCE=0
-for a in "$@"; do
-  case "$a" in
+WITH_PLUGIN=""
+MARKETPLACE=""
+PLUGIN_NAME="engineering-standards"
+while [[ $# -gt 0 ]]; do
+  case "$1" in
     --dry-run) DRY=1 ;;
     --force)   FORCE=1 ;;
-    -h|--help) sed -n '2,20p' "${BASH_SOURCE[0]}"; exit 0 ;;
-    -*)        echo "unknown flag: $a" >&2; exit 2 ;;
-    *)         TARGET="$a" ;;
+    --with-plugin)   WITH_PLUGIN="${2:-}"; shift ;;
+    --with-plugin=*) WITH_PLUGIN="${1#*=}" ;;
+    --marketplace)   MARKETPLACE="${2:-}"; shift ;;
+    --marketplace=*) MARKETPLACE="${1#*=}" ;;
+    --plugin)        PLUGIN_NAME="${2:-}"; shift ;;
+    --plugin=*)      PLUGIN_NAME="${1#*=}" ;;
+    -h|--help) usage; exit 0 ;;
+    -*)        echo "unknown flag: $1" >&2; exit 2 ;;
+    *)         TARGET="$1" ;;
   esac
+  shift
 done
+MARKETPLACE="${MARKETPLACE:-${WITH_PLUGIN##*/}}"
 
 [[ -d "$ASSETS" ]] || { echo "ERROR: assets not found at $ASSETS" >&2; exit 1; }
 [[ -d "$TARGET" ]] || { echo "ERROR: target '$TARGET' is not a directory" >&2; exit 1; }
@@ -81,8 +98,38 @@ place "$ci_src" ".github/workflows/verify.yml"
 place "$ASSETS/AGENTS.md" "AGENTS.md"
 place "$ASSETS/CLAUDE.md" "CLAUDE.md"
 
-# --- safety rails ---
+# --- safety rails (deny-list) ---
 place "$ASSETS/settings.json" ".claude/settings.json"
+
+# --- optional: wire team auto-enable of the plugin (merges into .claude/settings.json) ---
+if [[ -n "$WITH_PLUGIN" ]]; then
+  dest="$TARGET/.claude/settings.json"
+  if [[ "$DRY" -eq 1 ]]; then
+    echo "    would   .claude/settings.json (+ marketplace '$MARKETPLACE' + enable '$PLUGIN_NAME@$MARKETPLACE')"
+  elif command -v python3 >/dev/null 2>&1; then
+    mkdir -p "$(dirname "$dest")"
+    DEST="$dest" WP="$WITH_PLUGIN" MK="$MARKETPLACE" PN="$PLUGIN_NAME" python3 - <<'PY'
+import json, os
+dest, wp, mk, pn = os.environ["DEST"], os.environ["WP"], os.environ["MK"], os.environ["PN"]
+try:
+    data = json.load(open(dest))
+    if not isinstance(data, dict):
+        data = {}
+except (FileNotFoundError, ValueError):
+    data = {}
+data.setdefault("extraKnownMarketplaces", {})[mk] = {"source": {"source": "github", "repo": wp}}
+data.setdefault("enabledPlugins", {})[f"{pn}@{mk}"] = True
+with open(dest, "w") as f:
+    json.dump(data, f, indent=2)
+    f.write("\n")
+PY
+    echo "    team    .claude/settings.json (auto-enable $PLUGIN_NAME@$MARKETPLACE from $WITH_PLUGIN)"
+  else
+    echo "    WARN: python3 not found; add to .claude/settings.json by hand:" >&2
+    echo "          extraKnownMarketplaces.$MARKETPLACE.source = {source: github, repo: $WITH_PLUGIN}" >&2
+    echo "          enabledPlugins[\"$PLUGIN_NAME@$MARKETPLACE\"] = true" >&2
+  fi
+fi
 
 echo ""
 echo "Summary: created/would-create=$created, kept=$kept, stack=$stack"
@@ -90,5 +137,6 @@ echo "Next steps:"
 echo "  1. Fill AGENTS.md: stack + the gate commands for '$stack' (see the stack-appendix)."
 echo "  2. Set real owners in .github/CODEOWNERS."
 echo "  3. Complete .github/workflows/verify.yml for your stack."
+[[ -z "$WITH_PLUGIN" ]] && echo "  4. To auto-enable the plugin for the whole team: re-run with --with-plugin OWNER/REPO."
 [[ "$DRY" -eq 1 ]] && echo "(dry run: nothing was written)"
 exit 0

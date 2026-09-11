@@ -64,12 +64,14 @@ CLAUDE.md, and a `.claude/settings.json` safety deny-list), run the bundled scaf
 idempotent: it never overwrites an existing file without `--force`, and supports `--dry-run`.
 
 ```bash
-bash "${CLAUDE_SKILL_DIR}/scaffold.sh" /path/to/repo   # add --dry-run to preview
+bash "${CLAUDE_SKILL_DIR:-${CLAUDE_PLUGIN_ROOT:-.}/skills/engineering-standards}/scaffold.sh" /path/to/repo   # --dry-run to preview
 ```
 
-Then fill `AGENTS.md` with the stack's gate commands (see `references/stack-appendix.md`) and set real
-owners in `.github/CODEOWNERS`. Remember the split: the skill is advice; **CI plus branch protection
-are the authoritative gate**.
+Add `--with-plugin OWNER/REPO` to also wire the project's `.claude/settings.json` so the plugin
+auto-enables for everyone who trusts the repo. A dedicated `scaffold` command exists too. Then fill
+`AGENTS.md` with the stack's gate commands (see `references/stack-appendix.md`) and set real owners in
+`.github/CODEOWNERS`. Remember the split: the skill is advice; **CI plus branch protection are the
+authoritative gate**.
 
 ## Reference index
 

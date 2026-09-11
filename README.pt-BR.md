@@ -80,6 +80,19 @@ O instalador é idempotente e independente de localização; copia a skill (com 
 assets) para `~/.claude/skills/` e registra `/standards`. Escopo por projeto:
 `CLAUDE_DIR=./.claude bash install-skill.sh`.
 
+**Time / projeto inteiro (auto-habilitar para todos).** Commite um `.claude/settings.json` para que
+qualquer pessoa que confie no repo receba o plugin automaticamente, sem passos manuais:
+```json
+{
+  "extraKnownMarketplaces": {
+    "ai_engineering_standards": { "source": { "source": "github", "repo": "DouglasVulcano/ai_engineering_standards" } }
+  },
+  "enabledPlugins": { "engineering-standards@ai_engineering_standards": true }
+}
+```
+O scaffolder escreve isso para você:
+`scaffold.sh <repo> --with-plugin DouglasVulcano/ai_engineering_standards`.
+
 ## Uso
 
 - **Automático**: a skill dispara quando o pedido casa ("crie a issue/PR", "revise a UI", "configure
@@ -99,7 +112,8 @@ sem `--force`.
 bash skills/engineering-standards/scaffold.sh /caminho/do/repo --dry-run
 bash skills/engineering-standards/scaffold.sh /caminho/do/repo
 ```
-Após instalar globalmente, o mesmo script vive em
+Adicione `--with-plugin OWNER/REPO` para também gravar o `.claude/settings.json` do projeto e
+auto-habilitar o plugin para o time inteiro. Após instalar globalmente, o mesmo script vive em
 `~/.claude/skills/engineering-standards/scaffold.sh`. Depois preencha o `AGENTS.md` com os comandos do
 gate do seu stack (veja o apêndice) e defina owners reais em `.github/CODEOWNERS`.
 

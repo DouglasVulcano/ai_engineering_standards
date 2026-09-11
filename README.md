@@ -79,6 +79,19 @@ The installer is idempotent and location-independent; it copies the skill (with 
 assets) into `~/.claude/skills/` and registers `/standards`. Per-project scope:
 `CLAUDE_DIR=./.claude bash install-skill.sh`.
 
+**Team / project-wide (auto-enable for everyone).** Commit a `.claude/settings.json` so anyone who
+trusts the repo gets the plugin automatically, with no manual steps:
+```json
+{
+  "extraKnownMarketplaces": {
+    "ai_engineering_standards": { "source": { "source": "github", "repo": "DouglasVulcano/ai_engineering_standards" } }
+  },
+  "enabledPlugins": { "engineering-standards@ai_engineering_standards": true }
+}
+```
+The scaffolder writes this for you:
+`scaffold.sh <repo> --with-plugin DouglasVulcano/ai_engineering_standards`.
+
 ## Use
 
 - **Automatic**: the skill triggers when your request matches ("create the issue/PR", "review the
@@ -97,7 +110,8 @@ It **detects your stack**, is **idempotent**, and **never overwrites** a file wi
 bash skills/engineering-standards/scaffold.sh /path/to/repo --dry-run
 bash skills/engineering-standards/scaffold.sh /path/to/repo
 ```
-After installing globally, the same script lives at
+Add `--with-plugin OWNER/REPO` to also wire the project's `.claude/settings.json` so the plugin
+auto-enables for the whole team. After installing globally, the same script lives at
 `~/.claude/skills/engineering-standards/scaffold.sh`. Then fill `AGENTS.md` with your stack's gate
 commands (see the stack appendix) and set real owners in `.github/CODEOWNERS`.
 

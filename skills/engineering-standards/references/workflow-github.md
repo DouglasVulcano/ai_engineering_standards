@@ -78,7 +78,9 @@ gh pr create --fill --base main --title "feat: <summary>" --body "Closes #142
 
 Fastest path is the bundled scaffolder (safe, idempotent, never overwrites without `--force`):
 ```bash
-bash "${CLAUDE_SKILL_DIR:-.}/scaffold.sh" .   # AGENTS.md + thin CLAUDE.md + .github governance + CI gate + safety deny-list
+bash "${CLAUDE_SKILL_DIR:-${CLAUDE_PLUGIN_ROOT:-.}/skills/engineering-standards}/scaffold.sh" .
+# adds AGENTS.md + thin CLAUDE.md + .github governance + CI gate + safety deny-list
+# add --with-plugin OWNER/REPO to auto-enable the plugin for the whole team
 ```
 
 Or add the bootstrap block to `AGENTS.md` by hand:

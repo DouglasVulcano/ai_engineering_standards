@@ -17,6 +17,12 @@ follows SemVer.
 - MCP governance checklist in the arsenal reference.
 - Professional root files: `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `SECURITY.md`, this changelog.
 - `docs/research-and-benchmarks.md`: research synthesis (with sources) plus the self-benchmark.
+- Scaffolder `--with-plugin OWNER/REPO`: writes a project `.claude/settings.json`
+  (`extraKnownMarketplaces` + `enabledPlugins`) so the plugin auto-enables for everyone who trusts the
+  repo (safe JSON merge with the deny-list).
+- Dedicated `scaffold` command and robust scaffolder path resolution
+  (`${CLAUDE_SKILL_DIR}` then `${CLAUDE_PLUGIN_ROOT}`) so it works whether installed as a skill or a
+  plugin; `install-skill.sh` now installs all `commands/*.md`.
 
 ### Changed
 - Propagation now targets `AGENTS.md` (canonical, model-agnostic) with a thin `CLAUDE.md` that imports

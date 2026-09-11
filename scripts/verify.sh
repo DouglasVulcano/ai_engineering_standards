@@ -17,7 +17,7 @@ required=(
   ai-engineering-standards.md install-skill.sh README.md README.pt-BR.md LICENSE
   AGENTS.md CLAUDE.md CONTRIBUTING.md CHANGELOG.md SECURITY.md
   .claude-plugin/plugin.json .claude-plugin/marketplace.json
-  commands/standards.md
+  commands/standards.md commands/scaffold.md
   "$SKILL/SKILL.md" "$SKILL/scaffold.sh"
   "$SKILL/references/workflow-github.md"
   "$SKILL/references/motion-and-ui.md"
@@ -84,6 +84,7 @@ if CLAUDE_DIR="$tmp" bash install-skill.sh >/dev/null 2>&1; then
   [[ -f "$tmp/skills/engineering-standards/scaffold.sh" ]] && ok "bundled scaffold.sh" || err "scaffold.sh not bundled"
   [[ -f "$tmp/skills/engineering-standards/assets/AGENTS.md" ]] && ok "bundled assets" || err "assets not bundled"
   [[ -f "$tmp/commands/standards.md" ]] && ok "created /standards command" || err "no /standards command"
+  [[ -f "$tmp/commands/scaffold.md" ]] && ok "created scaffold command" || err "no scaffold command"
 else
   err "installer exited non-zero"
 fi
@@ -98,6 +99,12 @@ if bash "$SKILL/scaffold.sh" "$t2" >/dev/null 2>&1; then
   bash "$SKILL/scaffold.sh" "$t2" >/dev/null 2>&1
   after="$(cd "$t2" && find . -type f -exec sha1sum {} + | sort)"
   [[ "$before" == "$after" ]] && ok "scaffold is idempotent (no changes on re-run)" || err "scaffold not idempotent"
+  bash "$SKILL/scaffold.sh" "$t2" --with-plugin acme/demo >/dev/null 2>&1 || true
+  if grep -q '"enabledPlugins"' "$t2/.claude/settings.json" 2>/dev/null && grep -q '"deny"' "$t2/.claude/settings.json" 2>/dev/null; then
+    ok "--with-plugin wires team settings (merged with deny-list)"
+  else
+    err "--with-plugin did not wire team settings correctly"
+  fi
 else
   err "scaffold exited non-zero"
 fi
