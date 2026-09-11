@@ -29,14 +29,14 @@ required=(
   "$SKILL/assets/github/CODEOWNERS"
   "$SKILL/assets/github/workflows/ci.yml"
   hooks/hooks.json hooks/guard-bash.sh hooks/guard_bash.py hooks/guard-paths.sh hooks/guard_paths.py
-  evals/README.md evals/scaffold-greenfield/prompt.md
+  evals/README.md evals/scaffold-greenfield/prompt.md scripts/stress.sh
 )
 for f in "${required[@]}"; do
   [[ -f "$f" ]] && ok "$f" || err "missing $f"
 done
 
 echo "==> Shell syntax"
-for s in install-skill.sh scripts/verify.sh "$SKILL/scaffold.sh" hooks/guard-bash.sh hooks/guard-paths.sh; do
+for s in install-skill.sh scripts/verify.sh scripts/stress.sh "$SKILL/scaffold.sh" hooks/guard-bash.sh hooks/guard-paths.sh; do
   bash -n "$s" && ok "bash -n $s" || err "$s has a syntax error"
 done
 

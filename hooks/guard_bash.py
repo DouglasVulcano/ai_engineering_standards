@@ -10,13 +10,18 @@ try:
 except Exception:
     sys.exit(0)  # fail-open: never break the session
 
+# Command-position prefix: start of string, after a shell separator, or after sudo/xargs.
+# This keeps a dangerous verb from matching when it is only an argument (e.g. `echo rm -rf /`).
+CMD = r"(?:^|[\n;&|]|\bsudo\s+|\bxargs\s+(?:-\S+\s+)*)\s*"
+
 RULES = [
-    (r"\brm\b(?:\s+-[a-zA-Z]+)+\s+(?:/|~|\$HOME)(?:[*/]|\s|$)", "recursive rm targeting / or home"),
-    (r"\bgit\s+push\s+(?:--force\b|-f\b)", "git push --force"),
-    (r"\bmkfs(?:\.\w+)?\b", "mkfs (formats a filesystem)"),
+    (CMD + r"rm\b(?:\s+-[a-zA-Z]+)+\s+(?:/|~|\$HOME|\*)(?:[*/]|\s|$)", "recursive rm targeting / or home"),
+    (r"\bgit\s+push\b[^\n]*--force(?!-)", "git push --force"),          # allows --force-with-lease
+    (r"\bgit\s+push\b(?:\s+\S+)*\s+-f(?:\s|$)", "git push -f"),
+    (CMD + r"mkfs(?:\.\w+)?\b", "mkfs (formats a filesystem)"),
     (r"\bdd\b[^\n]*\bof=/dev/", "dd writing directly to a device"),
     (r":\s*\(\s*\)\s*\{\s*:\s*\|\s*:\s*&\s*\}\s*;\s*:", "fork bomb"),
-    (r"\bchmod\b\s+-R\s+0*777\s+/", "chmod -R 777 on /"),
+    (CMD + r"chmod\b\s+-R\s+0*777\s+/", "chmod -R 777 on /"),
     (r">\s*/dev/sd[a-z]\b", "writing to a raw disk device"),
 ]
 
