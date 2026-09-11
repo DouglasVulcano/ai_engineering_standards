@@ -1,0 +1,30 @@
+name: verify
+
+on:
+  push:
+  pull_request:
+
+# Python quality gate (starter). Tighten as the codebase matures.
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Install tools
+        run: pip install ruff mypy pytest pytest-cov
+      - name: fmt
+        run: ruff format --check .
+      - name: lint
+        run: ruff check .
+      - name: typecheck
+        run: mypy . || true   # remove "|| true" once the codebase is typed
+      - name: test + coverage
+        run: pytest --cov --cov-report=xml
+      - name: coverage upload
+        if: ${{ hashFiles('coverage.xml') != '' }}
+        uses: codecov/codecov-action@v4
+        with:
+          files: coverage.xml

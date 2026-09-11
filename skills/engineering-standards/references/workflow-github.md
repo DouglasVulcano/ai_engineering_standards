@@ -72,14 +72,27 @@ gh pr create --fill --base main --title "feat: <summary>" --body "Closes #142
   production without an Issue and a PR.
 
 ## Propagation (key rule)
-> **Feed the project's `CLAUDE.md`/`AGENTS.md`** so any agent of any model follows the standard. If
-> it does not exist, create it; if it exists, merge without deleting. Bootstrap block:
+> Make **AGENTS.md** the canonical, model-agnostic guide (read by Claude Code via a thin `CLAUDE.md`
+> import, and by Codex/Cursor/Copilot directly). If it does not exist, create it; if it exists, merge
+> without deleting.
+
+Fastest path is the bundled scaffolder (safe, idempotent, never overwrites without `--force`):
+```bash
+bash "${CLAUDE_SKILL_DIR:-.}/scaffold.sh" .   # AGENTS.md + thin CLAUDE.md + .github governance + CI gate + safety deny-list
+```
+
+Or add the bootstrap block to `AGENTS.md` by hand:
 
 ```markdown
 ## AI Engineering Standards (mandatory)
 1. Issue first, PR driven (every task is an Issue; every deploy is a PR that references the Issue). Conventional Commits.
 2. UI: skeleton, lazy loading, enter/exit/loading/progress animations; prefers-reduced-motion; animate only transform/opacity.
-3. Observability: OpenTelemetry base plus Sentry plus Datadog/New Relic.
-4. Quality: Biome, architecture contracts, Commitlint, Knip, Stryker.
-5. Testing: unit plus integration plus E2E (Playwright), coverage on Codecov.
+3. Observability: OpenTelemetry to an OTLP Collector to any backend (Sentry/Datadog/New Relic).
+4. Quality + Testing: the fmt -> lint -> typecheck -> arch -> deadcode -> test -> coverage -> build gate (bind verbs per stack; see stack-appendix).
+5. Enforcement lives in CI + branch protection + hooks; the skill is advice.
+```
+
+CLAUDE.md then stays thin (single source of truth in AGENTS.md):
+```markdown
+See @AGENTS.md for the canonical project guide and the AI Engineering Standards.
 ```

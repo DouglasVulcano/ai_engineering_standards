@@ -11,7 +11,7 @@
 
 | | |
 |---|---|
-| **Version** | 1.0.0 |
+| **Version** | 1.1.0 |
 | **Author** | DouglasVulcano |
 | **Scope** | Global, applies to all projects unless the repository explicitly overrides it |
 
@@ -282,6 +282,9 @@ hydration mismatch.
 **Best practices**
 - **One OTel layer, multiple exporters.** Instrument once; route to Datadog/New Relic through the
   **OpenTelemetry Collector** (OTLP). Sentry for UX/frontend errors.
+- Traces and metrics are Stable in every major SDK; OTel-native logs are Stable in Java/.NET and
+  maturing elsewhere, so where not Stable, emit structured JSON logs to stdout and collect them via
+  the Collector.
 - Propagate **trace context** end to end (W3C `traceparent`); correlate logs and traces by
   `trace_id`.
 - Define **SLIs/SLOs**, actionable alerts, and a minimal dashboard per service (p95 latency, error
@@ -289,36 +292,48 @@ hydration mismatch.
 - Cost aware sampling (`tracesSampleRate`, tail sampling in the Collector).
 - Never log PII or secrets; scrub in the SDK/Collector.
 
-### 3.2 Code Quality and Lint
+### 3.2 Quality and Testing as a capability gate (agnostic core)
 
-| Tool | Category | What it does / best practices |
+The gate is an ordered list of outcomes to guarantee, not a fixed tool list. Bind each verb to your
+stack's idiomatic tool (exact commands in §3.4 and the `stack-appendix` reference); CI only ever
+calls the verbs. Fail fast: cheapest and most local first.
+
+`fmt -> lint -> typecheck -> arch -> deadcode -> test -> coverage -> build`
+
+| Verb | Contract it guarantees | Policy |
 |---|---|---|
-| **Architecture contracts** ("Arch-contract") | Dependency rules | Enforce boundaries between layers/modules (forbid cross imports). Tools: **dependency-cruiser**, **eslint-plugin-boundaries**, **ts-arch**. Run in CI and fail the PR on a violation. |
-| **Biome** | Formatter plus linter (Rust) | Replaces ESLint plus Prettier with one fast binary. `biome check --write`; run in pre commit and CI. |
-| **Commitlint** | Commit convention | Validates **Conventional Commits** (§1.4) via the `commit-msg` hook (**husky**/**lefthook**). Enables automatic changelog/semver. |
-| **Knip** | Dead code | Detects unused files, exports, deps, and types. `knip` in CI to keep the repo lean. |
-| **Stryker** | Mutation testing | Measures the **quality** of tests by injecting mutations. Set a mutation score target per critical package; it does not need to run on every PR (nightly or per area). |
+| `fmt` | No formatting drift | `--check` in CI, auto-fix locally |
+| `lint` | No lint violations or anti-patterns | Fail on error |
+| `typecheck` | Types are sound | JS/TS and Python only; elsewhere folded into `build` |
+| `arch` | Module/layer boundaries enforced (no forbidden imports) | A violation fails the PR |
+| `deadcode` | No unreachable code, no unused exports/deps | Zero unused deps |
+| `test` | Unit and integration pass | Deterministic; integration via ephemeral real deps (Testcontainers) |
+| `coverage` | Diff coverage at or above threshold | Required check; focus on diff |
+| `build` | Compiles/packages cleanly | Release build succeeds |
 
-**CI gate order (fail fast):** `format -> lint (biome) -> typecheck -> arch-contract -> knip ->
-tests -> coverage -> build`.
+Rules that keep this true across languages: one tool may satisfy two stages (Ruff = fmt+lint,
+`go build` = typecheck); compiler-intrinsic stages are marked "covered by build", never skipped;
+mutation testing (test quality) runs nightly or on critical paths, never in the main gate.
 
-### 3.3 Testing and Coverage
+**Enforcement vs advice.** This standard and the skill are advice; the authoritative gate is
+**CI plus branch protection plus hooks**. Conventional Commits (§1.4) are validated by a `commit-msg`
+hook locally and by CI on merge.
 
-| Level | Tool | Target |
-|---|---|---|
-| **Unit** | Vitest / Jest | Pure logic, utils, hooks, isolated components. |
-| **Integration** | Vitest/Jest plus Testing Library / supertest | Modules talking to each other, API routes, DB (test containers). |
-| **End to end (E2E)** | **Playwright** | Real critical flows in the browser (login, checkout, and so on); run cross browser; use `data-testid`. |
-| **Coverage** | **Codecov** | Publish the coverage report in CI and on the PR; set status checks/threshold; comment diff coverage. |
-| **Test quality** | **Stryker** | Mutation score as a confidence metric (§3.2). |
+### 3.3 Testing model
+- Pyramid: many unit, fewer integration, few E2E on the money/risk flows.
+- Integration against ephemeral real dependencies (Testcontainers: Java/.NET/Go/Node/Python/Rust).
+- E2E with Playwright (first-party for TS/JS/Python/Java/.NET; a side-service for Go/Rust) on
+  critical flows; also a post-deploy smoke test on PR previews.
+- Coverage aggregated by Codecov (every stack emits Cobertura/LCOV); diff coverage as the required
+  check.
+- Mutation score as a confidence metric on critical packages (nightly).
 
-**Best practices**
-- **Testing pyramid:** many unit tests, fewer integration, few E2E (but E2E covering the money/risk
-  paths).
-- Playwright E2E also serves as a post deploy smoke test on PR previews.
-- Coverage threshold on Codecov as a required check (do not block on unrealistic numbers; focus on
-  diff coverage).
-- Deterministic tests (no flakiness): controlled retries, isolated data, mocked clock/network.
+### 3.4 Per-stack bindings
+The exact tool and command for each verb, per ecosystem (JS/TS, Python, Go, Rust, JVM, .NET), plus
+adopt-with-caution flags, live in the skill's `references/stack-appendix.md`. One instantiation
+(JS/TS): `biome check -> biome/eslint -> tsc --noEmit -> dependency-cruiser -> knip -> vitest ->
+codecov -> vite build`. The original JS/TS toolset (Biome, Commitlint, Knip, Stryker, Playwright,
+Codecov) is exactly one column of that appendix.
 
 ---
 
@@ -430,35 +445,52 @@ data.
 
 **Every service/feature (§3)**
 - [ ] Observability: errors (Sentry) plus traces/metrics (OTel to Datadog/New Relic) in the new flow.
-- [ ] Quality: passes biome, typecheck, arch-contract, knip; commitlint on the hook.
+- [ ] Quality/gate: passes fmt, lint, typecheck, arch, deadcode, test, coverage, build; commitlint on the hook.
 - [ ] Testing: unit plus integration; E2E (Playwright) on critical flows; coverage published
   (Codecov).
 
 ---
 
-## 6. Bootstrap: make the standard mandatory
+## 6. Bootstrap and distribution
 
-Paste this block into the `CLAUDE.md` (and/or `AGENTS.md`) of **every** repository. It is what makes
-the standard self enforcing for any agent of any model (§1.7).
+**Distribution.** Two ways to install (see the README):
+- **Plugin (recommended for teams):** `/plugin marketplace add DouglasVulcano/ai-engineering-standards`
+  then `/plugin install engineering-standards`. Versioned, updated with `claude plugin update`, no drift.
+- **Global skill:** `bash install-skill.sh` copies the skill into `~/.claude/skills/`.
+
+**Make it mandatory per repo.** Run the scaffolder to create `AGENTS.md` (canonical), a thin
+`CLAUDE.md` that imports it, `.github` governance, and a stack-aware CI gate:
+```bash
+bash "${CLAUDE_SKILL_DIR}/scaffold.sh" .   # safe, idempotent; --dry-run to preview
+```
+
+The bootstrap block below is written into **AGENTS.md** (canonical, model-agnostic; read by Claude
+Code via the CLAUDE.md import and by Codex/Cursor/Copilot directly). It makes the standard self
+enforcing for any agent of any model (§1.7).
 
 ```markdown
 ## AI Engineering Standards (mandatory)
 
-This project follows the user's **AI Engineering Standards**. Before any task, apply them (skill
-`engineering-standards`; full spec bundled in the installed skill at
-`~/.claude/skills/engineering-standards/references/ai-engineering-standards.md`):
+This project follows the **AI Engineering Standards** (skill `engineering-standards`; full spec at
+`~/.claude/skills/engineering-standards/references/ai-engineering-standards.md`). Before any task:
 
 1. **Workflow:** Issue first, PR driven. Every task (Fix/Improvement/New feature) starts as an Issue;
    every deploy goes through a PR that references the Issue (`Closes #`). Conventional Commits.
 2. **Motion and UI:** every interface has skeleton, lazy loading, and smooth animations for enter,
    exit, loading, and progress. Honor `prefers-reduced-motion`; animate only `transform`/`opacity`.
    Follow the Web Interface Guidelines (a11y, focus, forms, typography).
-3. **Observability:** OpenTelemetry as the base; Sentry (errors) plus Datadog/New Relic (APM).
-4. **Quality:** Biome, architecture contracts, Commitlint, Knip, Stryker.
-5. **Testing:** unit plus integration plus E2E (Playwright), coverage on Codecov.
+3. **Observability:** OpenTelemetry to an OTLP Collector to any backend (Sentry/Datadog/New Relic).
+4. **Quality and Testing:** the `fmt -> lint -> typecheck -> arch -> deadcode -> test -> coverage ->
+   build` gate; bind each verb to the stack (stack-appendix). Enforcement is CI plus branch
+   protection plus hooks; the skill is advice.
 
-Available tools: shadcn-ui-mcp, 21st.dev Magic, chrome-devtools-mcp, design-motion-principles,
+Tools: shadcn-ui-mcp, 21st.dev Magic, chrome-devtools-mcp, design-motion-principles,
 web-design-guidelines, humanizer.
+```
+
+CLAUDE.md then stays thin:
+```markdown
+See @AGENTS.md for the canonical project guide and the AI Engineering Standards.
 ```
 
 ---

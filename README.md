@@ -2,128 +2,133 @@
 
 **English** · [Português](README.pt-BR.md)
 
-> A single engineering standard for AI agents, packaged as a **central Claude Code skill**. One
-> source of truth, applied consistently by any agent of any model, on any project.
+> A single, stack-agnostic engineering standard for AI agents, packaged as a **Claude Code plugin and
+> skill**, with a **governance scaffolder**. One source of truth, applied consistently by any agent of
+> any model, on any project, in any language.
 
-![Claude Code Skill](https://img.shields.io/badge/Claude%20Code-Skill-6C4BF6)
-![Scope](https://img.shields.io/badge/scope-global%20%7C%20per%20project-informational)
+![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin%20%2B%20skill-6C4BF6)
+![Agnostic](https://img.shields.io/badge/stack-agnostic-success)
+![Scope](https://img.shields.io/badge/scope-global%20%7C%20project%20%7C%20team-informational)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 ---
 
 ## What it is
 
-This repository turns a personal AI configuration (`docs/origin/prompts.txt` plus
-`docs/origin/skills.txt`) into a **formal,
-versioned, installable engineering standard**. It delivers:
+A distributable standard that turns loose AI configuration into a **formal, versioned, installable**
+package. It delivers:
 
-1. **`ai-engineering-standards.md`**: the complete, readable specification (single source of truth).
-2. **`engineering-standards` skill**: the same knowledge packaged for Claude Code, with progressive
-   disclosure (it loads only the domain relevant to the task, for maximum context performance).
-3. **`install-skill.sh`**: the command that imports everything as a **central** skill under
-   `~/.claude/skills/` and registers the `/standards` slash command.
+1. **`ai-engineering-standards.md`** the complete, readable specification (single source of truth).
+2. **The `engineering-standards` skill** the same knowledge with progressive disclosure (loads only
+   the domain relevant to the task) plus a bundled **scaffolder** and governance **assets**.
+3. **Plugin packaging** (`.claude-plugin/`) for versioned team distribution, and **`install-skill.sh`**
+   for a global personal install.
 
-The goal: whenever any AI agent starts, plans, or reviews work, it automatically applies the same
-standards for workflow, UI, observability, quality, and testing.
+Goal: when any AI agent starts, plans, or reviews work, it applies the same standard for workflow,
+UI, observability, quality, and testing, and can scaffold the governance to enforce it.
 
 ## The 4 pillars
 
 | # | Pillar | Summary |
 |---|---|---|
-| 1 | **Workflow and Governance** | Issue first, PR driven. Every task (Fix/Improvement/New feature) starts as an **Issue**; every deploy goes through a **PR that references the Issue** (`Closes #N`). Conventional Commits. Feeds the project's `CLAUDE.md`/`AGENTS.md`. |
-| 2 | **Motion and UI/UX** | Every interface has **skeleton, lazy loading, and enter/exit/loading/progress animations**. Honors `prefers-reduced-motion`; animates only `transform`/`opacity`. Frequency Gate plus Web Interface Guidelines. |
-| 3 | **Observability, Quality, Testing** | OpenTelemetry (base) plus Sentry/Datadog/New Relic; Biome, architecture contracts, Commitlint, Knip, Stryker; unit plus integration plus E2E (Playwright) with coverage on Codecov. |
+| 1 | **Workflow and Governance** | Issue-first, PR-driven. Every task is an **Issue**; every deploy is a **PR that references it** (`Closes #N`). Conventional Commits. Feeds **AGENTS.md** (canonical) with a thin **CLAUDE.md** import. |
+| 2 | **Motion and UI/UX** | Skeleton, lazy loading, enter/exit/loading/progress animations; `prefers-reduced-motion`; animate only `transform`/`opacity`. Frequency Gate + Web Interface Guidelines. |
+| 3 | **Observability, Quality, Testing (stack-agnostic)** | OpenTelemetry to an OTLP Collector to any backend; a capability-contract gate (`fmt, lint, typecheck, arch, deadcode, test, coverage, build`); Testcontainers + Playwright + Codecov. Per-stack commands in the appendix. |
 | 4 | **Arsenal (MCP and Skills)** | The right tool per task: shadcn-ui-mcp, 21st.dev Magic, chrome-devtools-mcp, design-motion-principles, web-design-guidelines, humanizer. |
 
 ## Repository structure
 
 ```
 .
-├── README.md                          # this file (English)
-├── README.pt-BR.md                    # Portuguese version
-├── LICENSE                            # MIT
-├── .gitignore                         # ignores build artifacts (.tar.gz/.zip)
-├── .github/workflows/verify.yml       # CI self-check (dogfoods pillar 3)
+├── README.md / README.pt-BR.md        # docs (EN / PT)
+├── AGENTS.md / CLAUDE.md              # this repo's own guide (canonical + thin import)
+├── CONTRIBUTING.md / CHANGELOG.md / SECURITY.md / LICENSE
 ├── ai-engineering-standards.md        # the complete specification (single source of truth)
-├── install-skill.sh                   # importer: installs the skill into ~/.claude/skills/ + /standards
-├── scripts/verify.sh                  # local self-check (dashes, frontmatter, syntax, smoke test)
-├── engineering-standards/             # the skill (payload that gets imported)
-│   ├── SKILL.md                       # lean hub (triggers on its own)
-│   └── references/                    # per domain deep dives (loaded on demand)
-│       ├── workflow-github.md
-│       ├── motion-and-ui.md
-│       ├── observability-quality-testing.md
-│       └── arsenal-mcp-skills.md
-└── docs/origin/                       # provenance: original config that produced the standard
-    ├── prompts.txt                    # pillars 1 to 3
-    └── skills.txt                     # arsenal of pillar 4
+├── install-skill.sh                   # global-skill installer (+ /standards command)
+├── .claude-plugin/                    # plugin.json + marketplace.json (team distribution)
+├── commands/standards.md              # the /standards slash command
+├── scripts/verify.sh                  # repo self-check (dogfoods pillar 3)
+├── skills/engineering-standards/       # the skill (payload that gets installed)
+│   ├── SKILL.md                       # lean router (triggers on its own)
+│   ├── references/                    # per-domain deep dives (loaded on demand)
+│   │   ├── workflow-github.md · motion-and-ui.md
+│   │   ├── observability-quality-testing.md · stack-appendix.md
+│   │   └── arsenal-mcp-skills.md
+│   ├── scaffold.sh                    # governance scaffolder (safe, idempotent)
+│   └── assets/                        # issue/PR templates, CODEOWNERS, CI gate, AGENTS/CLAUDE, settings
+├── .github/workflows/verify.yml       # CI self-check
+└── docs/                              # origin/ (provenance) + research-and-benchmarks.md
 ```
 
-## Quick install
+## Install
 
+**Plugin (recommended for teams; versioned, no drift):**
+```text
+/plugin marketplace add DouglasVulcano/ai-engineering-standards
+/plugin install engineering-standards
+```
+Update later with `claude plugin update`.
+
+**Global skill (personal):**
 ```bash
-# clone anywhere; the folder name is up to you
 git clone https://github.com/DouglasVulcano/ai-engineering-standards.git
 cd ai-engineering-standards
 bash install-skill.sh
 ```
+The installer is idempotent and location-independent; it copies the skill (with the scaffolder and
+assets) into `~/.claude/skills/` and registers `/standards`. Per-project scope:
+`CLAUDE_DIR=./.claude bash install-skill.sh`.
 
-The installer is **idempotent** and location independent (it resolves its own path), so run it from
-the repo root wherever you cloned it. It copies the skill into
-`~/.claude/skills/engineering-standards/`, bundles the full spec into `references/`, and creates the
-`/standards` command. Reopen Claude Code (or run `/skills`) and you are set.
+## Use
 
-**Per project scope** (instead of global), installing into a specific repo (run from the repo root):
+- **Automatic**: the skill triggers when your request matches ("create the issue/PR", "review the
+  UI", "set up observability", "follow the standards").
+- **Explicit**: `/standards` (everything) or `/standards ui | workflow | o11y | testing | arsenal |
+  scaffold`.
+
+## Scaffold governance into a repo
+
+The highest-leverage feature. It creates issue/PR templates, `CODEOWNERS`, a stack-aware CI gate,
+**AGENTS.md** (canonical) + a thin **CLAUDE.md**, and a `.claude/settings.json` safety deny-list.
+It **detects your stack**, is **idempotent**, and **never overwrites** a file without `--force`.
+
 ```bash
-CLAUDE_DIR=./.claude bash install-skill.sh
+# preview, then apply (path defaults to the current directory)
+bash skills/engineering-standards/scaffold.sh /path/to/repo --dry-run
+bash skills/engineering-standards/scaffold.sh /path/to/repo
 ```
+After installing globally, the same script lives at
+`~/.claude/skills/engineering-standards/scaffold.sh`. Then fill `AGENTS.md` with your stack's gate
+commands (see the stack appendix) and set real owners in `.github/CODEOWNERS`.
 
-## How to use
+## Stack-agnostic by design
 
-- **Automatic**: the skill triggers on its own when your request matches the triggers: "create the
-  issue/PR", "review the UI", "add skeleton/lazy loading", "set up observability", "follow the
-  standards", and so on.
-- **Explicit**: the slash command:
-  ```
-  /standards            # apply everything
-  /standards ui         # motion/UI only
-  /standards workflow   # Issues/PR/deploy only
-  /standards o11y       # observability only
-  /standards testing    # quality/testing only
-  /standards arsenal    # choose or install an MCP or skill
-  ```
+Pillar 3 is a set of **capability contracts** (the 8 verbs), not a fixed toolset. The exact command
+per verb for JS/TS, Python, Go, Rust, JVM, and .NET lives in
+`skills/engineering-standards/references/stack-appendix.md`. The original JS/TS toolset (Biome, Knip,
+Stryker, Playwright, Codecov) is simply one column of that appendix.
 
-When you work in a repository, the skill also ensures the **bootstrap block** in `CLAUDE.md`/
-`AGENTS.md`, making the standard self enforcing for the next agents, of any model.
+## Install on another machine or another Claude
 
-## Install on another machine / another Claude
+- **Claude Code**: install the plugin, or clone and run `install-skill.sh`. Update with
+  `git pull && bash install-skill.sh`.
+- **Claude Desktop / claude.ai (web)**: upload the `skills/engineering-standards/` folder through the
+  Skills UI (the `/standards` command is Claude Code only).
+- MCP servers with API keys (21st.dev, shadcn, chrome-devtools) do not travel automatically; see
+  `references/arsenal-mcp-skills.md`.
 
-**Claude Code (CLI/IDE)**: clone the repo and run `install-skill.sh` (as above). To update, from the
-clone directory:
-```bash
-git pull && bash install-skill.sh
-```
+## Edit and evolve
 
-**Without git**: build a package from the repo folder (`tar -czf ai-standards.tar.gz -C <repo-folder> .`),
-carry it to the other machine, extract it into any folder, and run `bash install-skill.sh` inside.
+1. Edit the sources.
+2. `bash scripts/verify.sh` (must pass; CI runs it).
+3. `bash install-skill.sh` to sync the local skill.
+4. Bump `version` in `.claude-plugin/plugin.json` and `SKILL.md`; add a `CHANGELOG.md` entry; commit.
 
-**Claude Desktop / claude.ai (web)**: they do not use `~/.claude`. Install through the Skills UI by
-uploading the `engineering-standards/` folder (compress it first). The `/standards` slash command is
-exclusive to Claude Code and does not apply there.
+## Research and benchmarks
 
-> Note: MCP servers with API keys (21st.dev, shadcn, chrome-devtools) do not travel automatically;
-> they must be reconfigured on the new machine. Commands in
-> [`engineering-standards/references/arsenal-mcp-skills.md`](engineering-standards/references/arsenal-mcp-skills.md).
-
-## Edit and evolve the standard
-
-1. Edit the source files in the clone (the `ai-engineering-standards.md` and/or the skill).
-2. Verify: `bash scripts/verify.sh`.
-3. Reinstall: `bash install-skill.sh`.
-4. Commit plus push. On other machines: `git pull && bash install-skill.sh`.
-
-Keep `ai-engineering-standards.md` as the complete narrative and the `references/*` as the lean
-operational units (that is what preserves context performance).
+The design is evidence-based. See [`docs/research-and-benchmarks.md`](docs/research-and-benchmarks.md)
+for the research synthesis (with sources) and the self-benchmark (greenfield + brownfield fixtures,
+scored by artifacts, with the scaffolder and a fixed sample project verified end to end).
 
 ## Arsenal (external references)
 
@@ -131,23 +136,19 @@ operational units (that is what preserves context performance).
 |---|---|---|
 | [humanizer](https://github.com/blader/humanizer) | Skill | Make copy/docs read human |
 | [21st.dev Magic](https://github.com/21st-dev/magic-mcp) | MCP | Generate/discover UI (React/Tailwind) |
-| [shadcn-ui-mcp-server](https://github.com/Jpisnice/shadcn-ui-mcp-server) | MCP | shadcn/ui components (code/blocks) |
+| [shadcn-ui-mcp-server](https://github.com/Jpisnice/shadcn-ui-mcp-server) | MCP | shadcn/ui components |
 | [web-design-guidelines](https://github.com/vercel-labs/agent-skills/tree/main/skills/web-design-guidelines) | Skill | Audit UI (a11y/UX) |
 | [chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) | MCP | Perf/errors in a real browser |
 | [design-motion-principles](https://github.com/kylezantos/design-motion-principles) | Skill | Correct motion / audit animations |
 
-## What is **not** automatic (by design)
+## What is not automatic (by design)
 
-- The skill **guides my decisions**, but it does not run destructive actions or install MCPs with
-  API keys without your confirmation.
-- Rules that must be **mechanically enforced** (run lint on pre commit, block a merge without an
-  Issue) belong in **hooks / branch protection / CI**, not in a skill.
+- The skill guides decisions; it does not run destructive actions or install MCPs with API keys
+  without confirmation. The scaffolder never overwrites without `--force`.
+- Mechanical enforcement (lint on pre-commit, blocking a merge without an Issue) belongs in **CI,
+  hooks, and branch protection**, not in a skill. The skill is advice; CI is the authoritative gate.
 
-## Credits
+## Credits and License
 
-Standards distilled from the author's personal configuration and the projects referenced in the
-Arsenal. Full specification in [`ai-engineering-standards.md`](ai-engineering-standards.md).
-
-## License
-
-MIT, feel free to adapt it to your flow.
+Standards distilled from the author's configuration and the projects in the Arsenal. MIT licensed.
+Full specification in [`ai-engineering-standards.md`](ai-engineering-standards.md).

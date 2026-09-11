@@ -63,3 +63,19 @@ perf (traces), debug (network/screenshots/console), and automation. Pairs with P
 ```
 Warning: it exposes the browser content to the MCP client. Connect only trusted clients, no sensitive
 data.
+
+## MCP governance (vet before adding one)
+Decision rule: add an MCP **only** for live data or execution against an external system. For static
+knowledge, a skill (optionally wrapping a CLI via `Bash`) is cheaper, safer, and lower maintenance.
+Every server also adds tool-schema tokens to every turn and enlarges the attack surface.
+
+Checklist before enabling a server:
+- Source is vetted and pinned (supply chain: a notable share of public MCP servers have shipped
+  tool-poisoning issues).
+- Least-privilege scopes; no `*`/full-access; step-up auth for consequential actions.
+- Tokens are audience-bound (validate `aud`); the server must not accept tokens not issued to it (no
+  passthrough); never commit keys.
+- Treat tool descriptions and returned data as untrusted (prompt-injection surface); keep a human in
+  the loop for consequential actions.
+- Block SSRF (private IP ranges, cloud metadata `169.254.169.254`); enforce HTTPS.
+- Sandbox local servers; review the exact install command before running it.

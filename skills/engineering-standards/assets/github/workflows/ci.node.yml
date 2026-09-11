@@ -1,0 +1,26 @@
+name: verify
+
+on:
+  push:
+  pull_request:
+
+# Node / JS-TS quality gate (starter). Adjust scripts to your package manager.
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+      - name: Install
+        run: npm ci || npm install
+      - name: fmt + lint
+        run: npx --yes @biomejs/biome check .
+      - name: typecheck
+        run: npx --yes tsc --noEmit || echo "add a tsconfig to enable typecheck"
+      - name: test + coverage
+        run: npx --yes vitest run --coverage || echo "add tests to enable this gate"
+      - name: coverage upload
+        if: ${{ hashFiles('coverage/**') != '' }}
+        uses: codecov/codecov-action@v4

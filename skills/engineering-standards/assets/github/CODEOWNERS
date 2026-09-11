@@ -1,0 +1,9 @@
+# CODEOWNERS: auto-request reviews from the right people on matching paths.
+# Format: <path pattern>   <@user or @org/team>
+# Docs: https://docs.github.com/articles/about-code-owners
+#
+# Uncomment and edit for your repo (kept commented so it enforces nothing until set):
+# *                 @your-org/maintainers
+# /src/api/         @your-org/backend
+# /src/ui/          @your-org/frontend
+# /.github/         @your-org/platform

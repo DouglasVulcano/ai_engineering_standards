@@ -1,0 +1,31 @@
+name: verify
+
+on:
+  push:
+  pull_request:
+
+# Language-agnostic quality gate. Bind each verb to your stack using the engineering-standards
+# stack-appendix. Uncomment and fill the steps for your stack; keep the fail-fast order.
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # - name: fmt        # biome check | ruff format --check | gofmt -l | cargo fmt --check
+      #   run: "<cmd>"
+      # - name: lint       # biome/eslint | ruff check | golangci-lint run | cargo clippy -D warnings
+      #   run: "<cmd>"
+      # - name: typecheck  # JS/TS: tsc --noEmit | Python: mypy   (compiled langs: covered by build)
+      #   run: "<cmd>"
+      # - name: arch       # dependency-cruiser | import-linter | go-arch-lint | ArchUnit
+      #   run: "<cmd>"
+      # - name: deadcode   # knip | vulture + deptry | deadcode ./... | cargo-machete
+      #   run: "<cmd>"
+      # - name: test       # vitest run | pytest | go test ./... | cargo nextest run
+      #   run: "<cmd>"
+      # - name: coverage   # emit Cobertura/LCOV, then upload to Codecov
+      #   run: "<cmd>"
+      # - name: build      # vite build | uv build | go build ./... | cargo build --release
+      #   run: "<cmd>"
+      - name: placeholder
+        run: echo "Configure the gate for your stack (see engineering-standards stack-appendix)."

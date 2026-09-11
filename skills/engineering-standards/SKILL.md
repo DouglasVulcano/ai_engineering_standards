@@ -11,7 +11,7 @@ description: >-
   lint/testes", "seguir os padrões", "aplicar os standards".
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   author: DouglasVulcano
 ---
 
@@ -33,15 +33,17 @@ standard in its `CLAUDE.md`/`AGENTS.md`, offer to feed it (see the bootstrap sec
 
 1. **Workflow, Issue first and PR driven.** Every task (Fix, Improvement, or New feature) starts as
    an **Issue**; every deploy goes through a **PR that references the Issue** (`Closes #N`).
-   Conventional Commits. Feed the project's `CLAUDE.md`/`AGENTS.md`.
-   See `references/workflow-github.md`.
+   Conventional Commits. Feed the project's **AGENTS.md** (canonical, model-agnostic) with a thin
+   **CLAUDE.md** that imports it. See `references/workflow-github.md`.
 2. **Motion and UI.** Every interface has **skeleton, lazy loading, and smooth animations for enter,
    exit, loading, and progress**. Honor `prefers-reduced-motion`; animate only `transform` and
    `opacity`; never `transition: all`. Apply the Frequency Gate and the Web Interface Guidelines.
    See `references/motion-and-ui.md`.
-3. **Observability, Quality, and Testing.** OpenTelemetry as the base plus Sentry, Datadog, or New
-   Relic; Biome, architecture contracts, Commitlint, Knip, Stryker; unit, integration, and E2E
-   (Playwright) with coverage on Codecov. See `references/observability-quality-testing.md`.
+3. **Observability, Quality, and Testing (stack-agnostic).** OpenTelemetry to an OTLP Collector to
+   any backend (Sentry/Datadog/New Relic); an ordered CI gate of capability contracts (`fmt`,
+   `lint`, `typecheck`, `arch`, `deadcode`, `test`, `coverage`, `build`); unit, integration
+   (Testcontainers), and E2E (Playwright) with diff coverage on Codecov. Bind each verb to your
+   stack in `references/stack-appendix.md`. See `references/observability-quality-testing.md`.
 4. **Arsenal.** Use the right tools: shadcn-ui-mcp, 21st.dev Magic, chrome-devtools-mcp,
    design-motion-principles, web-design-guidelines, humanizer.
    See `references/arsenal-mcp-skills.md`.
@@ -51,9 +53,23 @@ standard in its `CLAUDE.md`/`AGENTS.md`, offer to feed it (see the bootstrap sec
 1. **Orient:** identify the kind of work and read only the reference for the domain(s) involved.
 2. **Apply:** follow the pillar; for UI, guarantee the five states (skeleton, lazy, enter, exit,
    progress); for features, guarantee the CI gate (lint, types, arch, knip, tests, coverage, build).
-3. **Propagate:** ensure the bootstrap block is in the repo's `CLAUDE.md`/`AGENTS.md` (self
-   enforcing).
+3. **Propagate:** run the scaffolder to add governance, and ensure the bootstrap block is in the
+   repo's **AGENTS.md** (a thin CLAUDE.md imports it), so the standard is self enforcing.
 4. **Close:** validate against the Definition of Done in `references/ai-engineering-standards.md` §5.
+
+## Scaffolding a repo
+
+To bootstrap governance (issue/PR templates, CODEOWNERS, a stack-aware CI gate, AGENTS.md plus a thin
+CLAUDE.md, and a `.claude/settings.json` safety deny-list), run the bundled scaffolder. It is safe and
+idempotent: it never overwrites an existing file without `--force`, and supports `--dry-run`.
+
+```bash
+bash "${CLAUDE_SKILL_DIR}/scaffold.sh" /path/to/repo   # add --dry-run to preview
+```
+
+Then fill `AGENTS.md` with the stack's gate commands (see `references/stack-appendix.md`) and set real
+owners in `.github/CODEOWNERS`. Remember the split: the skill is advice; **CI plus branch protection
+are the authoritative gate**.
 
 ## Reference index
 
@@ -63,6 +79,7 @@ standard in its `CLAUDE.md`/`AGENTS.md`, offer to feed it (see the bootstrap sec
 | `references/workflow-github.md` | Creating an Issue/PR, managing a deploy, feeding CLAUDE.md |
 | `references/motion-and-ui.md` | Building or reviewing any screen or animation |
 | `references/observability-quality-testing.md` | Setting up observability, lint/quality, tests/CI |
+| `references/stack-appendix.md` | Mapping the agnostic gate verbs to your stack's exact commands |
 | `references/arsenal-mcp-skills.md` | Choosing or installing an MCP server or skill |
 
 > Note: `references/ai-engineering-standards.md` is bundled by `install-skill.sh` at install time. In
