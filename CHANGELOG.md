@@ -15,6 +15,10 @@ follows SemVer.
   and the scaffolder requires the `verify` check for them.
 - `scripts/verify.sh` proves each stack marker (`go.mod`, `Cargo.toml`, `pom.xml`, `*.csproj`) selects
   its stack template rather than the placeholder, and that a generic target still warns as before.
+- Brand assets: `docs/logo.png` (wordmark), `docs/icon.png`, and `docs/favicon.ico`. The site favicon,
+  Open Graph, and Twitter image now use the icon; the hero shows the wordmark on dark and the icon
+  mark on light (the wordmark's text is light, so it is dark-surface only). Both READMEs show the
+  wordmark in GitHub dark mode and the icon in light mode.
 
 ## [1.5.1]
 
