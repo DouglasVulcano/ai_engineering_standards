@@ -3,14 +3,14 @@
 All notable changes to this project are documented here. Format follows Keep a Changelog; versioning
 follows SemVer.
 
-## [2.0.0]
+## [1.5.0]
 
 ### Changed
 - Renamed the project to **Zeroth**. The plugin id is now `zeroth` (install with
   `/plugin install zeroth`), the skill lives at `skills/zeroth/`, the slash command is `/zeroth`, the
   spec is `zeroth.md`, and the repository is `DouglasVulcano/zeroth-ai` (site at
   `douglasvulcano.github.io/zeroth-ai/`). Update any marketplace add to `DouglasVulcano/zeroth-ai`.
-  Breaking for existing installs, which must reinstall under the new name.
+  Existing installs should reinstall under the new name (/plugin install zeroth).
 
 ## [1.4.0]
 
