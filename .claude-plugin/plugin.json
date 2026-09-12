@@ -1,6 +1,6 @@
 {
   "name": "engineering-standards",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Central, stack-agnostic engineering standards for AI agents: Issue-first and PR-driven workflow, motion/UI, observability, a quality and testing gate, plus a governance scaffolder and an MCP/skills arsenal.",
   "author": { "name": "DouglasVulcano" },
   "homepage": "https://github.com/DouglasVulcano/ai_engineering_standards",

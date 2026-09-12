@@ -3,6 +3,14 @@
 All notable changes to this project are documented here. Format follows Keep a Changelog; versioning
 follows SemVer.
 
+## [1.3.2]
+
+### Security
+- Pinned the repo's own CI action (`actions/checkout`) to a full commit SHA with a version comment,
+  and added `.github/dependabot.yml` (grouped, weekly) to keep it current. SECURITY.md now states the
+  posture accurately: this repo pins to SHA; scaffolded templates default to major-version tags
+  (which receive patches) and can be pinned for the strictest posture.
+
 ## [1.3.1]
 
 ### Added

@@ -148,6 +148,13 @@ else
 fi
 rm -rf "$t3"
 
+echo "==> CI actions pinned to SHA (repo workflow)"
+if grep -qE 'uses: [^@ ]+@[0-9a-f]{40}' .github/workflows/verify.yml; then
+  ok "verify.yml pins actions to a commit SHA"
+else
+  err "verify.yml should pin actions to a full commit SHA"
+fi
+
 echo ""
 if [[ "$fail" -eq 0 ]]; then
   echo "ALL CHECKS PASSED"
