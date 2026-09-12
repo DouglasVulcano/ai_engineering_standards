@@ -27,7 +27,7 @@ h2{font-size:clamp(27px,4vw,40px);letter-spacing:-.025em;font-weight:700;margin:
 header.nav{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--s0) 78%,transparent);backdrop-filter:saturate(160%) blur(14px);border-bottom:1px solid var(--stroke)}
 .nav-in{display:flex;align-items:center;gap:14px;height:60px}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:-.01em}
-.brand svg{width:28px;height:28px}
+.brand svg,.brand img{width:28px;height:28px}
 .nav-links{margin-left:auto;display:flex;gap:20px;align-items:center}
 .nav-links a.link{color:var(--ink2);font-weight:500;font-size:14px}
 .nav-links a.link:hover{color:var(--ink)}
@@ -47,6 +47,11 @@ header.nav{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--s
 .hero::before{content:"";position:absolute;top:-160px;left:50%;transform:translateX(-50%);width:1100px;height:620px;background:radial-gradient(60% 60% at 50% 0,#ffd7002e,#ffd7000d 40%,transparent 70%);pointer-events:none}
 .hero::after{content:"";position:absolute;inset:0;background:radial-gradient(80% 55% at 50% 0,transparent 40%,var(--s0) 78%);pointer-events:none}
 .hero-in{position:relative;z-index:1;max-width:840px;margin:0 auto}
+.hero-logo{margin:0 auto 22px;height:auto}
+.hero-logo.dark{display:block;max-width:min(380px,74vw)}
+.hero-logo.light{display:none;max-width:120px}
+:root[data-theme="light"] .hero-logo.dark{display:none}
+:root[data-theme="light"] .hero-logo.light{display:block}
 .tag{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--ink2);background:var(--s1);border:1px solid var(--stroke);border-radius:999px;padding:6px 14px;margin-bottom:26px}
 .tag b{color:var(--acc-text);font-weight:700}
 .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold)}
@@ -98,7 +103,7 @@ details p{margin:0 0 18px;color:var(--ink2);font-size:15px}
 footer{border-top:1px solid var(--stroke);padding:40px 0;color:var(--muted);background:var(--s0)}
 .foot-in{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between}
 .foot-brand{display:flex;align-items:center;gap:9px;font-weight:700;color:var(--ink)}
-.foot-brand svg{width:24px;height:24px}
+.foot-brand svg,.foot-brand img{width:24px;height:24px}
 .foot-links{display:flex;gap:20px;flex-wrap:wrap}
 .foot-links a{color:var(--muted);font-size:14px} .foot-links a:hover{color:var(--ink)}
 @media (prefers-reduced-motion:reduce){

@@ -1,5 +1,6 @@
 <p align="center">
-  <img src="docs/logo.svg" alt="Zeroth" width="96" height="96">
+  <img alt="Zeroth" src="docs/logo.png#gh-dark-mode-only" width="320">
+  <img alt="Zeroth" src="docs/icon.png#gh-light-mode-only" width="96">
 </p>
 
 <h1 align="center">Zeroth</h1>
