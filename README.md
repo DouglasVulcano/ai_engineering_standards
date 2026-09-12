@@ -9,8 +9,9 @@
 </p>
 
 > A single, stack-agnostic engineering standard for AI agents, packaged as a **Claude Code plugin and
-> skill**, with a **governance scaffolder**. One source of truth, applied consistently by any agent of
-> any model, on any project, in any language.
+> skill**, with a **governance scaffolder**. The plugin and skill run in Claude Code; the standard
+> itself travels as a plain **`AGENTS.md`** (importing `zeroth.md`) that any agent of any model can
+> read, on any project, in any language.
 
 ![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin%20%2B%20skill-6C4BF6)
 ![Agnostic](https://img.shields.io/badge/stack-agnostic-success)

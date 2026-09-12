@@ -9,8 +9,9 @@
 </p>
 
 > Um padrão único e agnóstico de stack para agentes de IA, empacotado como **plugin e skill do Claude
-> Code**, com um **scaffolder de governança**. Uma fonte da verdade, aplicada de forma consistente por
-> qualquer agente de qualquer modelo, em qualquer projeto e linguagem.
+> Code**, com um **scaffolder de governança**. O plugin e o skill rodam no Claude Code; o padrão em si
+> viaja como um **`AGENTS.md`** simples (que importa o `zeroth.md`) que qualquer agente de qualquer
+> modelo consegue ler, em qualquer projeto e linguagem.
 
 ![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin%20%2B%20skill-6C4BF6)
 ![Agnostic](https://img.shields.io/badge/stack-agnostic-success)
