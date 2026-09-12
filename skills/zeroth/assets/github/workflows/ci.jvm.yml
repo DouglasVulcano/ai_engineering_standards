@@ -1,0 +1,25 @@
+name: verify
+
+on:
+  push:
+  pull_request:
+
+# JVM quality gate (starter). Assumes Gradle with the wrapper (`./gradlew`).
+# Gradle's `build` task runs the whole gate when the usual plugins are applied: fmt (spotless),
+# lint (checkstyle/detekt), typecheck (javac, part of compile), test, and coverage (JaCoCo/Kover).
+# For Maven, replace the build step with `mvn -B verify` (bind Spotless + tests + JaCoCo to `verify`).
+# Supply-chain hardening: commit and pin the wrapper, and pin each action to a commit SHA.
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - name: build (fmt, lint, typecheck, test, coverage)
+        run: ./gradlew build --no-daemon
+      - name: coverage upload
+        if: ${{ hashFiles('**/build/reports/jacoco/**/*.xml', '**/build/reports/kover/**/*.xml') != '' }}
+        uses: codecov/codecov-action@v5

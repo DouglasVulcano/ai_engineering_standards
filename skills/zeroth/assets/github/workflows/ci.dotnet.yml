@@ -1,0 +1,29 @@
+name: verify
+
+on:
+  push:
+  pull_request:
+
+# .NET quality gate (starter). Tighten as the codebase matures.
+# Verbs: fmt=dotnet format --verify-no-changes, lint+typecheck=dotnet build (Roslyn, -warnaserror),
+# test+coverage=dotnet test (XPlat Code Coverage), build=dotnet build/publish.
+# Supply-chain hardening: commit a lockfile and use `--locked-mode`, pin tool versions and action SHAs.
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.x"
+      - name: restore
+        run: dotnet restore
+      - name: fmt
+        run: dotnet format --verify-no-changes
+      - name: build (lint + typecheck via Roslyn)
+        run: dotnet build --no-restore -warnaserror
+      - name: test + coverage
+        run: dotnet test --no-build --collect:"XPlat Code Coverage"
+      - name: coverage upload
+        if: ${{ hashFiles('**/TestResults/**/coverage.cobertura.xml') != '' }}
+        uses: codecov/codecov-action@v5

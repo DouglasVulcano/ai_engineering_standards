@@ -3,6 +3,31 @@
 All notable changes to this project are documented here. Format follows Keep a Changelog; versioning
 follows SemVer.
 
+## [1.6.0]
+
+### Added
+- Scaffolded CI now delivers a real gate for every stack the scaffolder detects. Added starter
+  workflows `ci.go.yml`, `ci.rust.yml`, `ci.jvm.yml`, and `ci.dotnet.yml` (joining `ci.node.yml` and
+  `ci.python.yml`), each binding the capability contracts to the stack's idiomatic tools
+  (`fmt -> lint -> typecheck -> test -> coverage -> build`; typecheck folds into build on compiled
+  languages). Previously Go/Rust/JVM/.NET fell back to the always-passing placeholder, so the
+  scaffolder had to leave the required status check unset. Now those stacks produce a gate that runs,
+  and the scaffolder requires the `verify` check for them.
+- `scripts/verify.sh` proves each stack marker (`go.mod`, `Cargo.toml`, `pom.xml`, `*.csproj`) selects
+  its stack template rather than the placeholder, and that a generic target still warns as before.
+
+## [1.5.1]
+
+### Fixed
+- Secret-path guard (`hooks/guard_paths.py`) no longer blocks template files: `.env.example`,
+  `.env.sample`, and any `*.example` / `*.sample` / `*.template` / `*.dist` path is allowed (these
+  carry no real secret and exist to be committed). Real `.env` / `.env.local` still block.
+
+### Added
+- Secret-path guard now also covers `*.key`, `*.pfx`, `secret(s).yml|yaml|json`,
+  `service-account*.json`, `.pypirc`, and more SSH key types (`id_dsa`, `id_ecdsa`, `id_ed25519`).
+  New behavior is covered by `scripts/verify.sh` hook tests.
+
 ## [1.5.0]
 
 ### Changed

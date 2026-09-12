@@ -33,7 +33,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Zeroth","applicationCategory":"DeveloperApplication","operatingSystem":"Cross-platform","description":"Um padrão de engenharia compartilhado para agentes de IA como o Claude Code. Instale uma vez e seus agentes planejam, escrevem, testam e entregam código do mesmo jeito em todo projeto.","url":"https://douglasvulcano.github.io/zeroth-ai/pt-br/","codeRepository":"https://github.com/DouglasVulcano/zeroth-ai","softwareVersion":"1.5.0","inLanguage":["pt-BR","en"],"license":"https://opensource.org/licenses/MIT","author":{"@type":"Person","name":"DouglasVulcano"},"offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"}}
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Zeroth","applicationCategory":"DeveloperApplication","operatingSystem":"Cross-platform","description":"Um padrão de engenharia compartilhado para agentes de IA como o Claude Code. Instale uma vez e seus agentes planejam, escrevem, testam e entregam código do mesmo jeito em todo projeto.","url":"https://douglasvulcano.github.io/zeroth-ai/pt-br/","codeRepository":"https://github.com/DouglasVulcano/zeroth-ai","softwareVersion":"1.6.0","inLanguage":["pt-BR","en"],"license":"https://opensource.org/licenses/MIT","author":{"@type":"Person","name":"DouglasVulcano"},"offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"}}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
@@ -41,7 +41,7 @@
 {"@type":"Question","name":"Para quem é?","acceptedAnswer":{"@type":"Answer","text":"Para quem usa assistentes de IA como o Claude Code e quer resultado consistente, revisado e testado, seja um dev solo ou um time inteiro."}},
 {"@type":"Question","name":"Preciso mudar minhas ferramentas ou linguagem?","acceptedAnswer":{"@type":"Answer","text":"Não. As checagens de qualidade são metas mapeadas para o seu stack atual, então funciona com JavaScript, Python, Go, Rust, Java, .NET e mais."}},
 {"@type":"Question","name":"Ele muda meu repositório automaticamente?","acceptedAnswer":{"@type":"Answer","text":"Não. Ele prepara as peças e mostra os comandos; você decide quando ativar as checagens e as regras de revisão que garantem o padrão. Nada é mudado sem a sua confirmação."}},
-{"@type":"Question","name":"Com quais agentes de IA funciona?","acceptedAnswer":{"@type":"Answer","text":"Com qualquer agente que leia um arquivo de guia compartilhado. É feito para ser agnóstico de modelo, então o mesmo padrão vale no Claude Code, Cursor, Copilot e outros."}}
+{"@type":"Question","name":"Com quais agentes de IA funciona?","acceptedAnswer":{"@type":"Answer","text":"O plugin e o skill instalam no Claude Code. Para outros agentes (Cursor, Copilot, Codex), aponte-os para o AGENTS.md que a ferramenta de setup gera (ele importa o zeroth.md) e eles leem o mesmo padrão. O enforcement mora no seu repositório (CI mais branch protection), então vale igual seja qual for o agente que escreve o código."}}
 ]}
 </script>
 </head>
@@ -64,9 +64,9 @@
 <main id="top">
   <section class="hero">
     <div class="wrap hero-in">
-      <span class="tag"><span class="dot"></span> <b>v1.5.0</b> · Funciona com o Claude Code</span>
+      <span class="tag"><span class="dot"></span> <b>v1.6.0</b> · Funciona com o Claude Code</span>
       <h1>Um padrão que seus agentes de IA <span class="g">realmente seguem</span>.</h1>
-      <p class="lede">Assistentes como o Claude Code são poderosos, mas cada projeto acaba com sua própria colcha de retalhos de instruções. Este é um guia único e compartilhado que você instala uma vez, para que seus agentes planejem, escrevam, testem e entreguem código do mesmo jeito, em todo lugar.</p>
+      <p class="lede">Um guia único que você instala uma vez, para que todo agente planeje, escreva, teste e entregue código do mesmo jeito. Seu CI e suas regras de revisão fazem o padrão valer.</p>
       <div class="cta">
         <a class="btn btn-gold btn-lg" href="#install">Começar</a>
         <a class="btn btn-ghost btn-lg" href="https://github.com/DouglasVulcano/zeroth-ai" target="_blank" rel="noopener"><svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 014 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>Estrela no GitHub</a>
@@ -163,7 +163,7 @@ zeroth-ai.git
         <details><summary>Para quem é?</summary><p>Para quem usa assistentes de IA como o Claude Code e quer resultado consistente, revisado e testado, seja um dev solo ou um time inteiro.</p></details>
         <details><summary>Preciso mudar minhas ferramentas ou linguagem?</summary><p>Não. As checagens de qualidade são metas mapeadas para o seu stack atual, então funciona com JavaScript, Python, Go, Rust, Java, .NET e mais.</p></details>
         <details><summary>Ele muda meu repositório automaticamente?</summary><p>Não. Ele prepara as peças e mostra os comandos; você decide quando ativar as checagens e as regras de revisão que garantem o padrão. Nada é mudado sem a sua confirmação.</p></details>
-        <details><summary>Com quais agentes de IA funciona?</summary><p>Com qualquer agente que leia um arquivo de guia compartilhado. É feito para ser agnóstico de modelo, então o mesmo padrão vale no Claude Code, Cursor, Copilot e outros.</p></details>
+        <details><summary>Com quais agentes de IA funciona?</summary><p>O plugin e o skill instalam no Claude Code. Para outros agentes (Cursor, Copilot, Codex), aponte-os para o <code>AGENTS.md</code> que a ferramenta de setup gera (ele importa o <code>zeroth.md</code>) e eles leem o mesmo padrão. O enforcement mora no seu repositório (CI mais branch protection), então vale igual seja qual for o agente que escreve o código.</p></details>
       </div>
     </div>
   </section>

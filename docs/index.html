@@ -33,7 +33,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Zeroth","applicationCategory":"DeveloperApplication","operatingSystem":"Cross-platform","description":"One shared engineering standard for AI coding agents like Claude Code. Install it once, and your agents plan, build, test, and ship code the same way on every project.","url":"https://douglasvulcano.github.io/zeroth-ai/","codeRepository":"https://github.com/DouglasVulcano/zeroth-ai","softwareVersion":"1.5.0","inLanguage":["en","pt-BR"],"license":"https://opensource.org/licenses/MIT","author":{"@type":"Person","name":"DouglasVulcano"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Zeroth","applicationCategory":"DeveloperApplication","operatingSystem":"Cross-platform","description":"One shared engineering standard for AI coding agents like Claude Code. Install it once, and your agents plan, build, test, and ship code the same way on every project.","url":"https://douglasvulcano.github.io/zeroth-ai/","codeRepository":"https://github.com/DouglasVulcano/zeroth-ai","softwareVersion":"1.6.0","inLanguage":["en","pt-BR"],"license":"https://opensource.org/licenses/MIT","author":{"@type":"Person","name":"DouglasVulcano"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
@@ -41,7 +41,7 @@
 {"@type":"Question","name":"Who is it for?","acceptedAnswer":{"@type":"Answer","text":"Anyone using AI coding assistants like Claude Code who wants consistent, reviewed, and tested output, whether you are a solo developer or a whole team."}},
 {"@type":"Question","name":"Do I have to change my tools or programming language?","acceptedAnswer":{"@type":"Answer","text":"No. The quality checks are defined as goals and mapped to your existing stack, so it works with JavaScript, Python, Go, Rust, Java, .NET, and more."}},
 {"@type":"Question","name":"Does it change my repository automatically?","acceptedAnswer":{"@type":"Answer","text":"No. It sets up the pieces and shows you the commands; you decide when to turn on the checks and review rules that enforce the standard. Nothing is changed without your confirmation."}},
-{"@type":"Question","name":"Which AI agents does it work with?","acceptedAnswer":{"@type":"Answer","text":"Any agent that reads a shared guide file. It is built to be model-agnostic, so the same standard applies across Claude Code, Cursor, Copilot, and others."}}
+{"@type":"Question","name":"Which AI agents does it work with?","acceptedAnswer":{"@type":"Answer","text":"The plugin and skill install into Claude Code. For other agents (Cursor, Copilot, Codex), point them at the AGENTS.md the setup tool generates (it imports zeroth.md) and they read the same standard. Enforcement lives in your repo (CI plus branch protection), so it applies the same way whichever agent writes the code."}}
 ]}
 </script>
 </head>
@@ -64,9 +64,9 @@
 <main id="top">
   <section class="hero">
     <div class="wrap hero-in">
-      <span class="tag"><span class="dot"></span> <b>v1.5.0</b> · Works with Claude Code</span>
+      <span class="tag"><span class="dot"></span> <b>v1.6.0</b> · Works with Claude Code</span>
       <h1>One standard your AI coding agents <span class="g">actually follow</span>.</h1>
-      <p class="lede">AI assistants like Claude Code are powerful, but every project ends up with its own patchwork of instructions. This is a single, shared rulebook you install once, so your agents plan, write, test, and ship code the same way, everywhere.</p>
+      <p class="lede">One shared rulebook you install once, so every agent plans, writes, tests, and ships the same way. Your CI and review rules make it stick.</p>
       <div class="cta">
         <a class="btn btn-gold btn-lg" href="#install">Get started</a>
         <a class="btn btn-ghost btn-lg" href="https://github.com/DouglasVulcano/zeroth-ai" target="_blank" rel="noopener"><svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 014 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>Star on GitHub</a>
@@ -163,7 +163,7 @@ zeroth-ai.git
         <details><summary>Who is it for?</summary><p>Anyone using AI coding assistants like Claude Code who wants consistent, reviewed, and tested output, whether you are a solo developer or a whole team.</p></details>
         <details><summary>Do I have to change my tools or language?</summary><p>No. The quality checks are goals mapped to your existing stack, so it works with JavaScript, Python, Go, Rust, Java, .NET, and more.</p></details>
         <details><summary>Does it change my repository automatically?</summary><p>No. It sets up the pieces and shows you the commands; you decide when to turn on the checks and review rules that enforce the standard. Nothing is changed without your confirmation.</p></details>
-        <details><summary>Which AI agents does it work with?</summary><p>Any agent that reads a shared guide file. It is built to be model-agnostic, so the same standard applies across Claude Code, Cursor, Copilot, and others.</p></details>
+        <details><summary>Which AI agents does it work with?</summary><p>The plugin and skill install into Claude Code. For other agents (Cursor, Copilot, Codex), point them at the <code>AGENTS.md</code> the setup tool generates (it imports <code>zeroth.md</code>) and they read the same standard. Enforcement lives in your repo (CI plus branch protection), so it applies the same way whichever agent writes the code.</p></details>
       </div>
     </div>
   </section>

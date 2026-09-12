@@ -29,6 +29,12 @@ required=(
   "$SKILL/assets/github/pull_request_template.md"
   "$SKILL/assets/github/CODEOWNERS"
   "$SKILL/assets/github/workflows/ci.yml"
+  "$SKILL/assets/github/workflows/ci.node.yml"
+  "$SKILL/assets/github/workflows/ci.python.yml"
+  "$SKILL/assets/github/workflows/ci.go.yml"
+  "$SKILL/assets/github/workflows/ci.rust.yml"
+  "$SKILL/assets/github/workflows/ci.jvm.yml"
+  "$SKILL/assets/github/workflows/ci.dotnet.yml"
   hooks/hooks.json hooks/guard-bash.sh hooks/guard_bash.py hooks/guard-paths.sh hooks/guard_paths.py
   evals/README.md evals/scaffold-greenfield/prompt.md scripts/stress.sh
 )
@@ -69,7 +75,12 @@ run_hook() { printf '%s' "$2" | bash "$1" >/dev/null 2>&1; echo $?; }
 [ "$(run_hook hooks/guard-bash.sh '{"tool_input":{"command":"npm test"}}')" = 0 ] && ok "guard-bash allows npm test" || err "guard-bash blocked a safe command"
 [ "$(run_hook hooks/guard-bash.sh 'not-json')" = 0 ] && ok "guard-bash fail-open on bad input" || err "guard-bash not fail-open"
 [ "$(run_hook hooks/guard-paths.sh '{"tool_input":{"file_path":"config/.env"}}')" = 2 ] && ok "guard-paths blocks .env" || err "guard-paths did not block .env"
+[ "$(run_hook hooks/guard-paths.sh '{"tool_input":{"file_path":".env.local"}}')" = 2 ] && ok "guard-paths blocks .env.local" || err "guard-paths did not block .env.local"
 [ "$(run_hook hooks/guard-paths.sh '{"tool_input":{"file_path":"src/app.ts"}}')" = 0 ] && ok "guard-paths allows source" || err "guard-paths blocked a safe path"
+[ "$(run_hook hooks/guard-paths.sh '{"tool_input":{"file_path":".env.example"}}')" = 0 ] && ok "guard-paths allows .env.example (template)" || err "guard-paths blocked a safe template (.env.example)"
+[ "$(run_hook hooks/guard-paths.sh '{"tool_input":{"file_path":"config/secrets.yaml"}}')" = 2 ] && ok "guard-paths blocks secrets.yaml" || err "guard-paths did not block secrets.yaml"
+[ "$(run_hook hooks/guard-paths.sh '{"tool_input":{"file_path":"deploy/tls.key"}}')" = 2 ] && ok "guard-paths blocks *.key" || err "guard-paths did not block a .key file"
+[ "$(run_hook hooks/guard-paths.sh '{"tool_input":{"file_path":"gcp/service-account.json"}}')" = 2 ] && ok "guard-paths blocks service-account json" || err "guard-paths did not block service-account json"
 
 echo "==> Evals structure"
 ev=1
@@ -151,6 +162,36 @@ echo "$bp_out" | grep -q "NOT a status check" && ok "warns enforce_admins is not
 rs_dry="$(bash "$SKILL/scaffold.sh" "$t3" --protect --ruleset --dry-run 2>&1 || true)"
 echo "$rs_dry" | grep -qi "would POST" && ok "--protect --ruleset honors --dry-run" || err "--ruleset did not honor --dry-run"
 rm -rf "$t3"
+
+echo "==> Scaffolder stack-specific CI templates"
+# Each stack marker should select its real CI template (not the always-passing placeholder), which
+# in turn lets the scaffolder require the 'verify' status check. bash 3.2 safe (no assoc arrays).
+check_stack_ci() { # <stack> <marker-file> <signature-in-template>
+  local st="$1" mk="$2" sig="$3" ts out
+  ts="$(mktemp -d)"
+  : > "$ts/$mk"
+  out="$(bash "$SKILL/scaffold.sh" "$ts" 2>&1 || true)"
+  if grep -q "$sig" "$ts/.github/workflows/verify.yml" 2>/dev/null; then
+    ok "scaffold uses the $st CI template"
+  else
+    err "scaffold did not use the $st CI template"
+  fi
+  if echo "$out" | grep -q "always passes"; then
+    err "$st CI still flagged as placeholder (should be a real gate)"
+  else
+    ok "$st CI is a real gate (requires the verify check)"
+  fi
+  rm -rf "$ts"
+}
+check_stack_ci go     go.mod      "setup-go"
+check_stack_ci rust   Cargo.toml  "cargo clippy"
+check_stack_ci jvm    pom.xml     "setup-java"
+check_stack_ci dotnet app.csproj  "setup-dotnet"
+# Mechanism proven both ways: a generic target (no stack marker) still gets the placeholder + warning.
+tgen="$(mktemp -d)"
+gen_out="$(bash "$SKILL/scaffold.sh" "$tgen" 2>&1 || true)"
+echo "$gen_out" | grep -q "always passes" && ok "generic stack still warns (placeholder gate)" || err "generic stack lost its placeholder warning"
+rm -rf "$tgen"
 
 echo "==> CI actions pinned to SHA (repo workflow)"
 if grep -qE 'uses: [^@ ]+@[0-9a-f]{40}' .github/workflows/verify.yml; then
