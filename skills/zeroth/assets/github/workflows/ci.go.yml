@@ -1,0 +1,31 @@
+name: verify
+
+on:
+  push:
+  pull_request:
+
+# Go quality gate (starter). Tighten as the codebase matures.
+# Verbs: fmt=gofmt, lint=golangci-lint, typecheck=(go build), test+coverage=go test -cover,
+# build=go build. Optional next steps: arch (go-arch-lint/depguard), deadcode (deadcode ./...).
+# Supply-chain hardening: pin tool versions and pin each action to a commit SHA for stricter builds.
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "stable"
+      - name: fmt
+        run: test -z "$(gofmt -l .)" || { echo "gofmt needs to run on:"; gofmt -l .; echo "fix with: gofmt -w ."; exit 1; }
+      - name: lint
+        uses: golangci/golangci-lint-action@v6
+      - name: test + coverage
+        run: go test -race -coverprofile=coverage.out ./...
+      - name: build
+        run: go build ./...
+      - name: coverage upload
+        if: ${{ hashFiles('coverage.out') != '' }}
+        uses: codecov/codecov-action@v5
+        with:
+          files: coverage.out
