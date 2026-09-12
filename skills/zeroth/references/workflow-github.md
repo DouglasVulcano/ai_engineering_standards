@@ -52,7 +52,7 @@ Closes #<number>
 ## How to test
 1. ...
 ## Checklist
-- [ ] Follows the AI Engineering Standards
+- [ ] Follows the Zeroth standard
 - [ ] Tests (unit/integration/e2e) updated
 - [ ] Observability instrumented in new flows
 - [ ] prefers-reduced-motion respected in new animations
@@ -78,7 +78,7 @@ gh pr create --fill --base main --title "feat: <summary>" --body "Closes #142
 
 Fastest path is the bundled scaffolder (safe, idempotent, never overwrites without `--force`):
 ```bash
-bash "${CLAUDE_SKILL_DIR:-${CLAUDE_PLUGIN_ROOT:-.}/skills/engineering-standards}/scaffold.sh" .
+bash "${CLAUDE_SKILL_DIR:-${CLAUDE_PLUGIN_ROOT:-.}/skills/zeroth}/scaffold.sh" .
 # adds AGENTS.md + thin CLAUDE.md + .github governance + CI gate + safety deny-list
 # add --with-plugin OWNER/REPO to auto-enable the plugin for the whole team
 ```
@@ -86,7 +86,7 @@ bash "${CLAUDE_SKILL_DIR:-${CLAUDE_PLUGIN_ROOT:-.}/skills/engineering-standards}
 Or add the bootstrap block to `AGENTS.md` by hand:
 
 ```markdown
-## AI Engineering Standards (mandatory)
+## Zeroth (mandatory)
 1. Issue first, PR driven (every task is an Issue; every deploy is a PR that references the Issue). Conventional Commits.
 2. UI: skeleton, lazy loading, enter/exit/loading/progress animations; prefers-reduced-motion; animate only transform/opacity.
 3. Observability: OpenTelemetry to an OTLP Collector to any backend (Sentry/Datadog/New Relic).
@@ -96,5 +96,5 @@ Or add the bootstrap block to `AGENTS.md` by hand:
 
 CLAUDE.md then stays thin (single source of truth in AGENTS.md):
 ```markdown
-See @AGENTS.md for the canonical project guide and the AI Engineering Standards.
+See @AGENTS.md for the canonical project guide and the Zeroth standard.
 ```

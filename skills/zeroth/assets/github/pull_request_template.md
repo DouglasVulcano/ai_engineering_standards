@@ -11,7 +11,7 @@ Closes #<number>
 1. ...
 
 ## Checklist
-- [ ] Follows the AI Engineering Standards
+- [ ] Follows the Zeroth standard
 - [ ] Tests updated (unit/integration/e2e as applicable)
 - [ ] Observability instrumented in new flows
 - [ ] prefers-reduced-motion respected in new animations

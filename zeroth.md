@@ -1,11 +1,11 @@
-# AI Engineering Standards, a Single Way of Working
+# Zeroth, a Single Way of Working
 
 > **Single source of truth** for any AI agent (any model) working on the user's projects. It
 > consolidates and formalizes the personal configuration in `docs/origin/prompts.txt` and
 > `docs/origin/skills.txt`, enriched with best practices from the referenced resources.
 >
 > **How to use:** this document is the complete, readable version. The operational, load on demand
-> version lives in the `engineering-standards` skill (`~/.claude/skills/`). To make the standard
+> version lives in the `zeroth` skill (`~/.claude/skills/`). To make the standard
 > mandatory in a project, copy the bootstrap block from §6 into the repository's
 > `CLAUDE.md`/`AGENTS.md`.
 
@@ -107,7 +107,7 @@ Closes #<number>
 1. ...
 
 ## Checklist
-- [ ] Follows the AI Engineering Standards (workflow, motion/UI, o11y/quality/testing)
+- [ ] Follows the Zeroth standard (workflow, motion/UI, o11y/quality/testing)
 - [ ] Tests added/updated (unit/integration/e2e as applicable)
 - [ ] Observability instrumented (errors/spans) when there is a new flow
 - [ ] prefers-reduced-motion respected in new animations
@@ -454,8 +454,8 @@ data.
 ## 6. Bootstrap and distribution
 
 **Distribution.** Two ways to install (see the README):
-- **Plugin (recommended for teams):** `/plugin marketplace add DouglasVulcano/ai_engineering_standards`
-  then `/plugin install engineering-standards`. Versioned, updated with `claude plugin update`, no drift.
+- **Plugin (recommended for teams):** `/plugin marketplace add DouglasVulcano/zeroth-ai`
+  then `/plugin install zeroth`. Versioned, updated with `claude plugin update`, no drift.
 - **Global skill:** `bash install-skill.sh` copies the skill into `~/.claude/skills/`.
 
 **Make it mandatory per repo.** Run the scaffolder to create `AGENTS.md` (canonical), a thin
@@ -469,10 +469,10 @@ Code via the CLAUDE.md import and by Codex/Cursor/Copilot directly). It makes th
 enforcing for any agent of any model (§1.7).
 
 ```markdown
-## AI Engineering Standards (mandatory)
+## Zeroth (mandatory)
 
-This project follows the **AI Engineering Standards** (skill `engineering-standards`; full spec at
-`~/.claude/skills/engineering-standards/references/ai-engineering-standards.md`). Before any task:
+This project follows the **Zeroth** (skill `zeroth`; full spec at
+`~/.claude/skills/zeroth/references/zeroth.md`). Before any task:
 
 1. **Workflow:** Issue first, PR driven. Every task (Fix/Improvement/New feature) starts as an Issue;
    every deploy goes through a PR that references the Issue (`Closes #`). Conventional Commits.
@@ -490,7 +490,7 @@ web-design-guidelines, humanizer.
 
 CLAUDE.md then stays thin:
 ```markdown
-See @AGENTS.md for the canonical project guide and the AI Engineering Standards.
+See @AGENTS.md for the canonical project guide and the Zeroth standard.
 ```
 
 ---

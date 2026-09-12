@@ -36,7 +36,7 @@ RULES = [
 for pattern, why in RULES:
     if re.search(pattern, cmd):
         sys.stderr.write(
-            "Blocked by engineering-standards guard: %s. "
+            "Blocked by zeroth guard: %s. "
             "This looks destructive; run it yourself if it is truly intended.\n" % why
         )
         sys.exit(2)

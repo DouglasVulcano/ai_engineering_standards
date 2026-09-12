@@ -1,6 +1,6 @@
 # Evals
 
-A self-test suite for the `engineering-standards` plugin, run with `claude plugin eval` (early
+A self-test suite for the `zeroth` plugin, run with `claude plugin eval` (early
 access). It proves the package changes behavior and catches regressions in CI.
 
 ## Cases
@@ -27,7 +27,7 @@ there (a gap to fix).
 - `claude plugin eval` is early access; if it is not enabled for your org the command prints a notice.
   Until then, `scripts/verify.sh` provides the deterministic smoke tests (installer, scaffolder,
   hooks).
-- The `tool_used` matcher in `skill-activation` targets the skill name `engineering-standards`. If a
+- The `tool_used` matcher in `skill-activation` targets the skill name `zeroth`. If a
   run records skill activation under the generic `Skill` tool instead, change the grader to
   `tool_name: Skill` (optionally with an `input_match`). Confirm on the first live run.
 - `scaffold-greenfield` needs Bash + Write allowed so the agent can run the scaffolder; the

@@ -1,5 +1,5 @@
 ---
-description: Scaffold engineering-standards governance into a repo (issue/PR templates, CODEOWNERS, CI gate, AGENTS.md + thin CLAUDE.md, safety deny-list)
+description: Scaffold zeroth governance into a repo (issue/PR templates, CODEOWNERS, CI gate, AGENTS.md + thin CLAUDE.md, safety deny-list)
 argument-hint: "[target dir] [--dry-run] [--with-plugin owner/repo]"
 allowed-tools: Read, Bash, Glob, Grep
 ---
@@ -8,7 +8,7 @@ Run the bundled scaffolder against the target (default: the current directory), 
 from the skill or plugin root and passing `$ARGUMENTS` through:
 
 ```bash
-bash "${CLAUDE_SKILL_DIR:-${CLAUDE_PLUGIN_ROOT:-.}/skills/engineering-standards}/scaffold.sh" $ARGUMENTS
+bash "${CLAUDE_SKILL_DIR:-${CLAUDE_PLUGIN_ROOT:-.}/skills/zeroth}/scaffold.sh" $ARGUMENTS
 ```
 
 It is safe and idempotent (never overwrites without `--force`; supports `--dry-run`). Afterwards: fill

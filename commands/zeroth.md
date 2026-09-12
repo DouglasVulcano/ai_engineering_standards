@@ -1,10 +1,10 @@
 ---
-description: Apply the AI Engineering Standards (workflow, motion/UI, o11y, quality, testing, scaffold)
+description: Apply the Zeroth standard (workflow, motion/UI, o11y, quality, testing, scaffold)
 argument-hint: "[domain: workflow | ui | o11y | testing | arsenal | scaffold | (empty = everything)]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch
 ---
 
-Invoke the `engineering-standards` skill and apply the user's single engineering standard to the
+Invoke the `zeroth` skill and apply the user's single engineering standard to the
 current task. If `$ARGUMENTS` names a domain, load only the matching reference; otherwise follow
 `SKILL.md` and load on demand.
 
@@ -15,7 +15,7 @@ current task. If `$ARGUMENTS` names a domain, load only the matching reference; 
 - arsenal  -> references/arsenal-mcp-skills.md
 - scaffold -> run the scaffolder to add governance (issue/PR templates, CODEOWNERS, CI gate,
   AGENTS.md canonical + thin CLAUDE.md); see references/workflow-github.md
-- (empty)  -> SKILL.md plus the full spec in references/ai-engineering-standards.md
+- (empty)  -> SKILL.md plus the full spec in references/zeroth.md
 
 Whenever you work in a repository, ensure the standards bootstrap block is in AGENTS.md (the
 canonical, model-agnostic file) with a thin CLAUDE.md that imports it.

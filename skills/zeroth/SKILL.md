@@ -1,5 +1,5 @@
 ---
-name: engineering-standards
+name: zeroth
 description: >-
   The user's central engineering standard (workflow, UI/motion, observability, quality, testing, and
   an arsenal of MCPs and skills). Use it whenever you start, plan, or review work on any project: when
@@ -11,15 +11,15 @@ description: >-
   lint/testes", "seguir os padrões", "aplicar os standards".
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch
 metadata:
-  version: "1.4.0"
+  version: "2.0.0"
   author: DouglasVulcano
 ---
 
-# Engineering Standards
+# Zeroth
 
 Central skill that consolidates the user's AI configuration into a single standard that is mandatory
 for any agent of any model. The full, readable specification lives in
-`references/ai-engineering-standards.md`; the operational deep dives per domain live in the other
+`references/zeroth.md`; the operational deep dives per domain live in the other
 files under `references/`. **Read on demand:** load only the domain relevant to the task, not
 everything at once.
 
@@ -55,7 +55,7 @@ standard in its `CLAUDE.md`/`AGENTS.md`, offer to feed it (see the bootstrap sec
    progress); for features, guarantee the CI gate (lint, types, arch, knip, tests, coverage, build).
 3. **Propagate:** run the scaffolder to add governance, and ensure the bootstrap block is in the
    repo's **AGENTS.md** (a thin CLAUDE.md imports it), so the standard is self enforcing.
-4. **Close:** validate against the Definition of Done in `references/ai-engineering-standards.md` §5.
+4. **Close:** validate against the Definition of Done in `references/zeroth.md` §5.
 
 ## Scaffolding a repo
 
@@ -64,7 +64,7 @@ CLAUDE.md, and a `.claude/settings.json` safety deny-list), run the bundled scaf
 idempotent: it never overwrites an existing file without `--force`, and supports `--dry-run`.
 
 ```bash
-bash "${CLAUDE_SKILL_DIR:-${CLAUDE_PLUGIN_ROOT:-.}/skills/engineering-standards}/scaffold.sh" /path/to/repo   # --dry-run to preview
+bash "${CLAUDE_SKILL_DIR:-${CLAUDE_PLUGIN_ROOT:-.}/skills/zeroth}/scaffold.sh" /path/to/repo   # --dry-run to preview
 ```
 
 Add `--with-plugin OWNER/REPO` to also wire the project's `.claude/settings.json` so the plugin
@@ -77,12 +77,12 @@ authoritative gate**.
 
 | File | Load when |
 |---|---|
-| `references/ai-engineering-standards.md` | You need the full spec, the DoD, or the bootstrap block |
+| `references/zeroth.md` | You need the full spec, the DoD, or the bootstrap block |
 | `references/workflow-github.md` | Creating an Issue/PR, managing a deploy, feeding CLAUDE.md |
 | `references/motion-and-ui.md` | Building or reviewing any screen or animation |
 | `references/observability-quality-testing.md` | Setting up observability, lint/quality, tests/CI |
 | `references/stack-appendix.md` | Mapping the agnostic gate verbs to your stack's exact commands |
 | `references/arsenal-mcp-skills.md` | Choosing or installing an MCP server or skill |
 
-> Note: `references/ai-engineering-standards.md` is bundled by `install-skill.sh` at install time. In
-> the source repository it lives at the project root as `ai-engineering-standards.md`.
+> Note: `references/zeroth.md` is bundled by `install-skill.sh` at install time. In
+> the source repository it lives at the project root as `zeroth.md`.

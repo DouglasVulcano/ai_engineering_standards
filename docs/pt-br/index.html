@@ -5,35 +5,35 @@
 <script>(function(){try{var p=localStorage.getItem('aes-lang');if(!p&&!/^pt/i.test(navigator.language||''))location.replace('../');}catch(e){}})();</script>
 <script>try{var t=localStorage.getItem('aes-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI Engineering Standards - um padrão que seus agentes de IA seguem</title>
+<title>Zeroth - um padrão que seus agentes de IA seguem</title>
 <meta name="description" content="Um padrão de engenharia compartilhado para agentes de IA como o Claude Code. Instale uma vez e seus agentes planejam, escrevem, testam e entregam código do mesmo jeito em todo projeto. Open source, licença MIT.">
 <meta name="keywords" content="padrões de engenharia IA, Claude Code, agentes de IA, padrões de código, governança, AGENTS.md, CI, code review, ferramentas de desenvolvimento, MCP, plugin">
 <meta name="author" content="DouglasVulcano">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <meta name="theme-color" content="#0d0d0f">
-<link rel="canonical" href="https://douglasvulcano.github.io/ai_engineering_standards/pt-br/">
-<link rel="alternate" hreflang="en" href="https://douglasvulcano.github.io/ai_engineering_standards/">
-<link rel="alternate" hreflang="pt-BR" href="https://douglasvulcano.github.io/ai_engineering_standards/pt-br/">
-<link rel="alternate" hreflang="x-default" href="https://douglasvulcano.github.io/ai_engineering_standards/">
+<link rel="canonical" href="https://douglasvulcano.github.io/zeroth-ai/pt-br/">
+<link rel="alternate" hreflang="en" href="https://douglasvulcano.github.io/zeroth-ai/">
+<link rel="alternate" hreflang="pt-BR" href="https://douglasvulcano.github.io/zeroth-ai/pt-br/">
+<link rel="alternate" hreflang="x-default" href="https://douglasvulcano.github.io/zeroth-ai/">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="AI Engineering Standards">
-<meta property="og:title" content="AI Engineering Standards">
+<meta property="og:site_name" content="Zeroth">
+<meta property="og:title" content="Zeroth">
 <meta property="og:description" content="Um guia compartilhado para agentes de IA. Instale uma vez e eles planejam, constroem, testam e entregam código do mesmo jeito em todo projeto.">
-<meta property="og:url" content="https://douglasvulcano.github.io/ai_engineering_standards/pt-br/">
-<meta property="og:image" content="https://douglasvulcano.github.io/ai_engineering_standards/logo.svg">
+<meta property="og:url" content="https://douglasvulcano.github.io/zeroth-ai/pt-br/">
+<meta property="og:image" content="https://douglasvulcano.github.io/zeroth-ai/logo.svg">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="AI Engineering Standards">
+<meta name="twitter:title" content="Zeroth">
 <meta name="twitter:description" content="Um guia compartilhado para agentes de IA. Instale uma vez, entregue com consistência em todo projeto.">
-<meta name="twitter:image" content="https://douglasvulcano.github.io/ai_engineering_standards/logo.svg">
+<meta name="twitter:image" content="https://douglasvulcano.github.io/zeroth-ai/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"SoftwareApplication","name":"AI Engineering Standards","applicationCategory":"DeveloperApplication","operatingSystem":"Cross-platform","description":"Um padrão de engenharia compartilhado para agentes de IA como o Claude Code. Instale uma vez e seus agentes planejam, escrevem, testam e entregam código do mesmo jeito em todo projeto.","url":"https://douglasvulcano.github.io/ai_engineering_standards/pt-br/","codeRepository":"https://github.com/DouglasVulcano/ai_engineering_standards","softwareVersion":"1.4.0","inLanguage":["pt-BR","en"],"license":"https://opensource.org/licenses/MIT","author":{"@type":"Person","name":"DouglasVulcano"},"offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"}}
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Zeroth","applicationCategory":"DeveloperApplication","operatingSystem":"Cross-platform","description":"Um padrão de engenharia compartilhado para agentes de IA como o Claude Code. Instale uma vez e seus agentes planejam, escrevem, testam e entregam código do mesmo jeito em todo projeto.","url":"https://douglasvulcano.github.io/zeroth-ai/pt-br/","codeRepository":"https://github.com/DouglasVulcano/zeroth-ai","softwareVersion":"2.0.0","inLanguage":["pt-BR","en"],"license":"https://opensource.org/licenses/MIT","author":{"@type":"Person","name":"DouglasVulcano"},"offers":{"@type":"Offer","price":"0","priceCurrency":"BRL"}}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
@@ -49,7 +49,7 @@
 
 <header class="nav">
   <div class="wrap nav-in">
-    <a class="brand" href="#top" aria-label="AI Engineering Standards inicio"><svg viewBox="0 0 128 128" aria-hidden="true"><defs><linearGradient id="lg" x1="40" y1="34" x2="88" y2="94" gradientUnits="userSpaceOnUse"><stop stop-color="#ffe353"/><stop offset=".55" stop-color="#ffd700"/><stop offset="1" stop-color="#e6c200"/></linearGradient></defs><rect x="4" y="4" width="120" height="120" rx="27" fill="#141417"/><rect x="5" y="5" width="118" height="118" rx="26" fill="none" stroke="#3f3f46" stroke-width="1.5"/><g stroke="url(#lg)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M50 36 H38 a6 6 0 0 0 -6 6 V86 a6 6 0 0 0 6 6 H50" stroke-width="7" opacity=".9"/><path d="M78 36 H90 a6 6 0 0 1 6 6 V86 a6 6 0 0 1 -6 6 H78" stroke-width="7" opacity=".9"/><path d="M45 65 L59 79 L85 47" stroke-width="10"/></g></svg><span>AI Engineering Standards</span></a>
+    <a class="brand" href="#top" aria-label="Zeroth inicio"><svg viewBox="0 0 128 128" aria-hidden="true"><defs><linearGradient id="lg" x1="40" y1="34" x2="88" y2="94" gradientUnits="userSpaceOnUse"><stop stop-color="#ffe353"/><stop offset=".55" stop-color="#ffd700"/><stop offset="1" stop-color="#e6c200"/></linearGradient></defs><rect x="4" y="4" width="120" height="120" rx="27" fill="#141417"/><rect x="5" y="5" width="118" height="118" rx="26" fill="none" stroke="#3f3f46" stroke-width="1.5"/><g stroke="url(#lg)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M50 36 H38 a6 6 0 0 0 -6 6 V86 a6 6 0 0 0 6 6 H50" stroke-width="7" opacity=".9"/><path d="M78 36 H90 a6 6 0 0 1 6 6 V86 a6 6 0 0 1 -6 6 H78" stroke-width="7" opacity=".9"/><path d="M45 65 L59 79 L85 47" stroke-width="10"/></g></svg><span>Zeroth</span></a>
     <nav class="nav-links">
       <a class="link" href="#pillars">O que cobre</a>
       <a class="link" href="#features">Por que funciona</a>
@@ -64,17 +64,17 @@
 <main id="top">
   <section class="hero">
     <div class="wrap hero-in">
-      <span class="tag"><span class="dot"></span> <b>v1.4.0</b> · Funciona com o Claude Code</span>
+      <span class="tag"><span class="dot"></span> <b>v2.0.0</b> · Funciona com o Claude Code</span>
       <h1>Um padrão que seus agentes de IA <span class="g">realmente seguem</span>.</h1>
       <p class="lede">Assistentes como o Claude Code são poderosos, mas cada projeto acaba com sua própria colcha de retalhos de instruções. Este é um guia único e compartilhado que você instala uma vez, para que seus agentes planejem, escrevam, testem e entreguem código do mesmo jeito, em todo lugar.</p>
       <div class="cta">
         <a class="btn btn-gold btn-lg" href="#install">Começar</a>
-        <a class="btn btn-ghost btn-lg" href="https://github.com/DouglasVulcano/ai_engineering_standards" target="_blank" rel="noopener"><svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 014 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>Estrela no GitHub</a>
+        <a class="btn btn-ghost btn-lg" href="https://github.com/DouglasVulcano/zeroth-ai" target="_blank" rel="noopener"><svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 014 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>Estrela no GitHub</a>
       </div>
       <div class="term">
         <div class="term-bar"><i></i><i></i><i></i><span>rode no Claude Code</span></div>
-        <pre><span class="p">/plugin</span> <span class="o">marketplace add DouglasVulcano/ai_engineering_standards</span>
-<span class="p">/plugin</span> <span class="o">install engineering-standards</span></pre>
+        <pre><span class="p">/plugin</span> <span class="o">marketplace add DouglasVulcano/zeroth-ai</span>
+<span class="p">/plugin</span> <span class="o">install zeroth</span></pre>
       </div>
     </div>
   </section>
@@ -143,12 +143,12 @@
         <div>
           <p class="kicker" style="margin-top:6px">Plugin, recomendado</p>
           <pre class="code"><span class="p">/plugin</span> marketplace add \
-  DouglasVulcano/ai_engineering_standards
-<span class="p">/plugin</span> install engineering-standards</pre>
+  DouglasVulcano/zeroth-ai
+<span class="p">/plugin</span> install zeroth</pre>
           <p class="kicker" style="margin-top:22px">Instalação pessoal</p>
           <pre class="code"><span class="p">git</span> clone https://github.com/DouglasVulcano/\
-ai_engineering_standards.git
-<span class="p">cd</span> ai_engineering_standards
+zeroth-ai.git
+<span class="p">cd</span> zeroth-ai
 <span class="p">bash</span> install-skill.sh</pre>
         </div>
       </div>
@@ -174,8 +174,8 @@ ai_engineering_standards.git
         <h2 style="margin-bottom:10px">Traga consistência para como seus agentes entregam código</h2>
         <p class="lede" style="margin:0 auto 26px">Instale o plugin, configure um repo, e deixe suas checagens garantirem o padrão.</p>
         <div class="cta">
-          <a class="btn btn-gold btn-lg" href="https://github.com/DouglasVulcano/ai_engineering_standards" target="_blank" rel="noopener">Ver no GitHub</a>
-          <a class="btn btn-ghost btn-lg" href="https://github.com/DouglasVulcano/ai_engineering_standards/blob/main/ai-engineering-standards.md" target="_blank" rel="noopener">Ler o padrão completo</a>
+          <a class="btn btn-gold btn-lg" href="https://github.com/DouglasVulcano/zeroth-ai" target="_blank" rel="noopener">Ver no GitHub</a>
+          <a class="btn btn-ghost btn-lg" href="https://github.com/DouglasVulcano/zeroth-ai/blob/main/zeroth.md" target="_blank" rel="noopener">Ler o padrão completo</a>
         </div>
       </div>
     </div>
@@ -184,12 +184,12 @@ ai_engineering_standards.git
 
 <footer>
   <div class="wrap foot-in">
-    <div class="foot-brand"><svg viewBox="0 0 128 128" aria-hidden="true"><defs><linearGradient id="fg" x1="40" y1="34" x2="88" y2="94" gradientUnits="userSpaceOnUse"><stop stop-color="#ffe353"/><stop offset=".55" stop-color="#ffd700"/><stop offset="1" stop-color="#e6c200"/></linearGradient></defs><rect x="4" y="4" width="120" height="120" rx="27" fill="#141417"/><rect x="5" y="5" width="118" height="118" rx="26" fill="none" stroke="#3f3f46" stroke-width="1.5"/><g stroke="url(#fg)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M50 36 H38 a6 6 0 0 0 -6 6 V86 a6 6 0 0 0 6 6 H50" stroke-width="7" opacity=".9"/><path d="M78 36 H90 a6 6 0 0 1 6 6 V86 a6 6 0 0 1 -6 6 H78" stroke-width="7" opacity=".9"/><path d="M45 65 L59 79 L85 47" stroke-width="10"/></g></svg><span>AI Engineering Standards</span></div>
+    <div class="foot-brand"><svg viewBox="0 0 128 128" aria-hidden="true"><defs><linearGradient id="fg" x1="40" y1="34" x2="88" y2="94" gradientUnits="userSpaceOnUse"><stop stop-color="#ffe353"/><stop offset=".55" stop-color="#ffd700"/><stop offset="1" stop-color="#e6c200"/></linearGradient></defs><rect x="4" y="4" width="120" height="120" rx="27" fill="#141417"/><rect x="5" y="5" width="118" height="118" rx="26" fill="none" stroke="#3f3f46" stroke-width="1.5"/><g stroke="url(#fg)" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M50 36 H38 a6 6 0 0 0 -6 6 V86 a6 6 0 0 0 6 6 H50" stroke-width="7" opacity=".9"/><path d="M78 36 H90 a6 6 0 0 1 6 6 V86 a6 6 0 0 1 -6 6 H78" stroke-width="7" opacity=".9"/><path d="M45 65 L59 79 L85 47" stroke-width="10"/></g></svg><span>Zeroth</span></div>
     <nav class="foot-links">
-      <a href="https://github.com/DouglasVulcano/ai_engineering_standards" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://github.com/DouglasVulcano/ai_engineering_standards/releases" target="_blank" rel="noopener">Releases</a>
+      <a href="https://github.com/DouglasVulcano/zeroth-ai" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/DouglasVulcano/zeroth-ai/releases" target="_blank" rel="noopener">Releases</a>
       <a href="../" onclick="try{localStorage.setItem('aes-lang','en')}catch(e){}">English</a>
-      <a href="https://github.com/DouglasVulcano/ai_engineering_standards/blob/main/LICENSE" target="_blank" rel="noopener">Licença MIT</a>
+      <a href="https://github.com/DouglasVulcano/zeroth-ai/blob/main/LICENSE" target="_blank" rel="noopener">Licença MIT</a>
     </nav>
   </div>
   <div class="wrap" style="margin-top:16px;font-size:13px">Feito por DouglasVulcano. Licença MIT. Open source no GitHub.</div>

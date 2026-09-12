@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://douglasvulcano.github.io/ai_engineering_standards/sitemap.xml
+Sitemap: https://douglasvulcano.github.io/zeroth-ai/sitemap.xml

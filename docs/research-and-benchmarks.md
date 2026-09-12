@@ -116,7 +116,7 @@ verbs passing locally as an executable proxy for the CI gate.
 ### 4.5 Gaps found and fixes applied
 - The generic CI file is a placeholder (not runnable) by design; the agent must bind stack commands.
   Mitigated by shipping concrete `ci.python.yml` / `ci.node.yml` starters and stack detection.
-- `SKILL.md` referenced `references/ai-engineering-standards.md`, which only exists after install
+- `SKILL.md` referenced `references/zeroth.md`, which only exists after install
   (bundled). Fixed earlier with an explicit note in `SKILL.md`.
 - Scaffolder only creates files (never merges into an existing `AGENTS.md`/`settings.json`). This is a
   deliberate safety choice; deep merge is on the roadmap.

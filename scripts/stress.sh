@@ -7,7 +7,7 @@
 set -uo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 ROOT="$(pwd)"
-SKILL="skills/engineering-standards"
+SKILL="skills/zeroth"
 OUT="${1:-/tmp/stress-results.json}"
 
 pass=0; fail=0
@@ -120,7 +120,7 @@ say "   $K repos in ${tot_ms}ms (avg ${avg_ms}ms/repo)"
 say "==> Context efficiency (progressive disclosure)"
 skill_b=$(wc -c < "$SKILL/SKILL.md")
 ref_b=$(cat "$SKILL"/references/*.md | wc -c)
-mast_b=$(wc -c < ai-engineering-standards.md)
+mast_b=$(wc -c < zeroth.md)
 tot_b=$((skill_b + ref_b))
 pct=$(( skill_b * 100 / tot_b ))
 say "   SKILL.md ${skill_b}B on trigger vs ${tot_b}B total refs => ~${pct}% loaded up-front"

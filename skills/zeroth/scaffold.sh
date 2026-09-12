@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# scaffold.sh: add engineering-standards governance to a target repo.
+# scaffold.sh: add zeroth governance to a target repo.
 # Safe by design: never overwrites an existing file unless --force; supports --dry-run;
 # re-running is idempotent (a second run makes no changes).
 #
@@ -8,7 +8,7 @@
 #   scaffold.sh [TARGET_DIR] [--dry-run] [--force] [--protect] [--ruleset]
 #               [--with-plugin OWNER/REPO] [--marketplace NAME] [--plugin NAME]
 #
-# Defaults: TARGET_DIR = current directory; plugin NAME = engineering-standards;
+# Defaults: TARGET_DIR = current directory; plugin NAME = zeroth;
 #           marketplace NAME = the repo part of OWNER/REPO.
 #
 # Delivers: .github issue/PR templates, CODEOWNERS, a stack-aware CI gate (verify.yml),
@@ -32,7 +32,7 @@ PROTECT=0
 RULESET=0
 WITH_PLUGIN=""
 MARKETPLACE=""
-PLUGIN_NAME="engineering-standards"
+PLUGIN_NAME="zeroth"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --dry-run) DRY=1 ;;
@@ -57,7 +57,7 @@ MARKETPLACE="${MARKETPLACE:-${WITH_PLUGIN##*/}}"
 [[ -d "$TARGET" ]] || { echo "ERROR: target '$TARGET' is not a directory" >&2; exit 1; }
 TARGET="$(cd "$TARGET" && pwd)"
 
-echo "==> Scaffolding engineering-standards governance"
+echo "==> Scaffolding zeroth governance"
 echo "    target: $TARGET"
 [[ "$DRY" -eq 1 ]] && echo "    mode:   DRY RUN (no writes)"
 

@@ -1,6 +1,6 @@
 # AGENTS.md
 
-> Canonical, model-agnostic guide for agents working on THIS repository (the `engineering-standards`
+> Canonical, model-agnostic guide for agents working on THIS repository (the `zeroth`
 > plugin/skill). Read by Claude Code via the CLAUDE.md import, and by Codex/Cursor/Copilot directly.
 
 ## Project
@@ -8,10 +8,10 @@ A distributable Claude Code plugin/skill that carries a stack-agnostic engineeri
 governance scaffolder. Content is Markdown and Bash; there is no application runtime.
 
 ## Layout
-- `skills/engineering-standards/` the skill: `SKILL.md` router + `references/` + `scaffold.sh` + `assets/`
-- `commands/standards.md` the `/standards` slash command
+- `skills/zeroth/` the skill: `SKILL.md` router + `references/` + `scaffold.sh` + `assets/`
+- `commands/zeroth.md` the `/zeroth` slash command
 - `.claude-plugin/` `plugin.json` + `marketplace.json`
-- `ai-engineering-standards.md` the full readable spec (bundled into the skill at install)
+- `zeroth.md` the full readable spec (bundled into the skill at install)
 - `install-skill.sh` global-skill installer; `scripts/verify.sh` the self-check
 - `docs/origin/` provenance (do not edit); `docs/research-and-benchmarks.md` research + self-benchmark
 
@@ -19,7 +19,7 @@ governance scaffolder. Content is Markdown and Bash; there is no application run
 - verify (lint/test): `bash scripts/verify.sh` (files, shell syntax, JSON validity, no em/en dashes,
   description length, installer + scaffolder smoke tests)
 - install locally: `CLAUDE_DIR=./.tmp bash install-skill.sh`
-- scaffold (manual test): `bash skills/engineering-standards/scaffold.sh <target> --dry-run`
+- scaffold (manual test): `bash skills/zeroth/scaffold.sh <target> --dry-run`
 There is no separate build/test toolchain (this is a Markdown and Bash repo); `verify.sh` is the gate.
 
 ## Conventions
@@ -29,7 +29,7 @@ There is no separate build/test toolchain (this is a Markdown and Bash repo); `v
 - After editing the skill: run `bash scripts/verify.sh`, then `bash install-skill.sh` to sync the
   local skill; bump `version` in `.claude-plugin/plugin.json` and `SKILL.md`, and add a CHANGELOG entry.
 
-## AI Engineering Standards (this repo dogfoods them)
+## Zeroth (this repo dogfoods it)
 Issue-first/PR-driven workflow; the `fmt -> ... -> build` gate is instantiated here as
 `scripts/verify.sh` and enforced by CI (`.github/workflows/verify.yml`). Full spec:
-`ai-engineering-standards.md`.
+`zeroth.md`.

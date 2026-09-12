@@ -10,15 +10,15 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."   # repo root, regardless of where it was
 fail=0
 err() { echo "  FAIL: $*" >&2; fail=1; }
 ok()  { echo "  ok:   $*"; }
-SKILL="skills/engineering-standards"
+SKILL="skills/zeroth"
 
 echo "==> Required files"
 required=(
-  ai-engineering-standards.md install-skill.sh README.md README.pt-BR.md LICENSE
+  zeroth.md install-skill.sh README.md README.pt-BR.md LICENSE
   AGENTS.md CLAUDE.md CONTRIBUTING.md CHANGELOG.md SECURITY.md
   .claude-plugin/plugin.json .claude-plugin/marketplace.json
   .github/CODEOWNERS
-  commands/standards.md commands/scaffold.md
+  commands/zeroth.md commands/scaffold.md
   "$SKILL/SKILL.md" "$SKILL/scaffold.sh"
   "$SKILL/references/workflow-github.md"
   "$SKILL/references/motion-and-ui.md"
@@ -51,10 +51,10 @@ python3 - <<'PY' || fail=1
 import json
 p=json.load(open(".claude-plugin/plugin.json"))
 m=json.load(open(".claude-plugin/marketplace.json"))
-assert p.get("name")=="engineering-standards", "plugin name"
+assert p.get("name")=="zeroth", "plugin name"
 assert p.get("version"), "plugin version"
 names=[x.get("name") for x in m.get("plugins",[])]
-assert "engineering-standards" in names, "marketplace lists the plugin"
+assert "zeroth" in names, "marketplace lists the plugin"
 print("  ok:   plugin/marketplace consistent (v%s)" % p["version"])
 PY
 
@@ -103,11 +103,11 @@ if [[ "$len" -gt 0 && "$len" -lt 1024 ]]; then ok "length = $len"; else err "len
 echo "==> Installer smoke test (temporary CLAUDE_DIR)"
 tmp="$(mktemp -d)"
 if CLAUDE_DIR="$tmp" bash install-skill.sh >/dev/null 2>&1; then
-  [[ -f "$tmp/skills/engineering-standards/SKILL.md" ]] && ok "produced SKILL.md" || err "no SKILL.md produced"
-  [[ -f "$tmp/skills/engineering-standards/references/ai-engineering-standards.md" ]] && ok "bundled master spec" || err "master spec not bundled"
-  [[ -f "$tmp/skills/engineering-standards/scaffold.sh" ]] && ok "bundled scaffold.sh" || err "scaffold.sh not bundled"
-  [[ -f "$tmp/skills/engineering-standards/assets/AGENTS.md" ]] && ok "bundled assets" || err "assets not bundled"
-  [[ -f "$tmp/commands/standards.md" ]] && ok "created /standards command" || err "no /standards command"
+  [[ -f "$tmp/skills/zeroth/SKILL.md" ]] && ok "produced SKILL.md" || err "no SKILL.md produced"
+  [[ -f "$tmp/skills/zeroth/references/zeroth.md" ]] && ok "bundled master spec" || err "master spec not bundled"
+  [[ -f "$tmp/skills/zeroth/scaffold.sh" ]] && ok "bundled scaffold.sh" || err "scaffold.sh not bundled"
+  [[ -f "$tmp/skills/zeroth/assets/AGENTS.md" ]] && ok "bundled assets" || err "assets not bundled"
+  [[ -f "$tmp/commands/zeroth.md" ]] && ok "created /zeroth command" || err "no /zeroth command"
   [[ -f "$tmp/commands/scaffold.md" ]] && ok "created scaffold command" || err "no scaffold command"
 else
   err "installer exited non-zero"

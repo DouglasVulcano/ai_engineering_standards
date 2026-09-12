@@ -26,11 +26,11 @@
   (`Closes #N`). Conventional Commits.
 - Repo-specific rules (only what is non-obvious): <...>
 
-## AI Engineering Standards (mandatory)
-This repo follows the `engineering-standards` skill. Apply the 4 pillars before any task:
+## Zeroth (mandatory)
+This repo follows the `zeroth` skill. Apply the 4 pillars before any task:
 1. Workflow (Issue-first, PR-driven).
 2. Motion and UI (skeleton, lazy loading, enter/exit/loading/progress; `prefers-reduced-motion`).
 3. Observability + Quality + Testing (OpenTelemetry; the `fmt -> ... -> build` gate; diff coverage).
 4. Arsenal (shadcn-ui-mcp, 21st.dev Magic, chrome-devtools-mcp, design-motion-principles,
    web-design-guidelines, humanizer).
-Full spec: the `engineering-standards` skill (`references/ai-engineering-standards.md`).
+Full spec: the `zeroth` skill (`references/zeroth.md`).
