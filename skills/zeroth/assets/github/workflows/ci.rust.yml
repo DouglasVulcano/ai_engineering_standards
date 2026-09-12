@@ -1,0 +1,27 @@
+name: verify
+
+on:
+  push:
+  pull_request:
+
+# Rust quality gate (starter). Tighten as the codebase matures.
+# Verbs: fmt=cargo fmt --check, lint=cargo clippy -D warnings, typecheck=(cargo check, via build),
+# test=cargo test, build=cargo build --release. Optional next steps: coverage (cargo-llvm-cov),
+# deadcode (cargo-machete), dependency policy (cargo-deny).
+# Supply-chain hardening: pin the toolchain + tool versions and pin each action to a commit SHA.
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - name: fmt
+        run: cargo fmt --all --check
+      - name: lint
+        run: cargo clippy --all-targets --all-features -- -D warnings
+      - name: test
+        run: cargo test --all-features
+      - name: build
+        run: cargo build --release

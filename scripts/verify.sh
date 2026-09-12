@@ -29,6 +29,12 @@ required=(
   "$SKILL/assets/github/pull_request_template.md"
   "$SKILL/assets/github/CODEOWNERS"
   "$SKILL/assets/github/workflows/ci.yml"
+  "$SKILL/assets/github/workflows/ci.node.yml"
+  "$SKILL/assets/github/workflows/ci.python.yml"
+  "$SKILL/assets/github/workflows/ci.go.yml"
+  "$SKILL/assets/github/workflows/ci.rust.yml"
+  "$SKILL/assets/github/workflows/ci.jvm.yml"
+  "$SKILL/assets/github/workflows/ci.dotnet.yml"
   hooks/hooks.json hooks/guard-bash.sh hooks/guard_bash.py hooks/guard-paths.sh hooks/guard_paths.py
   evals/README.md evals/scaffold-greenfield/prompt.md scripts/stress.sh
 )
@@ -156,6 +162,36 @@ echo "$bp_out" | grep -q "NOT a status check" && ok "warns enforce_admins is not
 rs_dry="$(bash "$SKILL/scaffold.sh" "$t3" --protect --ruleset --dry-run 2>&1 || true)"
 echo "$rs_dry" | grep -qi "would POST" && ok "--protect --ruleset honors --dry-run" || err "--ruleset did not honor --dry-run"
 rm -rf "$t3"
+
+echo "==> Scaffolder stack-specific CI templates"
+# Each stack marker should select its real CI template (not the always-passing placeholder), which
+# in turn lets the scaffolder require the 'verify' status check. bash 3.2 safe (no assoc arrays).
+check_stack_ci() { # <stack> <marker-file> <signature-in-template>
+  local st="$1" mk="$2" sig="$3" ts out
+  ts="$(mktemp -d)"
+  : > "$ts/$mk"
+  out="$(bash "$SKILL/scaffold.sh" "$ts" 2>&1 || true)"
+  if grep -q "$sig" "$ts/.github/workflows/verify.yml" 2>/dev/null; then
+    ok "scaffold uses the $st CI template"
+  else
+    err "scaffold did not use the $st CI template"
+  fi
+  if echo "$out" | grep -q "always passes"; then
+    err "$st CI still flagged as placeholder (should be a real gate)"
+  else
+    ok "$st CI is a real gate (requires the verify check)"
+  fi
+  rm -rf "$ts"
+}
+check_stack_ci go     go.mod      "setup-go"
+check_stack_ci rust   Cargo.toml  "cargo clippy"
+check_stack_ci jvm    pom.xml     "setup-java"
+check_stack_ci dotnet app.csproj  "setup-dotnet"
+# Mechanism proven both ways: a generic target (no stack marker) still gets the placeholder + warning.
+tgen="$(mktemp -d)"
+gen_out="$(bash "$SKILL/scaffold.sh" "$tgen" 2>&1 || true)"
+echo "$gen_out" | grep -q "always passes" && ok "generic stack still warns (placeholder gate)" || err "generic stack lost its placeholder warning"
+rm -rf "$tgen"
 
 echo "==> CI actions pinned to SHA (repo workflow)"
 if grep -qE 'uses: [^@ ]+@[0-9a-f]{40}' .github/workflows/verify.yml; then
