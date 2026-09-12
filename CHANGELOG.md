@@ -3,6 +3,17 @@
 All notable changes to this project are documented here. Format follows Keep a Changelog; versioning
 follows SemVer.
 
+## [1.4.0]
+
+### Added
+- Scaffolder branch-protection guidance is now ruleset-aware. It prints both the classic
+  branch-protection command and a **Ruleset** command (`POST /repos/{o}/{r}/rulesets`), and a new
+  `--ruleset` flag makes `--protect` create a ruleset instead of classic protection. Both paths warn
+  that `enforce_admins` is not a status-check context (it is the `enforce_admins` field in the classic
+  API and the `bypass_actors` list in a ruleset). SECURITY.md documents the ruleset equivalent. This
+  closes the gap where hand-adapting the classic JSON into a ruleset could hang a PR at
+  "Expected - Waiting for status to be reported".
+
 ## [1.3.2]
 
 ### Security

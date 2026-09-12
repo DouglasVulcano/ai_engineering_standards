@@ -44,6 +44,13 @@ gh api -X PUT repos/DouglasVulcano/ai_engineering_standards/branches/main/protec
 JSON
 ```
 
+On a **Ruleset** (Settings > Rules > Rulesets, GitHub's newer model) the shape differs: there is no
+`enforce_admins` field (an empty `bypass_actors` list applies the rule to admins too), and the
+required check is a `required_status_checks` rule whose context is the **job name** (here `verify`).
+Never put `enforce_admins` in the status-check list: nothing reports it, so the merge box stays on
+"Expected - Waiting for status to be reported". The scaffolder prints both commands, and
+`scaffold.sh --protect --ruleset` applies the ruleset for you.
+
 ## Reporting a vulnerability
 Please open a private GitHub Security Advisory on the repository. Do not file a public issue with
 exploit details.

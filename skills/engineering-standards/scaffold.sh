@@ -5,7 +5,7 @@
 # re-running is idempotent (a second run makes no changes).
 #
 # Usage:
-#   scaffold.sh [TARGET_DIR] [--dry-run] [--force] [--protect]
+#   scaffold.sh [TARGET_DIR] [--dry-run] [--force] [--protect] [--ruleset]
 #               [--with-plugin OWNER/REPO] [--marketplace NAME] [--plugin NAME]
 #
 # Defaults: TARGET_DIR = current directory; plugin NAME = engineering-standards;
@@ -16,7 +16,7 @@
 # deny-list. With --with-plugin it also wires .claude/settings.json to auto-enable the plugin for
 # everyone who trusts the repo (extraKnownMarketplaces + enabledPlugins). With --protect it arms
 # branch protection on the target's default branch via the GitHub API (needs gh + a repo-admin
-# token); otherwise it always prints the exact command for you to run.
+# token; add --ruleset to apply a Ruleset instead). Otherwise it prints the commands to run.
 #
 set -euo pipefail
 
@@ -29,6 +29,7 @@ TARGET="."
 DRY=0
 FORCE=0
 PROTECT=0
+RULESET=0
 WITH_PLUGIN=""
 MARKETPLACE=""
 PLUGIN_NAME="engineering-standards"
@@ -37,6 +38,7 @@ while [[ $# -gt 0 ]]; do
     --dry-run) DRY=1 ;;
     --force)   FORCE=1 ;;
     --protect) PROTECT=1 ;;
+    --ruleset) RULESET=1 ;;
     --with-plugin)   WITH_PLUGIN="${2:-}"; shift ;;
     --with-plugin=*) WITH_PLUGIN="${1#*=}" ;;
     --marketplace)   MARKETPLACE="${2:-}"; shift ;;
@@ -147,12 +149,17 @@ branch="$(git -C "$TARGET" symbolic-ref --quiet --short refs/remotes/origin/HEAD
 [[ -z "$branch" ]] && branch="$(git -C "$TARGET" symbolic-ref --quiet --short HEAD 2>/dev/null || true)"
 [[ -z "$branch" ]] && branch="main"
 slug_disp="${repo_slug:-<owner>/<repo>}"
+# Two dialects: the classic branch-protection API (enforce_admins is a field) and Rulesets (the
+# newer model; enforce_admins maps to an empty bypass_actors list, never a status check).
 if [[ "$ci_is_placeholder" -eq 1 ]]; then
   checks_json='"required_status_checks": null'
+  rs_check_rule=''
 else
   checks_json='"required_status_checks": { "strict": true, "contexts": ["verify"] }'
+  rs_check_rule=', { "type": "required_status_checks", "parameters": { "strict_required_status_checks_policy": true, "required_status_checks": [ { "context": "verify" } ] } }'
 fi
 prot_json="{ \"required_pull_request_reviews\": { \"required_approving_review_count\": 1, \"require_code_owner_reviews\": true }, $checks_json, \"enforce_admins\": true, \"restrictions\": null }"
+rs_json="{ \"name\": \"main-protection\", \"target\": \"branch\", \"enforcement\": \"active\", \"conditions\": { \"ref_name\": { \"include\": [\"~DEFAULT_BRANCH\"], \"exclude\": [] } }, \"rules\": [ { \"type\": \"pull_request\", \"parameters\": { \"required_approving_review_count\": 1, \"require_code_owner_review\": true, \"dismiss_stale_reviews_on_push\": false, \"require_last_push_approval\": false, \"required_review_thread_resolution\": false } }$rs_check_rule, { \"type\": \"non_fast_forward\" }, { \"type\": \"deletion\" } ], \"bypass_actors\": [] }"
 
 echo ""
 echo "Summary: created/would-create=$created, kept=$kept, stack=$stack"
@@ -167,18 +174,31 @@ echo "Next steps:"
 echo "  1. Fill AGENTS.md: stack + the gate commands for '$stack' (see the stack-appendix)."
 echo "  2. Set real owners in .github/CODEOWNERS."
 echo "  3. Complete .github/workflows/verify.yml for your stack."
-echo "  4. Arm branch protection on '$branch' (the authoritative gate). Review, then run:"
+echo "  4. Arm branch protection on '$branch' (the authoritative gate). Review, then run ONE of:"
+echo "     - Classic branch-protection API:"
 echo "       gh api -X PUT repos/$slug_disp/branches/$branch/protection --input - <<'JSON'"
 echo "       $prot_json"
 echo "       JSON"
-echo "     or re-run this scaffolder with --protect to apply it for you."
+echo "     - Ruleset (GitHub's newer model; targets the default branch):"
+echo "       gh api -X POST repos/$slug_disp/rulesets --input - <<'JSON'"
+echo "       $rs_json"
+echo "       JSON"
+echo "     Note: 'enforce_admins' is NOT a status check. Classic uses the enforce_admins field; a"
+echo "     ruleset uses bypass_actors (empty = applies to admins too). Putting it in a check list"
+echo "     hangs the merge on 'Expected - Waiting for status to be reported'."
+echo "     Or re-run with --protect (add --ruleset to apply a Ruleset instead of the classic API)."
 [[ -z "$WITH_PLUGIN" ]] && echo "  5. To auto-enable the plugin for the whole team: re-run with --with-plugin OWNER/REPO."
 
 if [[ "$PROTECT" -eq 1 ]]; then
+  if [[ "$RULESET" -eq 1 ]]; then method="ruleset"; else method="classic branch protection"; fi
   echo ""
-  echo "==> --protect: branch protection on '$branch'"
+  echo "==> --protect: applying $method on '$branch'"
   if [[ "$DRY" -eq 1 ]]; then
-    echo "    dry run: would PUT repos/$slug_disp/branches/$branch/protection (nothing sent)"
+    if [[ "$RULESET" -eq 1 ]]; then
+      echo "    dry run: would POST repos/$slug_disp/rulesets (nothing sent)"
+    else
+      echo "    dry run: would PUT repos/$slug_disp/branches/$branch/protection (nothing sent)"
+    fi
   elif [[ -z "$repo_slug" ]]; then
     echo "    SKIP: no 'origin' remote in $TARGET; set one and re-run, or apply the command above." >&2
   elif ! command -v gh >/dev/null 2>&1; then
@@ -188,15 +208,23 @@ if [[ "$PROTECT" -eq 1 ]]; then
   else
     apply=1
     if [[ -t 0 ]]; then
-      printf '    Apply branch protection to %s on %s? [y/N] ' "$repo_slug" "$branch"
+      printf '    Apply %s to %s on %s? [y/N] ' "$method" "$repo_slug" "$branch"
       read -r ans || ans=""
       [[ "$ans" =~ ^[Yy]$ ]] || apply=0
     fi
     if [[ "$apply" -eq 1 ]]; then
-      if printf '%s' "$prot_json" | gh api -X PUT "repos/$repo_slug/branches/$branch/protection" --input - >/dev/null 2>&1; then
-        echo "    done: branch protection applied to $repo_slug@$branch"
+      if [[ "$RULESET" -eq 1 ]]; then
+        if printf '%s' "$rs_json" | gh api -X POST "repos/$repo_slug/rulesets" --input - >/dev/null 2>&1; then
+          echo "    done: ruleset 'main-protection' created on $repo_slug (edit or delete it in Settings > Rules)."
+        else
+          echo "    ERROR: gh api POST rulesets failed (needs a repo-admin token; a ruleset named 'main-protection' may already exist)." >&2
+        fi
       else
-        echo "    ERROR: gh api PUT failed (needs a repo-admin token: classic 'repo' scope or fine-grained Administration:write)." >&2
+        if printf '%s' "$prot_json" | gh api -X PUT "repos/$repo_slug/branches/$branch/protection" --input - >/dev/null 2>&1; then
+          echo "    done: branch protection applied to $repo_slug@$branch"
+        else
+          echo "    ERROR: gh api PUT failed (needs a repo-admin token: classic 'repo' scope or fine-grained Administration:write)." >&2
+        fi
       fi
     else
       echo "    cancelled (no changes)."

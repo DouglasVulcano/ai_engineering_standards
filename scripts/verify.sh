@@ -146,6 +146,10 @@ if echo "$bp_dry" | grep -qi "dry run: would PUT" && ! echo "$bp_dry" | grep -q 
 else
   err "--protect did not honor --dry-run"
 fi
+echo "$bp_out" | grep -q "repos/acme/demo/rulesets" && ok "prints the ruleset command too" || err "missing ruleset command"
+echo "$bp_out" | grep -q "NOT a status check" && ok "warns enforce_admins is not a check" || err "missing enforce_admins caveat"
+rs_dry="$(bash "$SKILL/scaffold.sh" "$t3" --protect --ruleset --dry-run 2>&1 || true)"
+echo "$rs_dry" | grep -qi "would POST" && ok "--protect --ruleset honors --dry-run" || err "--ruleset did not honor --dry-run"
 rm -rf "$t3"
 
 echo "==> CI actions pinned to SHA (repo workflow)"
