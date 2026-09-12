@@ -1,6 +1,12 @@
-# AI Engineering Standards
+<p align="center">
+  <img src="docs/logo.svg" alt="AI Engineering Standards" width="96" height="96">
+</p>
 
-[English](README.md) · **Português**
+<h1 align="center">AI Engineering Standards</h1>
+
+<p align="center">
+  <a href="https://douglasvulcano.github.io/ai_engineering_standards/pt-br/"><b>Site</b></a> · <a href="README.md">English</a> · <b>Português</b>
+</p>
 
 > Um padrão único e agnóstico de stack para agentes de IA, empacotado como **plugin e skill do Claude
 > Code**, com um **scaffolder de governança**. Uma fonte da verdade, aplicada de forma consistente por
