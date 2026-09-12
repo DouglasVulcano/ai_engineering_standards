@@ -10,16 +10,32 @@ try:
 except Exception:
     sys.exit(0)  # fail-open
 
+# Template/placeholder files carry no real secret and exist to be committed
+# (.env.example, credentials.json.sample, config.php.dist, ...). Allow them even when
+# the name resembles a secret. Checked BEFORE the block list.
+ALLOW = [
+    r"\.(example|sample|template|dist)$",
+]
+
 SENSITIVE = [
     r"(^|/)\.env(\.|$)",
     r"\.pem$",
     r"\.p12$",
-    r"(^|/)id_rsa",
+    r"\.pfx$",
+    r"\.key$",
+    r"(^|/)id_(rsa|dsa|ecdsa|ed25519)\b",
     r"(^|/)\.npmrc$",
+    r"(^|/)\.pypirc$",
     r"(^|/)\.git-credentials$",
     r"(^|/)credentials(\.json)?$",
     r"(^|/)\.aws/credentials$",
+    r"(^|/)secrets?\.(ya?ml|json)$",
+    r"(^|/)service-account[^/]*\.json$",
 ]
+
+for pattern in ALLOW:
+    if re.search(pattern, fp):
+        sys.exit(0)  # safe template/placeholder, not a real secret
 
 for pattern in SENSITIVE:
     if re.search(pattern, fp):

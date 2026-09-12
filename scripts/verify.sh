@@ -69,7 +69,12 @@ run_hook() { printf '%s' "$2" | bash "$1" >/dev/null 2>&1; echo $?; }
 [ "$(run_hook hooks/guard-bash.sh '{"tool_input":{"command":"npm test"}}')" = 0 ] && ok "guard-bash allows npm test" || err "guard-bash blocked a safe command"
 [ "$(run_hook hooks/guard-bash.sh 'not-json')" = 0 ] && ok "guard-bash fail-open on bad input" || err "guard-bash not fail-open"
 [ "$(run_hook hooks/guard-paths.sh '{"tool_input":{"file_path":"config/.env"}}')" = 2 ] && ok "guard-paths blocks .env" || err "guard-paths did not block .env"
+[ "$(run_hook hooks/guard-paths.sh '{"tool_input":{"file_path":".env.local"}}')" = 2 ] && ok "guard-paths blocks .env.local" || err "guard-paths did not block .env.local"
 [ "$(run_hook hooks/guard-paths.sh '{"tool_input":{"file_path":"src/app.ts"}}')" = 0 ] && ok "guard-paths allows source" || err "guard-paths blocked a safe path"
+[ "$(run_hook hooks/guard-paths.sh '{"tool_input":{"file_path":".env.example"}}')" = 0 ] && ok "guard-paths allows .env.example (template)" || err "guard-paths blocked a safe template (.env.example)"
+[ "$(run_hook hooks/guard-paths.sh '{"tool_input":{"file_path":"config/secrets.yaml"}}')" = 2 ] && ok "guard-paths blocks secrets.yaml" || err "guard-paths did not block secrets.yaml"
+[ "$(run_hook hooks/guard-paths.sh '{"tool_input":{"file_path":"deploy/tls.key"}}')" = 2 ] && ok "guard-paths blocks *.key" || err "guard-paths did not block a .key file"
+[ "$(run_hook hooks/guard-paths.sh '{"tool_input":{"file_path":"gcp/service-account.json"}}')" = 2 ] && ok "guard-paths blocks service-account json" || err "guard-paths did not block service-account json"
 
 echo "==> Evals structure"
 ev=1
