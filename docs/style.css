@@ -107,8 +107,11 @@ footer{border-top:1px solid var(--stroke);padding:40px 0;color:var(--muted);back
 }
 
 /* responsive hardening */
-body{overflow-x:clip}
-img,svg,pre{max-width:100%}
+html,body{overflow-x:clip}
+img,svg,video{max-width:100%;height:auto}
+pre{max-width:100%;overflow-x:auto}
+code{overflow-wrap:anywhere}
+.nav-in,.hero-in,.cols,.cols>*,.grid,.steps,.step,.card,.faq,.cta,.foot-in,.term,.head,.head>*{min-width:0}
 @media (max-width:820px){ section{padding:56px 0} .hero{padding:78px 0 54px} }
 @media (max-width:600px){
   .wrap{padding:0 18px}
