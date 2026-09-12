@@ -1,0 +1,19 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AI Engineering Standards">
+  <defs>
+    <linearGradient id="tile" x1="12" y1="6" x2="116" y2="122" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8B6CFF"/>
+      <stop offset="1" stop-color="#4E31D4"/>
+    </linearGradient>
+    <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="128" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff" stop-opacity="0.20"/>
+      <stop offset="0.55" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="120" height="120" rx="30" fill="url(#tile)"/>
+  <rect x="4" y="4" width="120" height="120" rx="30" fill="url(#sheen)"/>
+  <g stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M50 36 H38 a6 6 0 0 0 -6 6 V86 a6 6 0 0 0 6 6 H50" stroke-width="7" opacity="0.85"/>
+    <path d="M78 36 H90 a6 6 0 0 1 6 6 V86 a6 6 0 0 1 -6 6 H78" stroke-width="7" opacity="0.85"/>
+    <path d="M45 65 L59 79 L85 47" stroke-width="10"/>
+  </g>
+</svg>

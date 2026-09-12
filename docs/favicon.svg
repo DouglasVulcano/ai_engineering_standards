@@ -1,0 +1,10 @@
+<svg width="64" height="64" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AI Engineering Standards">
+  <defs>
+    <linearGradient id="t" x1="12" y1="6" x2="116" y2="122" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8B6CFF"/>
+      <stop offset="1" stop-color="#4E31D4"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="120" height="120" rx="30" fill="url(#t)"/>
+  <path d="M40 66 L57 84 L90 44" stroke="#ffffff" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
