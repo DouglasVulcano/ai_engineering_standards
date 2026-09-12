@@ -3,6 +3,18 @@
 All notable changes to this project are documented here. Format follows Keep a Changelog; versioning
 follows SemVer.
 
+## [1.5.1]
+
+### Fixed
+- Secret-path guard (`hooks/guard_paths.py`) no longer blocks template files: `.env.example`,
+  `.env.sample`, and any `*.example` / `*.sample` / `*.template` / `*.dist` path is allowed (these
+  carry no real secret and exist to be committed). Real `.env` / `.env.local` still block.
+
+### Added
+- Secret-path guard now also covers `*.key`, `*.pfx`, `secret(s).yml|yaml|json`,
+  `service-account*.json`, `.pypirc`, and more SSH key types (`id_dsa`, `id_ecdsa`, `id_ed25519`).
+  New behavior is covered by `scripts/verify.sh` hook tests.
+
 ## [1.5.0]
 
 ### Changed
