@@ -4,7 +4,7 @@ on:
   push:
   pull_request:
 
-# Language-agnostic quality gate. Bind each verb to your stack using the engineering-standards
+# Language-agnostic quality gate. Bind each verb to your stack using the zeroth
 # stack-appendix. Uncomment and fill the steps for your stack; keep the fail-fast order.
 jobs:
   verify:
@@ -28,4 +28,4 @@ jobs:
       # - name: build      # vite build | uv build | go build ./... | cargo build --release
       #   run: "<cmd>"
       - name: placeholder
-        run: echo "Configure the gate for your stack (see engineering-standards stack-appendix)."
+        run: echo "Configure the gate for your stack (see zeroth stack-appendix)."

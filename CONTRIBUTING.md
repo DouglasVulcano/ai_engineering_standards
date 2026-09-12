@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for improving the `engineering-standards` package.
+Thanks for improving the `zeroth` package.
 
 ## Workflow
 - Open an Issue (Fix / Improvement / New feature) before non-trivial work.
@@ -14,10 +14,10 @@ Thanks for improving the `engineering-standards` package.
 - Do not edit `docs/origin/` (provenance of the original config).
 
 ## Making changes
-1. Edit the sources (`ai-engineering-standards.md`, the skill, the assets, the scripts).
+1. Edit the sources (`zeroth.md`, the skill, the assets, the scripts).
 2. `bash scripts/verify.sh`.
 3. `bash install-skill.sh` to sync the local skill.
-4. Bump `version` in `.claude-plugin/plugin.json` and in `skills/engineering-standards/SKILL.md`, then
+4. Bump `version` in `.claude-plugin/plugin.json` and in `skills/zeroth/SKILL.md`, then
    add a `CHANGELOG.md` entry.
 
 ## Scope of changes

@@ -37,7 +37,7 @@ Enable it in GitHub (Settings > Branches > Add rule for `main`), or via the API 
 repo-admin scope:
 
 ```bash
-gh api -X PUT repos/DouglasVulcano/ai_engineering_standards/branches/main/protection --input - <<'JSON'
+gh api -X PUT repos/DouglasVulcano/zeroth-ai/branches/main/protection --input - <<'JSON'
 { "required_pull_request_reviews": { "required_approving_review_count": 1, "require_code_owner_reviews": true },
   "required_status_checks": { "strict": true, "contexts": ["verify"] },
   "enforce_admins": true, "restrictions": null }
@@ -57,5 +57,5 @@ exploit details.
 
 ## MCP note
 Before enabling any MCP server, follow the vetting checklist in
-`skills/engineering-standards/references/arsenal-mcp-skills.md` (audience-bound tokens, no
+`skills/zeroth/references/arsenal-mcp-skills.md` (audience-bound tokens, no
 passthrough, least-privilege scopes, sandbox local servers, block private IP ranges).

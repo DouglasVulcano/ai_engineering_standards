@@ -1,13 +1,13 @@
 {
-  "name": "ai_engineering_standards",
+  "name": "zeroth-ai",
   "owner": { "name": "DouglasVulcano" },
   "metadata": {
-    "description": "Marketplace hosting the engineering-standards plugin.",
+    "description": "Marketplace hosting the zeroth plugin.",
     "version": "1.2.1"
   },
   "plugins": [
     {
-      "name": "engineering-standards",
+      "name": "zeroth",
       "source": "./",
       "description": "Central, stack-agnostic engineering standards plus a governance scaffolder for AI-assisted projects."
     }

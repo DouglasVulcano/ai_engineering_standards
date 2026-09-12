@@ -24,7 +24,7 @@ SENSITIVE = [
 for pattern in SENSITIVE:
     if re.search(pattern, fp):
         sys.stderr.write(
-            "Blocked by engineering-standards guard: '%s' looks like a secrets/credentials file. "
+            "Blocked by zeroth guard: '%s' looks like a secrets/credentials file. "
             "Edit it yourself if that is intended.\n" % fp
         )
         sys.exit(2)

@@ -3,6 +3,15 @@
 All notable changes to this project are documented here. Format follows Keep a Changelog; versioning
 follows SemVer.
 
+## [2.0.0]
+
+### Changed
+- Renamed the project to **Zeroth**. The plugin id is now `zeroth` (install with
+  `/plugin install zeroth`), the skill lives at `skills/zeroth/`, the slash command is `/zeroth`, the
+  spec is `zeroth.md`, and the repository is `DouglasVulcano/zeroth-ai` (site at
+  `douglasvulcano.github.io/zeroth-ai/`). Update any marketplace add to `DouglasVulcano/zeroth-ai`.
+  Breaking for existing installs, which must reinstall under the new name.
+
 ## [1.4.0]
 
 ### Added
@@ -45,7 +54,7 @@ follows SemVer.
 
 ### Fixed
 - Quickstart: the global-skill install snippet referenced the wrong directory after `git clone`
-  (`cd ai-engineering-standards` should be `cd ai_engineering_standards`), in README (EN and PT-BR).
+  (`cd zeroth` should be `cd zeroth-ai`), in README (EN and PT-BR).
 - CHANGELOG accuracy: the v1.2.0 note overstated eval automation. CI validates the eval-suite
   structure via `verify.sh`; the evals themselves run manually (`claude plugin eval`).
 
@@ -78,7 +87,7 @@ follows SemVer.
 ### Added
 - Claude Code plugin packaging (`.claude-plugin/plugin.json` + `marketplace.json`) for versioned team
   distribution alongside the global-skill installer.
-- Governance scaffolder (`skills/engineering-standards/scaffold.sh` + `assets/`): issue/PR templates,
+- Governance scaffolder (`skills/zeroth/scaffold.sh` + `assets/`): issue/PR templates,
   CODEOWNERS, a stack-aware CI gate, AGENTS.md (canonical) + a thin CLAUDE.md, and a `.claude`
   safety deny-list. Safe by design (no overwrite without `--force`) and idempotent, with `--dry-run`.
 - Stack-agnostic Pillar 3: a capability-contract gate
@@ -108,5 +117,5 @@ follows SemVer.
 ## [1.0.0]
 
 ### Added
-- Initial `engineering-standards` skill (4 pillars), the master spec, the installer, the `/standards`
+- Initial `zeroth` skill (4 pillars), the master spec, the installer, the `/zeroth`
   command, and the self-check.

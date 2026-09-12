@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="docs/logo.svg" alt="AI Engineering Standards" width="96" height="96">
+  <img src="docs/logo.svg" alt="Zeroth" width="96" height="96">
 </p>
 
-<h1 align="center">AI Engineering Standards</h1>
+<h1 align="center">Zeroth</h1>
 
 <p align="center">
-  <a href="https://douglasvulcano.github.io/ai_engineering_standards/pt-br/"><b>Site</b></a> · <a href="README.md">English</a> · <b>Português</b>
+  <a href="https://douglasvulcano.github.io/zeroth-ai/pt-br/"><b>Site</b></a> · <a href="README.md">English</a> · <b>Português</b>
 </p>
 
 > Um padrão único e agnóstico de stack para agentes de IA, empacotado como **plugin e skill do Claude
@@ -24,8 +24,8 @@
 Um padrão distribuível que transforma configuração de IA solta em um pacote **formal, versionado e
 instalável**. Entrega:
 
-1. **`ai-engineering-standards.md`** a especificação completa e legível (fonte única da verdade).
-2. **A skill `engineering-standards`** o mesmo conhecimento com progressive disclosure (carrega só o
+1. **`zeroth.md`** a especificação completa e legível (fonte única da verdade).
+2. **A skill `zeroth`** o mesmo conhecimento com progressive disclosure (carrega só o
    domínio relevante) mais um **scaffolder** e os **assets** de governança.
 3. **Empacotamento de plugin** (`.claude-plugin/`) para distribuição versionada em time, e
    **`install-skill.sh`** para instalação pessoal global.
@@ -43,8 +43,8 @@ aplicada:
 um `CLAUDE.md` fino, um deny-list de segurança em `.claude`). Previa, depois aplique:
 
 ```bash
-bash skills/engineering-standards/scaffold.sh /caminho/do/repo --dry-run
-bash skills/engineering-standards/scaffold.sh /caminho/do/repo
+bash skills/zeroth/scaffold.sh /caminho/do/repo --dry-run
+bash skills/zeroth/scaffold.sh /caminho/do/repo
 ```
 
 **2. Preencha o `AGENTS.md`** com seu stack e os comandos do gate (veja o apêndice de stack), e
@@ -90,14 +90,14 @@ retorno; o scaffolder mais um `AGENTS.md` preenchido mais o gate armado é onde 
 ├── README.md / README.pt-BR.md        # docs (EN / PT)
 ├── AGENTS.md / CLAUDE.md              # guia do próprio repo (canônico + import fino)
 ├── CONTRIBUTING.md / CHANGELOG.md / SECURITY.md / LICENSE
-├── ai-engineering-standards.md        # a especificação completa (fonte única da verdade)
-├── install-skill.sh                   # instalador da skill global (+ comando /standards)
+├── zeroth.md        # a especificação completa (fonte única da verdade)
+├── install-skill.sh                   # instalador da skill global (+ comando /zeroth)
 ├── .claude-plugin/                    # plugin.json + marketplace.json (distribuição em time)
-├── commands/standards.md              # o slash command /standards
+├── commands/zeroth.md              # o slash command /zeroth
 ├── scripts/verify.sh                  # self-check do repo (dogfood do pilar 3)
 ├── hooks/                             # guards PreToolUse do plugin (bloqueia Bash destrutivo / edição de segredos)
 ├── evals/                             # suíte claude plugin eval (braço de controle with/without)
-├── skills/engineering-standards/       # a skill (payload instalado)
+├── skills/zeroth/       # a skill (payload instalado)
 │   ├── SKILL.md                       # router enxuto (dispara sozinho)
 │   ├── references/                    # deep dives por domínio (sob demanda)
 │   │   ├── workflow-github.md · motion-and-ui.md
@@ -113,19 +113,19 @@ retorno; o scaffolder mais um `AGENTS.md` preenchido mais o gate armado é onde 
 
 **Plugin (recomendado para times; versionado, sem drift):**
 ```text
-/plugin marketplace add DouglasVulcano/ai_engineering_standards
-/plugin install engineering-standards
+/plugin marketplace add DouglasVulcano/zeroth-ai
+/plugin install zeroth
 ```
 Atualize depois com `claude plugin update`.
 
 **Skill global (pessoal):**
 ```bash
-git clone https://github.com/DouglasVulcano/ai_engineering_standards.git
-cd ai_engineering_standards
+git clone https://github.com/DouglasVulcano/zeroth-ai.git
+cd zeroth-ai
 bash install-skill.sh
 ```
 O instalador é idempotente e independente de localização; copia a skill (com o scaffolder e os
-assets) para `~/.claude/skills/` e registra `/standards`. Escopo por projeto:
+assets) para `~/.claude/skills/` e registra `/zeroth`. Escopo por projeto:
 `CLAUDE_DIR=./.claude bash install-skill.sh`.
 
 **Time / projeto inteiro (auto-habilitar para todos).** Commite um `.claude/settings.json` para que
@@ -133,19 +133,19 @@ qualquer pessoa que confie no repo receba o plugin automaticamente, sem passos m
 ```json
 {
   "extraKnownMarketplaces": {
-    "ai_engineering_standards": { "source": { "source": "github", "repo": "DouglasVulcano/ai_engineering_standards" } }
+    "zeroth-ai": { "source": { "source": "github", "repo": "DouglasVulcano/zeroth-ai" } }
   },
-  "enabledPlugins": { "engineering-standards@ai_engineering_standards": true }
+  "enabledPlugins": { "zeroth@zeroth-ai": true }
 }
 ```
 O scaffolder escreve isso para você:
-`scaffold.sh <repo> --with-plugin DouglasVulcano/ai_engineering_standards`.
+`scaffold.sh <repo> --with-plugin DouglasVulcano/zeroth-ai`.
 
 ## Uso
 
 - **Automático**: a skill dispara quando o pedido casa ("crie a issue/PR", "revise a UI", "configure
   observabilidade", "siga os padrões").
-- **Explícito**: `/standards` (tudo) ou `/standards ui | workflow | o11y | testing | arsenal |
+- **Explícito**: `/zeroth` (tudo) ou `/zeroth ui | workflow | o11y | testing | arsenal |
   scaffold`.
 
 ## Scaffold de governança em um repo
@@ -157,27 +157,27 @@ sem `--force`.
 
 ```bash
 # previa, depois aplica (o caminho assume o diretório atual)
-bash skills/engineering-standards/scaffold.sh /caminho/do/repo --dry-run
-bash skills/engineering-standards/scaffold.sh /caminho/do/repo
+bash skills/zeroth/scaffold.sh /caminho/do/repo --dry-run
+bash skills/zeroth/scaffold.sh /caminho/do/repo
 ```
 Adicione `--with-plugin OWNER/REPO` para também gravar o `.claude/settings.json` do projeto e
 auto-habilitar o plugin para o time inteiro. Após instalar globalmente, o mesmo script vive em
-`~/.claude/skills/engineering-standards/scaffold.sh`. Depois preencha o `AGENTS.md` com os comandos do
+`~/.claude/skills/zeroth/scaffold.sh`. Depois preencha o `AGENTS.md` com os comandos do
 gate do seu stack (veja o apêndice) e defina owners reais em `.github/CODEOWNERS`.
 
 ## Agnóstico por design
 
 O Pilar 3 é um conjunto de **contratos de capacidade** (os 8 verbos), não um toolset fixo. O comando
 exato por verbo para JS/TS, Python, Go, Rust, JVM e .NET vive em
-`skills/engineering-standards/references/stack-appendix.md`. O toolset original JS/TS (Biome, Knip,
+`skills/zeroth/references/stack-appendix.md`. O toolset original JS/TS (Biome, Knip,
 Stryker, Playwright, Codecov) é apenas uma coluna desse apêndice.
 
 ## Instalar em outra máquina ou outro Claude
 
 - **Claude Code**: instale o plugin, ou clone e rode `install-skill.sh`. Atualize com
   `git pull && bash install-skill.sh`.
-- **Claude Desktop / claude.ai (web)**: suba a pasta `skills/engineering-standards/` pela UI de
-  Skills (o comando `/standards` é exclusivo do Claude Code).
+- **Claude Desktop / claude.ai (web)**: suba a pasta `skills/zeroth/` pela UI de
+  Skills (o comando `/zeroth` é exclusivo do Claude Code).
 - MCP servers com API key (21st.dev, shadcn, chrome-devtools) não viajam sozinhos; veja
   `references/arsenal-mcp-skills.md`.
 
@@ -220,4 +220,4 @@ scaffolder e um projeto de amostra corrigido e verificado de ponta a ponta).
 ## Créditos e Licença
 
 Padrões destilados da configuração do autor e dos projetos do Arsenal. Licença MIT. Especificação
-completa em [`ai-engineering-standards.md`](ai-engineering-standards.md).
+completa em [`zeroth.md`](zeroth.md).
