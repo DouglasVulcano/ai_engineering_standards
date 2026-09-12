@@ -27,6 +27,46 @@ package. It delivers:
 Goal: when any AI agent starts, plans, or reviews work, it applies the same standard for workflow,
 UI, observability, quality, and testing, and can scaffold the governance to enforce it.
 
+## Quickstart: the golden path
+
+The standard pays off when the whole path is in place, not just the skill. From zero to enforced
+governance:
+
+**1. Scaffold governance** (issue/PR templates, CODEOWNERS, a CI gate, `AGENTS.md` + a thin
+`CLAUDE.md`, a `.claude` safety deny-list). Preview, then apply:
+
+```bash
+bash skills/engineering-standards/scaffold.sh /path/to/repo --dry-run
+bash skills/engineering-standards/scaffold.sh /path/to/repo
+```
+
+**2. Fill `AGENTS.md`** with your stack and its gate commands (see the stack appendix), and **3. set
+real owners** in `.github/CODEOWNERS` (the two things the scaffolder cannot guess).
+
+**4. Arm branch protection** on your default branch, the authoritative gate. Re-run the scaffolder
+with `--protect`, or apply it yourself (classic branch-protection API):
+
+```bash
+gh api -X PUT repos/OWNER/REPO/branches/main/protection --input - <<'JSON'
+{ "required_pull_request_reviews": { "required_approving_review_count": 1, "require_code_owner_reviews": true },
+  "required_status_checks": { "strict": true, "contexts": ["verify"] },
+  "enforce_admins": true, "restrictions": null }
+JSON
+```
+
+> Using a **Ruleset** (GitHub's newer model)? The shape differs: `enforce_admins` is not a status
+> check (it maps to the bypass list), and the required check `contexts` is the job name (here
+> `verify`). Do not drop the classic fields into a ruleset's status-check list, or the merge box
+> hangs at "Expected - Waiting for status to be reported".
+
+The skill is advice; **CI plus branch protection are what enforce it**. The skill alone is the least
+return; the scaffolder plus a filled `AGENTS.md` plus an armed gate is where the value is.
+
+> **This repo runs on its own standard:** its `AGENTS.md`, `.github/workflows/verify.yml`, and the
+> ruleset on `main` (requiring the `verify` check plus review) are the same setup the scaffolder
+> produces. It is a living reference; see [`docs/research-and-benchmarks.md`](docs/research-and-benchmarks.md)
+> for the greenfield/brownfield fixtures verified end to end.
+
 ## The 4 pillars
 
 | # | Pillar | Summary |
