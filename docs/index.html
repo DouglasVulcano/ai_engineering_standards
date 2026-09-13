@@ -35,7 +35,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css?v=2">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Zeroth","applicationCategory":"DeveloperApplication","operatingSystem":"Cross-platform","description":"One shared engineering standard for AI coding agents like Claude Code. Install it once, and your agents plan, build, test, and ship code the same way on every project.","url":"https://douglasvulcano.github.io/zeroth-ai/","codeRepository":"https://github.com/DouglasVulcano/zeroth-ai","softwareVersion":"1.6.0","inLanguage":["en","pt-BR"],"license":"https://opensource.org/licenses/MIT","author":{"@type":"Person","name":"DouglasVulcano"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Zeroth","applicationCategory":"DeveloperApplication","operatingSystem":"Cross-platform","description":"One shared engineering standard for AI coding agents like Claude Code. Install it once, and your agents plan, build, test, and ship code the same way on every project.","url":"https://douglasvulcano.github.io/zeroth-ai/","codeRepository":"https://github.com/DouglasVulcano/zeroth-ai","softwareVersion":"1.7.0","inLanguage":["en","pt-BR"],"license":"https://opensource.org/licenses/MIT","author":{"@type":"Person","name":"DouglasVulcano"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
@@ -67,7 +67,7 @@
   <section class="hero">
     <div class="wrap hero-in">
       <img class="hero-logo" src="logo.png" alt="Zeroth" width="380">
-      <span class="tag"><span class="dot"></span> <b>v1.6.0</b> · Works with Claude Code</span>
+      <span class="tag"><span class="dot"></span> <b id="ver">v1.7.0</b> · Works with Claude Code</span>
       <h1>One standard your AI coding agents <span class="g">actually follow</span>.</h1>
       <p class="lede">One shared rulebook you install once, so every agent plans, writes, tests, and ships the same way. Your CI and review rules make it stick.</p>
       <div class="cta">
@@ -199,5 +199,6 @@ zeroth-ai.git
 </footer>
 
 <script>function toggleTheme(){var el=document.documentElement,cur=el.getAttribute('data-theme')==='light'?'light':'dark',next=cur==='light'?'dark':'light';el.setAttribute('data-theme',next);try{localStorage.setItem('aes-theme',next);}catch(e){}}</script>
+<script>(function(){var el=document.getElementById('ver');if(!el||!window.fetch)return;fetch('https://api.github.com/repos/DouglasVulcano/zeroth-ai/releases/latest',{headers:{Accept:'application/vnd.github+json'}}).then(function(r){return r.ok?r.json():null;}).then(function(d){if(d&&d.tag_name){el.textContent=/^v/i.test(d.tag_name)?d.tag_name:'v'+d.tag_name;}}).catch(function(){});})();</script>
 </body>
 </html>
