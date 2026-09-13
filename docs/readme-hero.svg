@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 344" role="img" aria-label="Installing Zeroth in Claude Code">
+  <defs>
+    <radialGradient id="zhGlow" cx="50%" cy="0%" r="75%">
+      <stop offset="0%" stop-color="#ffd700" stop-opacity="0.16"/>
+      <stop offset="55%" stop-color="#ffd700" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#ffd700" stop-opacity="0"/>
+    </radialGradient>
+    <style>
+      .mono{font-family:ui-monospace,"Cascadia Code","JetBrains Mono",Consolas,"Liberation Mono",monospace}
+    </style>
+  </defs>
+
+  <!-- terminal card (self-contained dark; reads well on light or dark pages) -->
+  <rect x="8" y="8" width="784" height="328" rx="14" fill="#141417" stroke="#2a2a30" stroke-width="1.5"/>
+  <rect x="8" y="8" width="784" height="328" rx="14" fill="url(#zhGlow)"/>
+
+  <!-- title bar -->
+  <circle cx="42" cy="44" r="6" fill="#3a3a42"/>
+  <circle cx="64" cy="44" r="6" fill="#3a3a42"/>
+  <circle cx="86" cy="44" r="6" fill="#ffd700" fill-opacity="0.85"/>
+  <text x="400" y="49" text-anchor="middle" class="mono" font-size="14" fill="#8e8e98">zeroth &#183; install</text>
+  <line x1="8" y1="72" x2="792" y2="72" stroke="#2a2a30" stroke-width="1.5"/>
+
+  <!-- body -->
+  <g class="mono" font-size="17">
+    <g opacity="0">
+      <animate attributeName="opacity" from="0" to="1" begin="0.3s" dur="0.35s" fill="freeze"/>
+      <text x="40" y="128"><tspan fill="#ffd700">$</tspan><tspan fill="#e4e4e7" dx="12">/plugin marketplace add DouglasVulcano/zeroth-ai</tspan></text>
+    </g>
+    <g opacity="0">
+      <animate attributeName="opacity" from="0" to="1" begin="1.15s" dur="0.35s" fill="freeze"/>
+      <text x="40" y="172"><tspan fill="#ffd700">$</tspan><tspan fill="#e4e4e7" dx="12">/plugin install zeroth</tspan></text>
+    </g>
+    <g opacity="0">
+      <animate attributeName="opacity" from="0" to="1" begin="1.95s" dur="0.35s" fill="freeze"/>
+      <text x="40" y="220"><tspan fill="#4ec9a0">&#10003;</tspan><tspan fill="#a1a1aa" dx="12">zeroth v1.7 ready &#183; the standard now travels in AGENTS.md</tspan></text>
+    </g>
+    <g opacity="0">
+      <animate attributeName="opacity" from="0" to="1" begin="2.45s" dur="0.3s" fill="freeze"/>
+      <text x="40" y="272" class="mono" font-size="17" fill="#ffd700">$</text>
+      <rect x="58" y="257" width="11" height="20" fill="#ffd700">
+        <animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.5;0.5;1" dur="1.1s" begin="2.7s" repeatCount="indefinite"/>
+      </rect>
+    </g>
+  </g>
+</svg>
