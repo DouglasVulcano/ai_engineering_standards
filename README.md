@@ -1,26 +1,32 @@
-<p align="center">
-  <img alt="Zeroth" src="docs/logo.png#gh-dark-mode-only" width="320">
-  <img alt="Zeroth" src="docs/icon.png#gh-light-mode-only" width="96">
+<div align="center">
+
+<img src="docs/icon.png" alt="Zeroth" width="84" height="84">
+
+<h1>Zeroth</h1>
+
+<p><b>One engineering standard your AI coding agents actually follow.</b><br>
+On every project, in any language.</p>
+
+<p>
+  <img alt="Release" src="https://img.shields.io/github/v/release/DouglasVulcano/zeroth-ai?style=flat-square&labelColor=141417&color=ffd700&label=release">
+  <img alt="Claude Code plugin and skill" src="https://img.shields.io/badge/Claude_Code-plugin_%2B_skill-e4e4e7?style=flat-square&labelColor=141417">
+  <img alt="Stack agnostic" src="https://img.shields.io/badge/stack-agnostic-43b581?style=flat-square&labelColor=141417">
+  <img alt="License" src="https://img.shields.io/github/license/DouglasVulcano/zeroth-ai?style=flat-square&labelColor=141417&color=8e8e98">
 </p>
 
-<h1 align="center">Zeroth</h1>
+<img src="docs/readme-hero.svg" alt="Installing Zeroth in Claude Code" width="760">
 
-<p align="center">
-  <a href="https://douglasvulcano.github.io/zeroth-ai/"><b>Website</b></a> · <b>English</b> · <a href="README.pt-BR.md">Português</a>
+<p>
+  <a href="https://douglasvulcano.github.io/zeroth-ai/"><b>Website</b></a>
+  &nbsp;&#183;&nbsp; <b>English</b>
+  &nbsp;&#183;&nbsp; <a href="README.pt-BR.md">Português</a>
 </p>
 
-> One engineering standard your AI coding agents actually follow, on every project and in any
-> language. It ships as a **Claude Code plugin and skill**, and also travels as a plain **`AGENTS.md`**
-> that any agent of any model (Claude, Cursor, Copilot, Codex) can read.
-
-![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin%20%2B%20skill-6C4BF6)
-![Agnostic](https://img.shields.io/badge/stack-agnostic-success)
-![Scope](https://img.shields.io/badge/scope-global%20%7C%20project%20%7C%20team-informational)
-![License](https://img.shields.io/badge/license-MIT-blue)
+</div>
 
 ---
 
-## What it is
+## 🧭 What it is
 
 AI agents write code a little differently every time. Zeroth gives them one shared playbook, so the
 way you work, build, test, and ship stays the same no matter which agent or model is helping. It is
@@ -31,10 +37,11 @@ three things:
 - **A scaffolder** that drops governance into any repo in one command (issue/PR templates, a CI gate,
   `AGENTS.md`, safety rules).
 
-You do not adopt it all at once. Install it and the agent starts applying the standard; run the
-scaffolder when you want a repo to enforce it.
+> [!TIP]
+> You do not adopt it all at once. Install it and the agent starts applying the standard right away;
+> run the scaffolder later, when you want a repo to actually enforce it.
 
-## Install
+## 🚀 Install
 
 **For a team (recommended)** - versioned, no drift. In Claude Code:
 
@@ -53,7 +60,44 @@ bash install-skill.sh
 
 Update later with `claude plugin update` (plugin) or `git pull && bash install-skill.sh` (skill).
 
-## Use
+## 🤝 Using another agent? You are covered too
+
+Zeroth's home is **Claude Code**, where it installs as a plugin and triggers on its own. But the
+standard itself is **model-agnostic**: it lives in a plain [`AGENTS.md`](https://agents.md) file, the
+open format that Cursor, GitHub Copilot, OpenAI Codex, Windsurf, Gemini CLI, Aider and others already
+read. Point Zeroth at your repo once, and every agent on your team follows the same playbook - no
+plugin required.
+
+| Your agent | How it picks up Zeroth |
+|---|---|
+| **Claude Code** | Plugin/skill (automatic), or `AGENTS.md` |
+| **Cursor, Copilot, Codex, Windsurf, Gemini CLI, Aider, ...** | Reads the `AGENTS.md` the scaffolder writes |
+
+```bash
+# Not on Claude Code? Clone, then let the scaffolder write AGENTS.md into your repo:
+git clone https://github.com/DouglasVulcano/zeroth-ai.git
+bash zeroth-ai/skills/zeroth/scaffold.sh /path/to/your/repo
+```
+
+<details>
+<summary><b>Or paste the bootstrap block into your <code>AGENTS.md</code> by hand</b></summary>
+
+```markdown
+## Zeroth (project standard)
+1. Workflow: Issue-first, PR-driven. Every task is an Issue; every deploy is a PR that closes it
+   (`Closes #N`). Conventional Commits.
+2. Motion and UI: every screen has skeleton, lazy loading, and smooth enter/exit/loading states;
+   honor `prefers-reduced-motion`; animate only `transform`/`opacity`.
+3. Quality and Testing: the `fmt -> lint -> typecheck -> arch -> deadcode -> test -> coverage -> build`
+   CI gate; bind each verb to the stack. Enforcement is CI plus branch protection; the skill is advice.
+4. Observability (opt-in, deployed apps): instrument with OpenTelemetry (or your existing stack) only
+   when you ship a service with real traffic.
+Full spec: https://github.com/DouglasVulcano/zeroth-ai/blob/main/zeroth.md
+```
+
+</details>
+
+## ⌨️ Use
 
 - **Automatic** - just work. The skill triggers when your request matches ("create the issue and PR",
   "review this screen", "set up the CI gate", "follow the standards").
@@ -69,33 +113,38 @@ Update later with `claude plugin update` (plugin) or `git pull && bash install-s
   is safe to re-run. Add `--with-plugin DouglasVulcano/zeroth-ai` to auto-enable the plugin for
   everyone who trusts the repo.
 
-## What you get: the 4 pillars
+## 🏛️ What you get: the 4 pillars
 
 | # | Pillar | In one line |
-|---|---|---|
-| 1 | **Workflow** | Issue-first, PR-driven. Every task is an Issue; every deploy is a PR that closes it (`Closes #N`). Conventional Commits. |
-| 2 | **Motion and UI** | Every screen has skeleton, lazy loading, and smooth enter/exit/loading states; respects `prefers-reduced-motion`. |
-| 3 | **Quality and Testing** | One CI gate (`fmt -> lint -> typecheck -> arch -> deadcode -> test -> coverage -> build`), bound to your stack. Observability (OpenTelemetry) is opt-in, for deployed apps. |
-| 4 | **Arsenal** | The right MCP or skill per task: UI generation, browser performance, motion, humanized copy. |
+|:-:|---|---|
+| **1** | 🔁 **Workflow** | Issue-first, PR-driven. Every task is an Issue; every deploy is a PR that closes it (`Closes #N`). Conventional Commits. |
+| **2** | 🎬 **Motion and UI** | Every screen has skeleton, lazy loading, and smooth enter/exit/loading states; respects `prefers-reduced-motion`. |
+| **3** | ✅ **Quality and Testing** | One CI gate (`fmt -> lint -> typecheck -> arch -> deadcode -> test -> coverage -> build`), bound to your stack. Observability (OpenTelemetry) is opt-in, for deployed apps. |
+| **4** | 🧰 **Arsenal** | The right MCP or skill per task: UI generation, browser performance, motion, humanized copy. |
 
 The standard is **stack-agnostic**: the gate is a set of contracts, and each verb maps to your
 language's tools (JS/TS, Python, Go, Rust, JVM, .NET). The skill is advice; your **CI plus branch
 protection** are what actually enforce it.
 
-## Learn more
+## 📚 Learn more
 
 - **[Full specification (`zeroth.md`)](zeroth.md)** - the complete standard, readable end to end.
-- **Deep dives** (the skill loads these on demand):
-  [workflow](skills/zeroth/references/workflow-github.md) ·
-  [motion and UI](skills/zeroth/references/motion-and-ui.md) ·
-  [quality and testing](skills/zeroth/references/quality-and-testing.md) ·
-  [observability](skills/zeroth/references/observability.md) ·
-  [per-stack commands](skills/zeroth/references/stack-appendix.md) ·
-  [arsenal](skills/zeroth/references/arsenal-mcp-skills.md).
 - **[Security](SECURITY.md)** - threat model, branch protection, and the trust boundary.
 - **[Contributing](CONTRIBUTING.md)** - how to change the standard and pass the gate.
 - **[Research and benchmarks](docs/research-and-benchmarks.md)** - the evidence behind the design.
 
-## License
+<details>
+<summary><b>Per-domain deep dives</b> (the skill loads these on demand)</summary>
+
+- [Workflow and governance](skills/zeroth/references/workflow-github.md)
+- [Motion and UI](skills/zeroth/references/motion-and-ui.md)
+- [Quality and testing (the CI gate)](skills/zeroth/references/quality-and-testing.md)
+- [Observability (deployed apps, opt-in)](skills/zeroth/references/observability.md)
+- [Per-stack commands](skills/zeroth/references/stack-appendix.md)
+- [Arsenal (MCP servers and skills)](skills/zeroth/references/arsenal-mcp-skills.md)
+
+</details>
+
+## 📄 License
 
 MIT. Standards distilled from the author's configuration and the projects in the Arsenal.
