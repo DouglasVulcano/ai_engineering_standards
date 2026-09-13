@@ -39,11 +39,12 @@ standard in its `CLAUDE.md`/`AGENTS.md`, offer to feed it (see the bootstrap sec
    exit, loading, and progress**. Honor `prefers-reduced-motion`; animate only `transform` and
    `opacity`; never `transition: all`. Apply the Frequency Gate and the Web Interface Guidelines.
    See `references/motion-and-ui.md`.
-3. **Observability, Quality, and Testing (stack-agnostic).** OpenTelemetry to an OTLP Collector to
-   any backend (Sentry/Datadog/New Relic); an ordered CI gate of capability contracts (`fmt`,
-   `lint`, `typecheck`, `arch`, `deadcode`, `test`, `coverage`, `build`); unit, integration
-   (Testcontainers), and E2E (Playwright) with diff coverage on Codecov. Bind each verb to your
-   stack in `references/stack-appendix.md`. See `references/observability-quality-testing.md`.
+3. **Observability, Quality, and Testing (stack-agnostic).** An ordered CI gate of capability
+   contracts (`fmt`, `lint`, `typecheck`, `arch`, `deadcode`, `test`, `coverage`, `build`) plus unit,
+   integration (Testcontainers), and E2E (Playwright) with diff coverage; bind each verb to your stack
+   in `references/stack-appendix.md`. Runtime observability (OpenTelemetry to any backend) is a
+   companion practice for **deployed apps**, opt-in by project type, not part of the CI gate. See
+   `references/quality-and-testing.md` and `references/observability.md`.
 4. **Arsenal.** Use the right tools: shadcn-ui-mcp, 21st.dev Magic, chrome-devtools-mcp,
    design-motion-principles, web-design-guidelines, humanizer.
    See `references/arsenal-mcp-skills.md`.
@@ -80,7 +81,8 @@ authoritative gate**.
 | `references/zeroth.md` | You need the full spec, the DoD, or the bootstrap block |
 | `references/workflow-github.md` | Creating an Issue/PR, managing a deploy, feeding CLAUDE.md |
 | `references/motion-and-ui.md` | Building or reviewing any screen or animation |
-| `references/observability-quality-testing.md` | Setting up observability, lint/quality, tests/CI |
+| `references/quality-and-testing.md` | Setting up the CI gate: lint/quality, tests, coverage |
+| `references/observability.md` | Adding runtime observability to a deployed app (opt-in) |
 | `references/stack-appendix.md` | Mapping the agnostic gate verbs to your stack's exact commands |
 | `references/arsenal-mcp-skills.md` | Choosing or installing an MCP server or skill |
 

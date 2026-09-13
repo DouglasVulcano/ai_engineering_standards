@@ -10,8 +10,8 @@ current task. If `$ARGUMENTS` names a domain, load only the matching reference; 
 
 - workflow -> references/workflow-github.md
 - ui       -> references/motion-and-ui.md
-- o11y     -> references/observability-quality-testing.md
-- testing  -> references/observability-quality-testing.md + references/stack-appendix.md
+- o11y     -> references/observability.md
+- testing  -> references/quality-and-testing.md + references/stack-appendix.md
 - arsenal  -> references/arsenal-mcp-skills.md
 - scaffold -> run the scaffolder to add governance (issue/PR templates, CODEOWNERS, CI gate,
   AGENTS.md canonical + thin CLAUDE.md); see references/workflow-github.md
