@@ -266,36 +266,19 @@ hydration mismatch.
 
 ## 3. Observability, Quality, and Testing
 
-> **Source:** `prompts.txt` #3. Make sure the system has Observability (Sentry, Datadog, New Relic,
-> OpenTelemetry); Code Quality and Lint (architecture contracts, Biome, Commitlint, Knip, Stryker);
-> unit, integration, and end to end tests (Codecov, Playwright).
+> **Source:** `prompts.txt` #3. Make sure the system has Code Quality and Lint (architecture
+> contracts, Biome, Commitlint, Knip, Stryker); unit, integration, and end to end tests (Playwright,
+> a coverage sink); and, for deployed apps, Observability (Sentry, Datadog, New Relic, OpenTelemetry).
 
-### 3.1 Observability (the three pillars: logs, metrics, traces)
+Two concerns live in this pillar. The **CI gate** (3.1 to 3.3) is repo-time: it runs on push and PR,
+applies to every project, and is the authoritative enforcement point together with branch protection.
+**Observability** (3.4) is runtime: it watches a deployed app in production, is opt-in by project
+type, and is never part of the CI gate. A repo can pass Pillar 3 in full with no observability at all.
 
-| Tool | Role | Recommended use |
-|---|---|---|
-| **OpenTelemetry (OTel)** | Vendor neutral instrumentation standard | **The base of everything.** Instrument traces/metrics/logs with the OTel SDK and export via OTLP to the chosen backend. Avoids lock in. |
-| **Sentry** | Errors plus performance plus session replay (front and back) | Exception capture, source maps, `tracesSampleRate`, release health, alerts. Ideal on the frontend. |
-| **Datadog** | APM plus metrics plus logs plus dashboards | Backend/infra; receives OTLP from the OTel Collector; optional RUM. |
-| **New Relic** | APM plus metrics | Alternative/complement to Datadog; also receives OTLP. |
-
-**Best practices**
-- **One OTel layer, multiple exporters.** Instrument once; route to Datadog/New Relic through the
-  **OpenTelemetry Collector** (OTLP). Sentry for UX/frontend errors.
-- Traces and metrics are Stable in every major SDK; OTel-native logs are Stable in Java/.NET and
-  maturing elsewhere, so where not Stable, emit structured JSON logs to stdout and collect them via
-  the Collector.
-- Propagate **trace context** end to end (W3C `traceparent`); correlate logs and traces by
-  `trace_id`.
-- Define **SLIs/SLOs**, actionable alerts, and a minimal dashboard per service (p95 latency, error
-  rate, saturation).
-- Cost aware sampling (`tracesSampleRate`, tail sampling in the Collector).
-- Never log PII or secrets; scrub in the SDK/Collector.
-
-### 3.2 Quality and Testing as a capability gate (agnostic core)
+### 3.1 Quality and Testing as a capability gate (agnostic core)
 
 The gate is an ordered list of outcomes to guarantee, not a fixed tool list. Bind each verb to your
-stack's idiomatic tool (exact commands in §3.4 and the `stack-appendix` reference); CI only ever
+stack's idiomatic tool (exact commands in §3.3 and the `stack-appendix` reference); CI only ever
 calls the verbs. Fail fast: cheapest and most local first.
 
 `fmt -> lint -> typecheck -> arch -> deadcode -> test -> coverage -> build`
@@ -319,21 +302,49 @@ mutation testing (test quality) runs nightly or on critical paths, never in the 
 **CI plus branch protection plus hooks**. Conventional Commits (§1.4) are validated by a `commit-msg`
 hook locally and by CI on merge.
 
-### 3.3 Testing model
+### 3.2 Testing model
 - Pyramid: many unit, fewer integration, few E2E on the money/risk flows.
 - Integration against ephemeral real dependencies (Testcontainers: Java/.NET/Go/Node/Python/Rust).
 - E2E with Playwright (first-party for TS/JS/Python/Java/.NET; a side-service for Go/Rust) on
   critical flows; also a post-deploy smoke test on PR previews.
-- Coverage aggregated by Codecov (every stack emits Cobertura/LCOV); diff coverage as the required
-  check.
+- Diff coverage is the required check. Any tool that emits Cobertura/LCOV works as the reporting sink
+  (Codecov, Coveralls, SonarQube, or self-hosted); pick one, do not require a specific vendor.
 - Mutation score as a confidence metric on critical packages (nightly).
 
-### 3.4 Per-stack bindings
+### 3.3 Per-stack bindings
 The exact tool and command for each verb, per ecosystem (JS/TS, Python, Go, Rust, JVM, .NET), plus
 adopt-with-caution flags, live in the skill's `references/stack-appendix.md`. One instantiation
 (JS/TS): `biome check -> biome/eslint -> tsc --noEmit -> dependency-cruiser -> knip -> vitest ->
-codecov -> vite build`. The original JS/TS toolset (Biome, Commitlint, Knip, Stryker, Playwright,
-Codecov) is exactly one column of that appendix.
+coverage -> vite build`. The original JS/TS toolset (Biome, Commitlint, Knip, Stryker, Playwright, a
+coverage sink) is exactly one column of that appendix.
+
+### 3.4 Observability (opt-in, deployed apps)
+
+Runtime observability watches a **deployed app or service** with real users. It is **not** part of
+the CI gate and does not run on push or PR. Adopt it when you have production traffic; skip it for a
+library, CLI, plugin, or a small app not yet in production. Full guidance (including the maturity
+tiers) lives in the skill's `references/observability.md`.
+
+| Tool | Role | Recommended use |
+|---|---|---|
+| **OpenTelemetry (OTel)** | Vendor neutral instrumentation standard | The recommended baseline when you instrument. Emit traces/metrics/logs via the OTel SDK and export OTLP to the backend you already run. Avoids lock in. |
+| **Sentry** | Errors plus performance plus session replay (front and back) | Exception capture, source maps, `tracesSampleRate`, release health, alerts. Ideal on the frontend. |
+| **Datadog** | APM plus metrics plus logs plus dashboards | Backend/infra; receives OTLP from the OTel Collector; optional RUM. |
+| **New Relic** | APM plus metrics | Alternative/complement to Datadog; also receives OTLP. |
+
+**Best practices (once you do instrument)**
+- **Adopt in tiers:** structured JSON logs to stdout from day one (trivial); traces/metrics via OTel
+  when you have production traffic; SLOs, alerts, and dashboards as the service matters more.
+- **One OTel layer, pluggable backend.** Instrument once; let the OpenTelemetry Collector (OTLP) fan
+  out to Datadog/New Relic/Grafana/your existing stack, so swapping vendors is a Collector config
+  change. Sentry for UX/frontend errors.
+- Traces and metrics are Stable in every major SDK; OTel-native logs are Stable in Java/.NET and
+  maturing elsewhere, so where not Stable, emit structured JSON logs to stdout and collect them via
+  the Collector.
+- Propagate **trace context** end to end (W3C `traceparent`); correlate logs and traces by
+  `trace_id`. Define **SLIs/SLOs** and a minimal dashboard per service (p95 latency, error rate,
+  saturation). Cost aware sampling (`tracesSampleRate`, tail sampling). Never log PII or secrets;
+  scrub in the SDK/Collector.
 
 ---
 
@@ -444,10 +455,10 @@ data.
 - [ ] Web Interface Guidelines checklist reviewed (a11y, focus, forms, typography, empty states).
 
 **Every service/feature (§3)**
-- [ ] Observability: errors (Sentry) plus traces/metrics (OTel to Datadog/New Relic) in the new flow.
 - [ ] Quality/gate: passes fmt, lint, typecheck, arch, deadcode, test, coverage, build; commitlint on the hook.
-- [ ] Testing: unit plus integration; E2E (Playwright) on critical flows; coverage published
-  (Codecov).
+- [ ] Testing: unit plus integration; E2E (Playwright) on critical flows; diff coverage published.
+- [ ] Observability (deployed apps only): errors plus traces/metrics wired into the new flow (OTel to
+  your backend). Skip for libraries, CLIs, or pre-production projects.
 
 ---
 
@@ -479,10 +490,12 @@ This project follows the **Zeroth** (skill `zeroth`; full spec at
 2. **Motion and UI:** every interface has skeleton, lazy loading, and smooth animations for enter,
    exit, loading, and progress. Honor `prefers-reduced-motion`; animate only `transform`/`opacity`.
    Follow the Web Interface Guidelines (a11y, focus, forms, typography).
-3. **Observability:** OpenTelemetry to an OTLP Collector to any backend (Sentry/Datadog/New Relic).
-4. **Quality and Testing:** the `fmt -> lint -> typecheck -> arch -> deadcode -> test -> coverage ->
+3. **Quality and Testing:** the `fmt -> lint -> typecheck -> arch -> deadcode -> test -> coverage ->
    build` gate; bind each verb to the stack (stack-appendix). Enforcement is CI plus branch
    protection plus hooks; the skill is advice.
+4. **Observability (deployed apps, opt-in):** when you ship a service with real traffic, instrument
+   with OpenTelemetry (or your existing stack) to any backend. Not required for libraries, CLIs, or
+   pre-production projects.
 
 Tools: shadcn-ui-mcp, 21st.dev Magic, chrome-devtools-mcp, design-motion-principles,
 web-design-guidelines, humanizer.

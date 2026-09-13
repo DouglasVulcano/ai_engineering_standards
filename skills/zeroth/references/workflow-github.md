@@ -89,8 +89,8 @@ Or add the bootstrap block to `AGENTS.md` by hand:
 ## Zeroth (mandatory)
 1. Issue first, PR driven (every task is an Issue; every deploy is a PR that references the Issue). Conventional Commits.
 2. UI: skeleton, lazy loading, enter/exit/loading/progress animations; prefers-reduced-motion; animate only transform/opacity.
-3. Observability: OpenTelemetry to an OTLP Collector to any backend (Sentry/Datadog/New Relic).
-4. Quality + Testing: the fmt -> lint -> typecheck -> arch -> deadcode -> test -> coverage -> build gate (bind verbs per stack; see stack-appendix).
+3. Quality + Testing: the fmt -> lint -> typecheck -> arch -> deadcode -> test -> coverage -> build gate (bind verbs per stack; see stack-appendix).
+4. Observability (opt-in, deployed apps): when you ship a service with real traffic, instrument with OpenTelemetry (or your existing stack) to any backend. Not required for libraries/CLIs/pre-production.
 5. Enforcement lives in CI + branch protection + hooks; the skill is advice.
 ```
 

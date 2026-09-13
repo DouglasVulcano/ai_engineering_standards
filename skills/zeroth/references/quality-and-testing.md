@@ -1,22 +1,9 @@
-# Reference: Observability, Quality, and Testing (agnostic core)
+# Reference: Quality and Testing (the CI gate)
 
-> Pillar 3. Source: `prompts.txt` #3. This is the language-agnostic core: capability contracts,
-> gate order, thresholds, and the observability baseline. Exact per-stack commands live in
-> `stack-appendix.md`.
-
-## Observability (logs, metrics, traces)
-A vendor-neutral baseline that works with any backend (Sentry, Datadog, New Relic, Grafana):
-1. Instrument once with the OpenTelemetry SDK or auto-instrumentation. Traces and metrics are
-   required (Stable in every major SDK).
-2. Export OTLP to an OpenTelemetry Collector; never point the app at a vendor SDK directly.
-3. The Collector fans out to any backend, so swapping vendors is a Collector config change with zero
-   app changes.
-4. Logs: use OTel-native logs where Stable (Java, .NET); elsewhere (Python, JS, Go, Rust today)
-   write structured JSON logs to stdout and collect them via the Collector, correlated by `trace_id`.
-5. Sentry on the frontend for errors, session replay, and release health (it also ingests OTLP).
-6. Propagate W3C `traceparent`; correlate logs and traces by `trace_id`; define SLIs/SLOs; RED/USE
-   dashboards (p95 latency, error rate, saturation); tail sampling in the Collector; scrub PII and
-   secrets.
+> Pillar 3, repo-time core. Source: `prompts.txt` #3. This is the language-agnostic quality gate that
+> runs on every push and PR: capability contracts, gate order, thresholds, and the testing model.
+> Exact per-stack commands live in `stack-appendix.md`. Runtime observability (a separate, opt-in
+> concern for deployed apps) lives in `observability.md`.
 
 ## The CI gate = capability contracts
 The gate is an ordered list of outcomes to guarantee, not a fixed tool list. Bind each verb to your
@@ -41,16 +28,25 @@ Rules that keep this true across languages:
 - Compiler-intrinsic stages are marked "covered by build", never skipped silently.
 - Mutation testing (test quality) runs nightly or on critical paths, never in the main gate.
 
+This gate is the authoritative enforcement point together with branch protection: the skill is
+advice, CI plus branch protection are what actually block a bad merge.
+
 ## Testing model
 - Pyramid: many unit, fewer integration, few E2E on the money/risk flows.
 - Integration against ephemeral real dependencies (Testcontainers: Java/.NET/Go/Node/Python/Rust).
 - E2E with Playwright (first-party for TS/JS/Python/Java/.NET; run as a side-service for Go/Rust) on
   critical flows; also a post-deploy smoke test on PR previews.
-- Coverage aggregated by Codecov (every stack emits Cobertura/LCOV); diff coverage as the required
-  check.
+- Diff coverage is the required check. Any tool that emits Cobertura/LCOV works as the reporting
+  sink (Codecov, Coveralls, SonarQube, or a self-hosted service); pick one, do not require a specific
+  vendor. Focus the gate on diff, not absolute coverage.
 - Mutation score as a confidence metric on critical packages (cadence: nightly).
 
 ## Thresholds (set per repo, record them in AGENTS.md)
 - Diff coverage target (for example, at or above 80%).
 - Mutation score target on critical packages.
 - Policy: "arch violations fail the PR", "zero unused deps".
+
+## Related
+- `observability.md`: runtime observability (logs, metrics, traces) for deployed apps. It is opt-in
+  by project type and is not part of this CI gate.
+- `stack-appendix.md`: the exact command per verb for JS/TS, Python, Go, Rust, JVM, and .NET.

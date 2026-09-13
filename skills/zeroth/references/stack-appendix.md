@@ -1,7 +1,7 @@
 # Reference: Per-Stack Appendix (verb to command)
 
 > Thin binding layer for Pillar 3. Nothing normative lives here: it maps the agnostic gate verbs
-> (see `observability-quality-testing.md`) to the idiomatic tool and command per stack. Pick your
+> (see `quality-and-testing.md`) to the idiomatic tool and command per stack. Pick your
 > column. Verified September 2026.
 
 ## Contents
@@ -26,8 +26,8 @@ Idiomatic default shown; `( )` means the step is covered by the compiler/build, 
 | commit-convention | commitlint | commitizen | cocogitto | cocogitto | commitlint | commitlint |
 | build/monorepo | pnpm + Turborepo/Nx | uv (+ workspaces) | go workspaces | cargo workspaces | Gradle | MSBuild + Central Package Mgmt |
 
-All coverage tools emit Cobertura/LCOV, so Codecov stays the single reporting layer. Language-agnostic
-hook runners: Lefthook or pre-commit.
+All coverage tools emit Cobertura/LCOV, so any reporting sink works (Codecov, Coveralls, SonarQube, or
+self-hosted); pick one. Language-agnostic hook runners: Lefthook or pre-commit.
 
 ## Adopt-with-caution (dated, September 2026)
 - Python type-checker: use mypy or pyright today; `ty` (Astral, Rust) is beta, adopt at 1.0.
@@ -39,7 +39,8 @@ hook runners: Lefthook or pre-commit.
   (cargo-modules, Modou); cargo-deny governs external dependency policy.
 
 ## Fully-agnostic cells (same across every stack)
-Conventional Commits, OpenTelemetry (OTLP to Collector), Testcontainers (integration), Playwright
-(E2E), and Codecov (coverage sink) are cross-language standards and belong in the core almost
-verbatim. Type-checking is a separate verb only in JS/TS and Python; everywhere else it is part of
-`build`.
+Conventional Commits, Testcontainers (integration), Playwright (E2E), and a coverage sink are
+cross-language **repo-gate** standards and belong in the core almost verbatim. OpenTelemetry (OTLP to
+Collector) is the cross-language **runtime observability** standard, but it is opt-in for deployed
+apps and is not part of the CI gate (see `observability.md`). Type-checking is a separate verb only in
+JS/TS and Python; everywhere else it is part of `build`.

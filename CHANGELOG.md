@@ -3,6 +3,23 @@
 All notable changes to this project are documented here. Format follows Keep a Changelog; versioning
 follows SemVer.
 
+## [1.7.0]
+
+### Changed
+- Observability is now an opt-in production practice, not a mandatory Pillar 3 item. The Pillar 3 CI
+  gate (`fmt -> ... -> build`) is unchanged and still applies to every project, but OpenTelemetry,
+  Sentry, and a coverage sink are no longer framed as required: a library, CLI, plugin, or
+  pre-production app scaffolds with no demand to stand up an OTel Collector, and the coverage sink is
+  pluggable (Codecov, Coveralls, SonarQube, self-hosted). Split
+  `references/observability-quality-testing.md` into `quality-and-testing.md` (the gate, always) and
+  `observability.md` (deployed apps, opt-in, tiered by maturity). Reframed the spec, `SKILL.md`,
+  `stack-appendix.md`, `workflow-github.md`, the scaffolded `assets/AGENTS.md`, and the `/zeroth`
+  command map. Pillar 3 keeps its name and the gate is unchanged.
+- Streamlined both READMEs (EN and PT) into a shorter, beginner-friendly front door: what it is,
+  how to install, the commands to run, the 4 pillars, and links out to the spec and per-domain
+  references. Moved the branch-protection JSON, the repository tree, and the deeper how-tos into the
+  files that already hold them, so a newcomer is not overwhelmed on the first screen.
+
 ## [1.6.0]
 
 ### Added

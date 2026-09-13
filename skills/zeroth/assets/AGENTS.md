@@ -30,7 +30,8 @@
 This repo follows the `zeroth` skill. Apply the 4 pillars before any task:
 1. Workflow (Issue-first, PR-driven).
 2. Motion and UI (skeleton, lazy loading, enter/exit/loading/progress; `prefers-reduced-motion`).
-3. Observability + Quality + Testing (OpenTelemetry; the `fmt -> ... -> build` gate; diff coverage).
+3. Quality + Testing (the `fmt -> ... -> build` CI gate; diff coverage). Observability
+   (OpenTelemetry or your existing stack) is opt-in: add it only when you ship a deployed app/service.
 4. Arsenal (shadcn-ui-mcp, 21st.dev Magic, chrome-devtools-mcp, design-motion-principles,
    web-design-guidelines, humanizer).
 Full spec: the `zeroth` skill (`references/zeroth.md`).
