@@ -23,7 +23,7 @@ jobs:
       #   run: "<cmd>"
       # - name: test       # vitest run | pytest | go test ./... | cargo nextest run
       #   run: "<cmd>"
-      # - name: coverage   # emit Cobertura/LCOV, then upload to Codecov
+      # - name: coverage   # emit Cobertura/LCOV, then upload to your sink (Codecov, Coveralls, SonarQube, self-hosted)
       #   run: "<cmd>"
       # - name: build      # vite build | uv build | go build ./... | cargo build --release
       #   run: "<cmd>"

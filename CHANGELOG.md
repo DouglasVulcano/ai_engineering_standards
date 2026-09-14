@@ -3,6 +3,24 @@
 All notable changes to this project are documented here. Format follows Keep a Changelog; versioning
 follows SemVer.
 
+## [1.7.1]
+
+### Fixed
+- Version consistency: the master spec `zeroth.md` still read `Version 1.1.0` while the plugin shipped
+  at 1.7.0. Corrected it, and added a `verify.sh` guard that fails when `plugin.json`, `SKILL.md`, and
+  `zeroth.md` disagree, so the drift cannot recur.
+- Scaffolded CI no longer hardcodes Codecov as the coverage sink. The `coverage upload` step is now a
+  commented, vendor-neutral placeholder (Codecov, Coveralls, SonarQube, or self-hosted) in
+  `ci.node/python/go/jvm/dotnet.yml`, matching the spec's "pick any Cobertura/LCOV sink" rule and
+  avoiding a broken gate on private repos that have no upload token.
+- `ci.node.yml` now matches its sibling templates: added the missing `build` step and documented
+  `arch` and `deadcode` as optional next steps.
+- `ci.go.yml` `fmt` step is now a block scalar. As a plain scalar its inline `fix with:` made the file
+  invalid YAML (`verify.sh` greps templates but never parsed them, so it went unnoticed).
+- `evals/skill-activation` actually exercises activation now: the grader uses the documented
+  `tool: Skill` + `input_match` schema (the old `tool_name: zeroth` was not a supported field), and
+  `prompt.md` grants the `Skill` tool so the skill can fire in the eval sandbox.
+
 ## [1.7.0]
 
 ### Changed

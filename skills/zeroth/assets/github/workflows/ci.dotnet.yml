@@ -24,6 +24,7 @@ jobs:
         run: dotnet build --no-restore -warnaserror
       - name: test + coverage
         run: dotnet test --no-build --collect:"XPlat Code Coverage"
-      - name: coverage upload
-        if: ${{ hashFiles('**/TestResults/**/coverage.cobertura.xml') != '' }}
-        uses: codecov/codecov-action@v5
+      # coverage upload: bind your sink (Codecov, Coveralls, SonarQube, or self-hosted). Example:
+      # - name: coverage upload
+      #   if: ${{ hashFiles('**/TestResults/**/coverage.cobertura.xml') != '' }}
+      #   uses: codecov/codecov-action@v5

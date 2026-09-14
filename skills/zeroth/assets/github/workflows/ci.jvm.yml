@@ -20,6 +20,7 @@ jobs:
           java-version: "21"
       - name: build (fmt, lint, typecheck, test, coverage)
         run: ./gradlew build --no-daemon
-      - name: coverage upload
-        if: ${{ hashFiles('**/build/reports/jacoco/**/*.xml', '**/build/reports/kover/**/*.xml') != '' }}
-        uses: codecov/codecov-action@v5
+      # coverage upload: bind your sink (Codecov, Coveralls, SonarQube, or self-hosted). Example:
+      # - name: coverage upload
+      #   if: ${{ hashFiles('**/build/reports/jacoco/**/*.xml', '**/build/reports/kover/**/*.xml') != '' }}
+      #   uses: codecov/codecov-action@v5
