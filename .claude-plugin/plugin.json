@@ -1,6 +1,6 @@
 {
   "name": "zeroth",
-  "version": "1.7.1",
+  "version": "1.9.0",
   "description": "Central, stack-agnostic engineering standards for AI agents: Issue-first and PR-driven workflow, motion/UI, observability, a quality and testing gate, plus a governance scaffolder and an MCP/skills arsenal.",
   "author": { "name": "DouglasVulcano" },
   "homepage": "https://github.com/DouglasVulcano/zeroth-ai",

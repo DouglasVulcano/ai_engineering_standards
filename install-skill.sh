@@ -8,7 +8,8 @@
 #   1. Copies skills/zeroth/ (SKILL.md + references + scaffold.sh + assets) into
 #      ~/.claude/skills/ (global scope = central)
 #   2. Bundles the master markdown zeroth.md into the skill's references/
-#   3. Installs the /zeroth slash command into ~/.claude/commands/
+#   3. Installs the /zeroth slash commands into ~/.claude/commands/
+#   3b. Installs subagents (agents/*.md) into ~/.claude/agents/
 #   4. Verifies the install and prints the next steps
 #
 # Usage:
@@ -24,6 +25,7 @@ SKILL_NAME="zeroth"
 SKILL_SRC="$SRC_DIR/skills/$SKILL_NAME"
 SKILL_DEST="$CLAUDE_DIR/skills/$SKILL_NAME"
 CMD_DEST="$CLAUDE_DIR/commands"
+AGENT_DEST="$CLAUDE_DIR/agents"
 MASTER_MD="$SRC_DIR/zeroth.md"
 
 echo "==> Importing skill '$SKILL_NAME'"
@@ -56,11 +58,20 @@ cp -f "$MASTER_MD" "$SKILL_DEST/references/zeroth.md"
 mkdir -p "$CMD_DEST"
 cp -f "$SRC_DIR/commands/"*.md "$CMD_DEST/"
 
+# --- 3b. subagents (plugin agents; installed here as user-level agents too) ----
+if compgen -G "$SRC_DIR/agents/*.md" > /dev/null 2>&1; then
+  mkdir -p "$AGENT_DEST"
+  cp -f "$SRC_DIR/agents/"*.md "$AGENT_DEST/"
+fi
+
 # --- 4. Verification ----------------------------------------------------------
 echo ""
 echo "==> Installed:"
 find "$SKILL_DEST" -type f | sort | sed "s|^|    |"
 for c in "$SRC_DIR/commands/"*.md; do echo "    $CMD_DEST/$(basename "$c")"; done
+if compgen -G "$SRC_DIR/agents/*.md" > /dev/null 2>&1; then
+  for a in "$SRC_DIR/agents/"*.md; do echo "    $AGENT_DEST/$(basename "$a")"; done
+fi
 
 echo ""
 echo "OK. Skill '$SKILL_NAME' imported centrally into $CLAUDE_DIR/skills/"
@@ -70,5 +81,6 @@ echo "  * Reopen Claude Code (or run /skills) to load the skill."
 echo "  * Use it naturally ('follow the standards', 'create the issue/PR', 'review the UI'); it triggers on its own."
 echo "  * Slash command:  /zeroth            (everything)"
 echo "                    /zeroth scaffold    (add governance to the current repo)"
+echo "                    /zeroth-review      (audit the current diff against the standard)"
 echo "  * Scaffold a repo directly:  bash $SKILL_DEST/scaffold.sh /path/to/repo   (--dry-run to preview)"
 echo "  * Optional: install the arsenal MCP servers/skills (they need API keys); see references/arsenal-mcp-skills.md."

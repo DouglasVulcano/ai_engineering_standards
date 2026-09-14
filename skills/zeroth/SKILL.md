@@ -11,7 +11,7 @@ description: >-
   lint/testes", "seguir os padrões", "aplicar os standards".
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch
 metadata:
-  version: "1.7.1"
+  version: "1.9.0"
   author: DouglasVulcano
 ---
 
@@ -56,7 +56,9 @@ standard in its `CLAUDE.md`/`AGENTS.md`, offer to feed it (see the bootstrap sec
    progress); for features, guarantee the CI gate (lint, types, arch, knip, tests, coverage, build).
 3. **Propagate:** run the scaffolder to add governance, and ensure the bootstrap block is in the
    repo's **AGENTS.md** (a thin CLAUDE.md imports it), so the standard is self enforcing.
-4. **Close:** validate against the Definition of Done in `references/zeroth.md` §5.
+4. **Close:** validate against the Definition of Done in `references/zeroth.md` §5. Optionally run
+   `/zeroth-review` (the read-only `zeroth-reviewer` subagent) to audit the diff against the pillars
+   before opening the PR.
 
 ## Scaffolding a repo
 
@@ -72,7 +74,8 @@ Add `--with-plugin OWNER/REPO` to also wire the project's `.claude/settings.json
 auto-enables for everyone who trusts the repo. A dedicated `scaffold` command exists too. Then fill
 `AGENTS.md` with the stack's gate commands (see `references/stack-appendix.md`) and set real owners in
 `.github/CODEOWNERS`. Remember the split: the skill is advice; **CI plus branch protection are the
-authoritative gate**.
+authoritative gate**. The plugin also ships advisory, non-blocking hooks (a Pillar 2 motion
+anti-pattern nudge and a bootstrap reminder) that never block.
 
 ## Reference index
 

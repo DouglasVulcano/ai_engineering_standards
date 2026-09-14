@@ -104,14 +104,21 @@ Full spec: https://github.com/DouglasVulcano/zeroth-ai/blob/main/zeroth.md
 - **On demand** - run `/zeroth` to apply everything, or focus one area:
 
   ```text
-  /zeroth workflow | ui | testing | o11y | arsenal | scaffold
+  /zeroth workflow | ui | testing | o11y | arsenal | scaffold | review
   ```
 
+- **Review before you ship** - `/zeroth-review` audits your current diff against the 4 pillars and
+  reports findings; it is read-only and never edits. Or just ask: "review my changes against the
+  standard".
 - **Set up a repo** - `/zeroth scaffold` (or preview first with
   `bash skills/zeroth/scaffold.sh /path/to/repo --dry-run`) adds issue/PR templates, a stack-aware CI
   gate, `AGENTS.md`, and safety rules. It detects your stack, never overwrites without `--force`, and
   is safe to re-run. Add `--with-plugin DouglasVulcano/zeroth-ai` to auto-enable the plugin for
   everyone who trusts the repo.
+
+> Once installed, Zeroth also works quietly in the background: safety guards on clearly destructive
+> commands, plus non-blocking nudges (a Pillar 2 motion check on UI edits, and a one-time scaffold
+> reminder in repos that do not carry the standard yet). Nothing blocks your work.
 
 ## 🏛️ What you get: the 4 pillars
 

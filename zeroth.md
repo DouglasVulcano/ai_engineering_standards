@@ -11,7 +11,7 @@
 
 | | |
 |---|---|
-| **Version** | 1.7.1 |
+| **Version** | 1.9.0 |
 | **Author** | DouglasVulcano |
 | **Scope** | Global, applies to all projects unless the repository explicitly overrides it |
 
@@ -447,6 +447,8 @@ data.
 - [ ] Branch named by convention; commits in Conventional Commits.
 - [ ] PR opened referencing the Issue (`Closes #`); PR small and focused.
 - [ ] The project's `CLAUDE.md`/`AGENTS.md` contains the standards bootstrap.
+- [ ] (Optional) Ran the `zeroth-reviewer` (`/zeroth-review`) to audit the diff against the pillars
+  before opening the PR.
 
 **Every UI (§2)**
 - [ ] Skeleton plus lazy loading plus enter/exit plus loading/progress covered.

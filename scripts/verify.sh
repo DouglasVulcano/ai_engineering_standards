@@ -18,7 +18,8 @@ required=(
   AGENTS.md CLAUDE.md CONTRIBUTING.md CHANGELOG.md SECURITY.md
   .claude-plugin/plugin.json .claude-plugin/marketplace.json
   .github/CODEOWNERS
-  commands/zeroth.md commands/scaffold.md
+  commands/zeroth.md commands/scaffold.md commands/zeroth-review.md
+  agents/zeroth-reviewer.md
   "$SKILL/SKILL.md" "$SKILL/scaffold.sh"
   "$SKILL/references/workflow-github.md"
   "$SKILL/references/motion-and-ui.md"
@@ -37,6 +38,7 @@ required=(
   "$SKILL/assets/github/workflows/ci.jvm.yml"
   "$SKILL/assets/github/workflows/ci.dotnet.yml"
   hooks/hooks.json hooks/guard-bash.sh hooks/guard_bash.py hooks/guard-paths.sh hooks/guard_paths.py
+  hooks/session-bootstrap.sh hooks/session_bootstrap.py hooks/motion-nudge.sh hooks/motion_nudge.py
   evals/README.md evals/scaffold-greenfield/prompt.md scripts/stress.sh
 )
 for f in "${required[@]}"; do
@@ -44,7 +46,7 @@ for f in "${required[@]}"; do
 done
 
 echo "==> Shell syntax"
-for s in install-skill.sh scripts/verify.sh scripts/stress.sh "$SKILL/scaffold.sh" hooks/guard-bash.sh hooks/guard-paths.sh; do
+for s in install-skill.sh scripts/verify.sh scripts/stress.sh "$SKILL/scaffold.sh" hooks/guard-bash.sh hooks/guard-paths.sh hooks/session-bootstrap.sh hooks/motion-nudge.sh; do
   bash -n "$s" && ok "bash -n $s" || err "$s has a syntax error"
 done
 
@@ -83,7 +85,7 @@ else:
 PY2
 
 echo "==> Python syntax (hooks)"
-for p in hooks/guard_bash.py hooks/guard_paths.py; do
+for p in hooks/guard_bash.py hooks/guard_paths.py hooks/session_bootstrap.py hooks/motion_nudge.py; do
   python3 -c "import sys; compile(open(sys.argv[1],'rb').read(), sys.argv[1], 'exec')" "$p" && ok "syntax $p" || err "$p has a syntax error"
 done
 
@@ -99,6 +101,23 @@ run_hook() { printf '%s' "$2" | bash "$1" >/dev/null 2>&1; echo $?; }
 [ "$(run_hook hooks/guard-paths.sh '{"tool_input":{"file_path":"config/secrets.yaml"}}')" = 2 ] && ok "guard-paths blocks secrets.yaml" || err "guard-paths did not block secrets.yaml"
 [ "$(run_hook hooks/guard-paths.sh '{"tool_input":{"file_path":"deploy/tls.key"}}')" = 2 ] && ok "guard-paths blocks *.key" || err "guard-paths did not block a .key file"
 [ "$(run_hook hooks/guard-paths.sh '{"tool_input":{"file_path":"gcp/service-account.json"}}')" = 2 ] && ok "guard-paths blocks service-account json" || err "guard-paths did not block service-account json"
+
+echo "==> Advisory hooks (motion nudge + session bootstrap; non-blocking)"
+mn() { printf '%s' "$1" | bash hooks/motion-nudge.sh 2>/dev/null; }
+mn '{"tool_name":"Write","tool_input":{"file_path":"card.css","file_text":".x{transition: all .2s}"}}' | grep -q "Pillar 2" && ok "motion-nudge flags transition: all" || err "motion-nudge missed transition: all"
+mn '{"tool_name":"Edit","tool_input":{"file_path":"Card.tsx","new_string":"<div onClick={go}>x</div>"}}' | grep -q "Pillar 2" && ok "motion-nudge flags div onClick" || err "motion-nudge missed div onClick"
+[ -z "$(mn '{"tool_name":"Write","tool_input":{"file_path":"util.ts","file_text":"export const x=1"}}')" ] && ok "motion-nudge silent on non-UI file" || err "motion-nudge should be silent on non-UI"
+[ -z "$(mn '{"tool_name":"Write","tool_input":{"file_path":"ok.css","file_text":".x{transition: opacity .2s}"}}')" ] && ok "motion-nudge silent on clean CSS" || err "motion-nudge should be silent on clean CSS"
+[ -z "$(mn 'not-json')" ] && ok "motion-nudge fail-open (silent on bad input)" || err "motion-nudge not fail-open"
+sb() { printf '%s' "$1" | bash hooks/session-bootstrap.sh 2>/dev/null; }
+sbt="$(mktemp -d)"; mkdir -p "$sbt/.git"
+sb "{\"cwd\":\"$sbt\",\"startup_reason\":\"startup\"}" | grep -q "zeroth scaffold" && ok "session-bootstrap suggests scaffold when missing" || err "session-bootstrap did not suggest scaffold"
+printf '# Zeroth (mandatory)\n' > "$sbt/AGENTS.md"
+[ -z "$(sb "{\"cwd\":\"$sbt\",\"startup_reason\":\"startup\"}")" ] && ok "session-bootstrap silent when bootstrap present" || err "session-bootstrap should be silent when present"
+rm -rf "$sbt"
+sbt2="$(mktemp -d)"
+[ -z "$(sb "{\"cwd\":\"$sbt2\",\"startup_reason\":\"startup\"}")" ] && ok "session-bootstrap silent outside a git repo" || err "session-bootstrap should be silent outside git"
+rm -rf "$sbt2"
 
 echo "==> Evals structure"
 ev=1
@@ -129,6 +148,17 @@ desc="$(awk '
 len=${#desc}
 if [[ "$len" -gt 0 && "$len" -lt 1024 ]]; then ok "length = $len"; else err "length = $len (must be 1..1023)"; fi
 
+echo "==> Subagent frontmatter (zeroth-reviewer)"
+ag="agents/zeroth-reviewer.md"
+head -1 "$ag" | grep -q '^---$' && ok "reviewer frontmatter opens" || err "reviewer frontmatter missing"
+grep -q '^name: zeroth-reviewer' "$ag" && ok "reviewer name" || err "reviewer name missing or wrong"
+grep -q '^description:' "$ag" && ok "reviewer description" || err "reviewer description missing"
+if grep -qE '^tools:[^#]*Read' "$ag" && ! grep -qE '^tools:[^#]*(Write|Edit|MultiEdit)' "$ag"; then
+  ok "reviewer is read-only (no Write/Edit in tools)"
+else
+  err "reviewer tools should be read-only (Read/Grep/Glob/Bash, no Write/Edit)"
+fi
+
 echo "==> Installer smoke test (temporary CLAUDE_DIR)"
 tmp="$(mktemp -d)"
 if CLAUDE_DIR="$tmp" bash install-skill.sh >/dev/null 2>&1; then
@@ -138,6 +168,7 @@ if CLAUDE_DIR="$tmp" bash install-skill.sh >/dev/null 2>&1; then
   [[ -f "$tmp/skills/zeroth/assets/AGENTS.md" ]] && ok "bundled assets" || err "assets not bundled"
   [[ -f "$tmp/commands/zeroth.md" ]] && ok "created /zeroth command" || err "no /zeroth command"
   [[ -f "$tmp/commands/scaffold.md" ]] && ok "created scaffold command" || err "no scaffold command"
+  [[ -f "$tmp/agents/zeroth-reviewer.md" ]] && ok "installed the reviewer agent" || err "reviewer agent not installed"
 else
   err "installer exited non-zero"
 fi
