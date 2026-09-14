@@ -103,6 +103,9 @@ if [[ -f "$ASSETS/github/workflows/ci.$stack.yml" ]]; then
 fi
 place "$ci_src" ".github/workflows/verify.yml"
 
+# --- dependency hygiene (keeps the SHA-pinned actions fresh) ---
+place "$ASSETS/github/dependabot.yml" ".github/dependabot.yml"
+
 # --- agent guides ---
 place "$ASSETS/AGENTS.md" "AGENTS.md"
 place "$ASSETS/CLAUDE.md" "CLAUDE.md"

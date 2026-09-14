@@ -1,0 +1,14 @@
+# Keeps the SHA-pinned GitHub Actions in .github/workflows/ current (a pinned SHA never moves, so it
+# needs an updater). Add package ecosystems for your stack (npm, pip, gomod, cargo, maven, nuget, ...)
+# as needed. Weekly, grouped into a single PR, using a chore(deps) commit prefix.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: chore(deps)

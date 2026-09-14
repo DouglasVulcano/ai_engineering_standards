@@ -22,9 +22,10 @@ execution and prompt injection for everyone who installs. Treat the guardrails a
   `.claude/settings.json` (`extraKnownMarketplaces` + `enabledPlugins`) is gated by Claude Code's
   workspace-trust prompt, but treat committing it as a supply-chain decision.
 - This repo's own CI pins actions to a full commit SHA (with a version comment) and keeps them
-  current with Dependabot (`.github/dependabot.yml`). The scaffolded CI templates default to
-  major-version tags (for example `@v5`), which still receive patches; pin them to a SHA for the
-  strictest supply-chain posture. Keep a lockfile and pin tool versions too.
+  current with Dependabot (`.github/dependabot.yml`). The scaffolded CI templates now do the same:
+  every `actions/*` is SHA-pinned, and the scaffolder writes a `.github/dependabot.yml` so the pins
+  stay current downstream (a moved tag can smuggle in code; a SHA cannot). Keep a lockfile and pin
+  tool versions too.
 
 ## Repository hardening (maintainers)
 Because the repo is the trust root, protect `main`:

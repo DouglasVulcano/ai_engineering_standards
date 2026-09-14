@@ -7,14 +7,14 @@ on:
 # Node / JS-TS quality gate (starter). Adjust scripts to your package manager.
 # Verbs: fmt+lint=biome check, typecheck=tsc --noEmit, test+coverage=vitest, build=your build script.
 # Optional next steps: arch (dependency-cruiser), deadcode (knip), mutation (stryker, nightly).
-# Supply-chain hardening: installs with --ignore-scripts and expects a committed lockfile. For
-# stricter builds, pin tool versions instead of `npx --yes`, and pin each action to a commit SHA.
+# Supply-chain hardening: actions are pinned to commit SHAs (dependabot keeps them fresh); installs
+# with --ignore-scripts and expect a committed lockfile. For stricter builds, also pin tool versions.
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: "lts/*"
       - name: Install
