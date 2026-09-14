@@ -3,6 +3,20 @@
 All notable changes to this project are documented here. Format follows Keep a Changelog; versioning
 follows SemVer.
 
+## [1.9.0]
+
+### Added
+- Two advisory, non-blocking hooks that nudge the standard during a session (fail-open, and quiet
+  unless they have something to say):
+  - `SessionStart` (`hooks/session-bootstrap.*`): in a git repo whose `AGENTS.md`/`CLAUDE.md` does not
+    yet carry the Zeroth bootstrap, injects a one-line suggestion to run `/zeroth scaffold`. Silent
+    once the bootstrap is present, and outside a project.
+  - `PostToolUse` on Write/Edit/MultiEdit (`hooks/motion-nudge.*`): after a UI-file change, flags a
+    small set of high-signal Pillar 2 anti-patterns (`transition: all`, `<div onClick>`) as an
+    advisory that points to `/zeroth-review`. Silent on clean writes and non-UI files.
+- `verify.sh` covers both hooks (flags the anti-patterns, stays silent otherwise, fail-open on bad
+  input) and requires their files.
+
 ## [1.8.0]
 
 ### Added

@@ -11,7 +11,7 @@
 
 | | |
 |---|---|
-| **Version** | 1.8.0 |
+| **Version** | 1.9.0 |
 | **Author** | DouglasVulcano |
 | **Scope** | Global, applies to all projects unless the repository explicitly overrides it |
 

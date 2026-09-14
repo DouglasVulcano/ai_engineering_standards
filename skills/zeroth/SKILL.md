@@ -11,7 +11,7 @@ description: >-
   lint/testes", "seguir os padrões", "aplicar os standards".
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch
 metadata:
-  version: "1.8.0"
+  version: "1.9.0"
   author: DouglasVulcano
 ---
 
@@ -74,7 +74,8 @@ Add `--with-plugin OWNER/REPO` to also wire the project's `.claude/settings.json
 auto-enables for everyone who trusts the repo. A dedicated `scaffold` command exists too. Then fill
 `AGENTS.md` with the stack's gate commands (see `references/stack-appendix.md`) and set real owners in
 `.github/CODEOWNERS`. Remember the split: the skill is advice; **CI plus branch protection are the
-authoritative gate**.
+authoritative gate**. The plugin also ships advisory, non-blocking hooks (a Pillar 2 motion
+anti-pattern nudge and a bootstrap reminder) that never block.
 
 ## Reference index
 
