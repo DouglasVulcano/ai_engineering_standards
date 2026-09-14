@@ -110,6 +110,9 @@ place "$ASSETS/CLAUDE.md" "CLAUDE.md"
 # --- safety rails (deny-list) ---
 place "$ASSETS/settings.json" ".claude/settings.json"
 
+# --- local git hooks (Conventional Commits + pre-commit gate) ---
+place "$ASSETS/lefthook.yml" "lefthook.yml"
+
 # --- optional: wire team auto-enable of the plugin (merges into .claude/settings.json) ---
 if [[ -n "$WITH_PLUGIN" ]]; then
   dest="$TARGET/.claude/settings.json"
@@ -174,6 +177,7 @@ echo "Next steps:"
 echo "  1. Fill AGENTS.md: stack + the gate commands for '$stack' (see the stack-appendix)."
 echo "  2. Set real owners in .github/CODEOWNERS."
 echo "  3. Complete .github/workflows/verify.yml for your stack."
+echo "  3b. Install local git hooks (Conventional Commits + pre-commit): lefthook install"
 echo "  4. Arm branch protection on '$branch' (the authoritative gate). Review, then run ONE of:"
 echo "     - Classic branch-protection API:"
 echo "       gh api -X PUT repos/$slug_disp/branches/$branch/protection --input - <<'JSON'"

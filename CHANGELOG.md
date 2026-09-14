@@ -16,6 +16,10 @@ follows SemVer.
     advisory that points to `/zeroth-review`. Silent on clean writes and non-UI files.
 - `verify.sh` covers both hooks (flags the anti-patterns, stays silent otherwise, fail-open on bad
   input) and requires their files.
+- Scaffolder now ships local git hooks: `skills/zeroth/assets/lefthook.yml` with a ready,
+  language-agnostic Conventional Commits `commit-msg` check (no Node dependency) and a `pre-commit`
+  section to bind the local gate per stack. `scaffold.sh` places it and prints `lefthook install`;
+  `verify.sh` covers it.
 
 ## [1.8.0]
 
