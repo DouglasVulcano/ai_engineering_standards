@@ -24,6 +24,10 @@ follows SemVer.
   and the scaffolder ships a `.github/dependabot.yml` (weekly, grouped) so the pins stay current
   downstream. `verify.sh` proves the templates are SHA-pinned, and `SECURITY.md` reflects the posture
   (`dtolnay/rust-toolchain@stable` stays a channel ref).
+- Scaffolder now ships a soft `pr-hygiene.yml` workflow (Pillar 1): it warns when a PR has no linked
+  Issue, is over ~400 lines, or has a non-conventional title, and never blocks a merge. `SECURITY.md`
+  adds an opt-in posture section (an OpenSSF Scorecard snippet, reviewdog, Allstar). `verify.sh` covers
+  both.
 
 ## [1.8.0]
 

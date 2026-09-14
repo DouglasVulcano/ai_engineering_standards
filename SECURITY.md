@@ -52,6 +52,38 @@ Never put `enforce_admins` in the status-check list: nothing reports it, so the 
 "Expected - Waiting for status to be reported". The scaffolder prints both commands, and
 `scaffold.sh --protect --ruleset` applies the ruleset for you.
 
+## Opt-in posture (advanced)
+These are opt-in and not scaffolded by default (they are repo- or org-specific). Add them when a
+project warrants it:
+
+- **OpenSSF Scorecard** scores your repository's security health and can upload SARIF to code scanning.
+  Public repos work out of the box; a private repo needs a PAT. Pin the actions to a SHA, as the CI
+  templates do:
+  ```yaml
+  # .github/workflows/scorecard.yml  (weekly + on push to the default branch)
+  permissions: read-all
+  jobs:
+    analysis:
+      runs-on: ubuntu-latest
+      permissions:
+        security-events: write
+        id-token: write
+      steps:
+        - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        - uses: ossf/scorecard-action@2d1146689b8cda280b9bc96326124645441f03bc # v2.4.4
+          with:
+            results_file: results.sarif
+            results_format: sarif
+            publish_results: true
+        - uses: github/codeql-action/upload-sarif@faaca9a8f6edddba5725ffe5adefdab6669a2eca # v3
+          with:
+            sarif_file: results.sarif
+  ```
+- **reviewdog** posts linter or scanner findings as inline PR annotations from any tool that emits
+  SARIF or checkstyle. Wire it into the CI `lint` step to turn pass/fail into in-diff review.
+- **Allstar** (OpenSSF) is a GitHub App installed at the ORG level; it watches for policy drift
+  (missing branch protection, no CODEOWNERS) and opens issues or fix PRs. Install it on the org.
+
 ## Reporting a vulnerability
 Please open a private GitHub Security Advisory on the repository. Do not file a public issue with
 exploit details.
