@@ -1,0 +1,33 @@
+name: pr-hygiene
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+# Soft, explainable PR feedback (Pillar 1). Complements branch protection; it never blocks a merge,
+# because every check is a ::warning:: or ::notice:: and the job exits 0. Make it a required status
+# check only if you want these to be hard gates.
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Linked issue, size, and title
+        env:
+          BODY: ${{ github.event.pull_request.body }}
+          TITLE: ${{ github.event.pull_request.title }}
+          ADD: ${{ github.event.pull_request.additions }}
+          DEL: ${{ github.event.pull_request.deletions }}
+        run: |
+          printf '%s\n%s' "$TITLE" "$BODY" \
+            | grep -qiE '(close[sd]?|fix(e[sd])?|resolve[sd]?)[[:space:]]+#[0-9]+' \
+            || echo "::warning::Link an Issue in the PR description (for example 'Closes #123')."
+          total=$(( ${ADD:-0} + ${DEL:-0} ))
+          if [ "$total" -gt 400 ]; then
+            echo "::warning::Large PR ($total changed lines). Zeroth aims for under ~400; consider splitting."
+          fi
+          printf '%s' "$TITLE" \
+            | grep -qE '^(feat|fix|refactor|perf|docs|test|build|ci|chore|revert)(\(.+\))?!?: .+' \
+            || echo "::notice::PR title is not a Conventional Commit (fine if you squash-merge with a clean subject)."
