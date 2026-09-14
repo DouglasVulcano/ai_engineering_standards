@@ -37,6 +37,7 @@ required=(
   "$SKILL/assets/github/workflows/ci.rust.yml"
   "$SKILL/assets/github/workflows/ci.jvm.yml"
   "$SKILL/assets/github/workflows/ci.dotnet.yml"
+  "$SKILL/assets/github/dependabot.yml"
   hooks/hooks.json hooks/guard-bash.sh hooks/guard_bash.py hooks/guard-paths.sh hooks/guard_paths.py
   hooks/session-bootstrap.sh hooks/session_bootstrap.py hooks/motion-nudge.sh hooks/motion_nudge.py
   evals/README.md evals/scaffold-greenfield/prompt.md scripts/stress.sh
@@ -180,6 +181,7 @@ if bash "$SKILL/scaffold.sh" "$t2" >/dev/null 2>&1; then
   [[ -f "$t2/.github/pull_request_template.md" ]] && ok "scaffold created PR template" || err "scaffold missing PR template"
   [[ -f "$t2/AGENTS.md" && -f "$t2/CLAUDE.md" ]] && ok "scaffold created agent guides" || err "scaffold missing agent guides"
   [[ -f "$t2/lefthook.yml" ]] && ok "scaffold created lefthook.yml" || err "scaffold missing lefthook.yml"
+  [[ -f "$t2/.github/dependabot.yml" ]] && ok "scaffold created dependabot.yml" || err "scaffold missing dependabot.yml"
   before="$(cd "$t2" && find . -type f -exec sha1sum {} + | sort)"
   bash "$SKILL/scaffold.sh" "$t2" >/dev/null 2>&1
   after="$(cd "$t2" && find . -type f -exec sha1sum {} + | sort)"
@@ -257,6 +259,16 @@ if grep -qE 'uses: [^@ ]+@[0-9a-f]{40}' .github/workflows/verify.yml; then
 else
   err "verify.yml should pin actions to a full commit SHA"
 fi
+
+echo "==> Scaffolded CI templates pin actions to SHA"
+for t in ci.node ci.python ci.go ci.rust ci.jvm ci.dotnet; do
+  f="$SKILL/assets/github/workflows/$t.yml"
+  if grep -qE '^[[:space:]]*-?[[:space:]]*uses:[^#]*@v[0-9]' "$f"; then
+    err "$t.yml has an unpinned @vN action tag"
+  else
+    ok "$t.yml actions are SHA-pinned"
+  fi
+done
 
 echo ""
 if [[ "$fail" -eq 0 ]]; then

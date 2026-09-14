@@ -7,13 +7,14 @@ on:
 # .NET quality gate (starter). Tighten as the codebase matures.
 # Verbs: fmt=dotnet format --verify-no-changes, lint+typecheck=dotnet build (Roslyn, -warnaserror),
 # test+coverage=dotnet test (XPlat Code Coverage), build=dotnet build/publish.
-# Supply-chain hardening: commit a lockfile and use `--locked-mode`, pin tool versions and action SHAs.
+# Supply-chain hardening: actions are pinned to commit SHAs (dependabot keeps them fresh). Commit a
+# lockfile and use `--locked-mode`, and pin tool versions too.
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
         with:
           dotnet-version: "8.x"
       - name: restore

@@ -20,6 +20,10 @@ follows SemVer.
   language-agnostic Conventional Commits `commit-msg` check (no Node dependency) and a `pre-commit`
   section to bind the local gate per stack. `scaffold.sh` places it and prints `lefthook install`;
   `verify.sh` covers it.
+- Scaffolded CI now pins every `actions/*` (and golangci) to a full commit SHA with a version comment,
+  and the scaffolder ships a `.github/dependabot.yml` (weekly, grouped) so the pins stay current
+  downstream. `verify.sh` proves the templates are SHA-pinned, and `SECURITY.md` reflects the posture
+  (`dtolnay/rust-toolchain@stable` stays a channel ref).
 
 ## [1.8.0]
 

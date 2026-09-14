@@ -7,20 +7,21 @@ on:
 # Go quality gate (starter). Tighten as the codebase matures.
 # Verbs: fmt=gofmt, lint=golangci-lint, typecheck=(go build), test+coverage=go test -cover,
 # build=go build. Optional next steps: arch (go-arch-lint/depguard), deadcode (deadcode ./...).
-# Supply-chain hardening: pin tool versions and pin each action to a commit SHA for stricter builds.
+# Supply-chain hardening: actions are pinned to commit SHAs (dependabot keeps them fresh). Pin tool
+# versions too for stricter builds.
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
         with:
           go-version: "stable"
       - name: fmt
         run: |
           test -z "$(gofmt -l .)" || { echo "gofmt needs to run on:"; gofmt -l .; echo "fix with: gofmt -w ."; exit 1; }
       - name: lint
-        uses: golangci/golangci-lint-action@v6
+        uses: golangci/golangci-lint-action@55c2c1448f86e01eaae002a5a3a9624417608d84 # v6
       - name: test + coverage
         run: go test -race -coverprofile=coverage.out ./...
       - name: build
