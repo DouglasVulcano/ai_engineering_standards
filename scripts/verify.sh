@@ -27,7 +27,7 @@ required=(
   "$SKILL/references/observability.md"
   "$SKILL/references/stack-appendix.md"
   "$SKILL/references/arsenal-mcp-skills.md"
-  "$SKILL/assets/AGENTS.md" "$SKILL/assets/CLAUDE.md" "$SKILL/assets/settings.json"
+  "$SKILL/assets/AGENTS.md" "$SKILL/assets/CLAUDE.md" "$SKILL/assets/settings.json" "$SKILL/assets/lefthook.yml"
   "$SKILL/assets/github/pull_request_template.md"
   "$SKILL/assets/github/CODEOWNERS"
   "$SKILL/assets/github/workflows/ci.yml"
@@ -179,6 +179,7 @@ t2="$(mktemp -d)"
 if bash "$SKILL/scaffold.sh" "$t2" >/dev/null 2>&1; then
   [[ -f "$t2/.github/pull_request_template.md" ]] && ok "scaffold created PR template" || err "scaffold missing PR template"
   [[ -f "$t2/AGENTS.md" && -f "$t2/CLAUDE.md" ]] && ok "scaffold created agent guides" || err "scaffold missing agent guides"
+  [[ -f "$t2/lefthook.yml" ]] && ok "scaffold created lefthook.yml" || err "scaffold missing lefthook.yml"
   before="$(cd "$t2" && find . -type f -exec sha1sum {} + | sort)"
   bash "$SKILL/scaffold.sh" "$t2" >/dev/null 2>&1
   after="$(cd "$t2" && find . -type f -exec sha1sum {} + | sort)"
@@ -193,6 +194,14 @@ else
   err "scaffold exited non-zero"
 fi
 rm -rf "$t2"
+
+echo "==> Scaffolded lefthook (Conventional Commits check)"
+lh="$SKILL/assets/lefthook.yml"
+grep -q "commit-msg" "$lh" && ok "lefthook.yml has a commit-msg hook" || err "lefthook.yml missing commit-msg hook"
+cc_re='^(feat|fix|refactor|perf|docs|test|build|ci|chore|revert)(\([a-zA-Z0-9 ._/-]+\))?!?: .+'
+printf 'feat(auth): add OTP' | grep -qE "$cc_re" && ok "Conventional Commits regex accepts a valid subject" || err "CC regex rejected a valid commit"
+printf 'updated stuff' | grep -qE "$cc_re" && err "CC regex accepted a non-conventional commit" || ok "Conventional Commits regex rejects a bad subject"
+grep -qF "$cc_re" "$lh" && ok "lefthook.yml embeds the same CC regex" || err "lefthook.yml CC regex drifted from the test"
 
 echo "==> Scaffolder branch-protection guidance"
 t3="$(mktemp -d)"

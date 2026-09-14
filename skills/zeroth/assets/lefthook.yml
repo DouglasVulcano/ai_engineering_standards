@@ -1,0 +1,37 @@
+# Zeroth local git hooks (lefthook). After cloning, run once: lefthook install
+# lefthook is a single Go binary, language-agnostic and parallel:
+# https://github.com/evilmartians/lefthook
+#
+# These run the fast, local half of the Zeroth gate so issues surface before push, and enforce
+# Conventional Commits (Pillar 1). CI plus branch protection stay the authoritative gate.
+
+commit-msg:
+  commands:
+    conventional:
+      # First line must be:  type(optional-scope)!: subject
+      # types: feat fix refactor perf docs test build ci chore revert. Merge/revert/fixup pass through.
+      run: |
+        line=$(head -1 "{1}")
+        case "$line" in
+          "Merge "*|"Revert "*|"fixup! "*|"squash! "*) exit 0 ;;
+        esac
+        if printf '%s' "$line" | grep -qE '^(feat|fix|refactor|perf|docs|test|build|ci|chore|revert)(\([a-zA-Z0-9 ._/-]+\))?!?: .+'; then
+          exit 0
+        fi
+        echo "Commit message must follow Conventional Commits: type(scope): subject"
+        echo "  examples: 'feat(auth): add OTP login'  |  'fix: handle empty cart'"
+        exit 1
+
+pre-commit:
+  parallel: true
+  commands:
+    # Bind these to your stack's gate verbs (see references/stack-appendix.md), scoped to staged files,
+    # so a local failure is the same failure CI would catch. Examples:
+    #   fmt:
+    #     glob: "*.{js,ts,jsx,tsx,json,css}"
+    #     run: npx --yes @biomejs/biome check --no-errors-on-unmatched {staged_files}
+    #   lint:
+    #     run: <your lint command>
+    # The no-op below keeps `lefthook install` working until you wire real commands above.
+    zeroth-ready:
+      run: "true"
