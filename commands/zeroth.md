@@ -1,6 +1,6 @@
 ---
 description: Apply the Zeroth standard (workflow, motion/UI, o11y, quality, testing, scaffold)
-argument-hint: "[domain: workflow | ui | o11y | testing | arsenal | scaffold | (empty = everything)]"
+argument-hint: "[domain: workflow | ui | o11y | testing | arsenal | scaffold | review | (empty = everything)]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch
 ---
 
@@ -15,6 +15,8 @@ current task. If `$ARGUMENTS` names a domain, load only the matching reference; 
 - arsenal  -> references/arsenal-mcp-skills.md
 - scaffold -> run the scaffolder to add governance (issue/PR templates, CODEOWNERS, CI gate,
   AGENTS.md canonical + thin CLAUDE.md); see references/workflow-github.md
+- review   -> audit the current diff against the standard via the zeroth-reviewer subagent (or the
+  dedicated /zeroth-review command); advisory and read-only, CI stays the authoritative gate
 - (empty)  -> SKILL.md plus the full spec in references/zeroth.md
 
 Whenever you work in a repository, ensure the standards bootstrap block is in AGENTS.md (the

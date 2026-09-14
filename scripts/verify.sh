@@ -18,7 +18,8 @@ required=(
   AGENTS.md CLAUDE.md CONTRIBUTING.md CHANGELOG.md SECURITY.md
   .claude-plugin/plugin.json .claude-plugin/marketplace.json
   .github/CODEOWNERS
-  commands/zeroth.md commands/scaffold.md
+  commands/zeroth.md commands/scaffold.md commands/zeroth-review.md
+  agents/zeroth-reviewer.md
   "$SKILL/SKILL.md" "$SKILL/scaffold.sh"
   "$SKILL/references/workflow-github.md"
   "$SKILL/references/motion-and-ui.md"
@@ -129,6 +130,17 @@ desc="$(awk '
 len=${#desc}
 if [[ "$len" -gt 0 && "$len" -lt 1024 ]]; then ok "length = $len"; else err "length = $len (must be 1..1023)"; fi
 
+echo "==> Subagent frontmatter (zeroth-reviewer)"
+ag="agents/zeroth-reviewer.md"
+head -1 "$ag" | grep -q '^---$' && ok "reviewer frontmatter opens" || err "reviewer frontmatter missing"
+grep -q '^name: zeroth-reviewer' "$ag" && ok "reviewer name" || err "reviewer name missing or wrong"
+grep -q '^description:' "$ag" && ok "reviewer description" || err "reviewer description missing"
+if grep -qE '^tools:[^#]*Read' "$ag" && ! grep -qE '^tools:[^#]*(Write|Edit|MultiEdit)' "$ag"; then
+  ok "reviewer is read-only (no Write/Edit in tools)"
+else
+  err "reviewer tools should be read-only (Read/Grep/Glob/Bash, no Write/Edit)"
+fi
+
 echo "==> Installer smoke test (temporary CLAUDE_DIR)"
 tmp="$(mktemp -d)"
 if CLAUDE_DIR="$tmp" bash install-skill.sh >/dev/null 2>&1; then
@@ -138,6 +150,7 @@ if CLAUDE_DIR="$tmp" bash install-skill.sh >/dev/null 2>&1; then
   [[ -f "$tmp/skills/zeroth/assets/AGENTS.md" ]] && ok "bundled assets" || err "assets not bundled"
   [[ -f "$tmp/commands/zeroth.md" ]] && ok "created /zeroth command" || err "no /zeroth command"
   [[ -f "$tmp/commands/scaffold.md" ]] && ok "created scaffold command" || err "no scaffold command"
+  [[ -f "$tmp/agents/zeroth-reviewer.md" ]] && ok "installed the reviewer agent" || err "reviewer agent not installed"
 else
   err "installer exited non-zero"
 fi

@@ -3,6 +3,20 @@
 All notable changes to this project are documented here. Format follows Keep a Changelog; versioning
 follows SemVer.
 
+## [1.8.0]
+
+### Added
+- `zeroth-reviewer` subagent (`agents/zeroth-reviewer.md`): a read-only reviewer that audits a change
+  set (the working tree, a branch, or a PR) against the 4 pillars and returns a structured findings
+  report. It is advisory (CI plus branch protection stay the authoritative gate) and cannot edit,
+  stage, or commit (its tools are allowlisted to Read/Grep/Glob/Bash). It auto-delegates on "review my
+  changes" style requests and is invocable as `zeroth:zeroth-reviewer`.
+- `/zeroth-review` command: delegates to the reviewer for the working tree, a base branch, or a PR
+  number, with a read-only inline fallback so it also works on a global-skill install. Added a `review`
+  route to `/zeroth`, and `install-skill.sh` now installs subagents into `~/.claude/agents/`.
+- `verify.sh` requires the reviewer agent and `/zeroth-review`, checks the agent frontmatter, and
+  proves the reviewer is read-only (no Write/Edit in its tool allowlist).
+
 ## [1.7.1]
 
 ### Fixed
