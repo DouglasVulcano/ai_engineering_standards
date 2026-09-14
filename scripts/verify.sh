@@ -65,6 +65,23 @@ assert "zeroth" in names, "marketplace lists the plugin"
 print("  ok:   plugin/marketplace consistent (v%s)" % p["version"])
 PY
 
+echo "==> Version consistency (plugin.json == SKILL.md == zeroth.md)"
+python3 - <<'PY2' || fail=1
+import json, re, sys
+pv = json.load(open(".claude-plugin/plugin.json")).get("version")
+sk = open("skills/zeroth/SKILL.md").read()
+m  = re.search(r'^\s*version:\s*"?([0-9]+\.[0-9]+\.[0-9]+)"?', sk, re.M)
+sv = m.group(1) if m else None
+zt = open("zeroth.md").read()
+m2 = re.search(r'\|\s*\*\*Version\*\*\s*\|\s*([0-9]+\.[0-9]+\.[0-9]+)\s*\|', zt)
+zv = m2.group(1) if m2 else None
+if pv and pv == sv == zv:
+    print("  ok:   all three at %s" % pv)
+else:
+    print("  FAIL: version drift plugin.json=%s SKILL.md=%s zeroth.md=%s" % (pv, sv, zv), file=sys.stderr)
+    sys.exit(1)
+PY2
+
 echo "==> Python syntax (hooks)"
 for p in hooks/guard_bash.py hooks/guard_paths.py; do
   python3 -c "import sys; compile(open(sys.argv[1],'rb').read(), sys.argv[1], 'exec')" "$p" && ok "syntax $p" || err "$p has a syntax error"

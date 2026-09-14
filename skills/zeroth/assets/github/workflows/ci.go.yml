@@ -17,15 +17,17 @@ jobs:
         with:
           go-version: "stable"
       - name: fmt
-        run: test -z "$(gofmt -l .)" || { echo "gofmt needs to run on:"; gofmt -l .; echo "fix with: gofmt -w ."; exit 1; }
+        run: |
+          test -z "$(gofmt -l .)" || { echo "gofmt needs to run on:"; gofmt -l .; echo "fix with: gofmt -w ."; exit 1; }
       - name: lint
         uses: golangci/golangci-lint-action@v6
       - name: test + coverage
         run: go test -race -coverprofile=coverage.out ./...
       - name: build
         run: go build ./...
-      - name: coverage upload
-        if: ${{ hashFiles('coverage.out') != '' }}
-        uses: codecov/codecov-action@v5
-        with:
-          files: coverage.out
+      # coverage upload: bind your sink (Codecov, Coveralls, SonarQube, or self-hosted). Example:
+      # - name: coverage upload
+      #   if: ${{ hashFiles('coverage.out') != '' }}
+      #   uses: codecov/codecov-action@v5
+      #   with:
+      #     files: coverage.out

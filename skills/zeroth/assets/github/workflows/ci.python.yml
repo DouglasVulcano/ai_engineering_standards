@@ -25,8 +25,9 @@ jobs:
         run: mypy . || true   # remove "|| true" once the codebase is typed
       - name: test + coverage
         run: pytest --cov --cov-report=xml
-      - name: coverage upload
-        if: ${{ hashFiles('coverage.xml') != '' }}
-        uses: codecov/codecov-action@v5
-        with:
-          files: coverage.xml
+      # coverage upload: bind your sink (Codecov, Coveralls, SonarQube, or self-hosted). Example:
+      # - name: coverage upload
+      #   if: ${{ hashFiles('coverage.xml') != '' }}
+      #   uses: codecov/codecov-action@v5
+      #   with:
+      #     files: coverage.xml
